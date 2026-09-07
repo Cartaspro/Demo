@@ -23,7 +23,7 @@
 }
 </style>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DEMO - Carta Digital</title>
+<title>DEMO - Carta Digital con Validación y Maps</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c;--text:#fff}
@@ -46,19 +46,34 @@ body{background:var(--bg);color:var(--text);padding-bottom:120px}
 .cart button{background:#E11D48;color:#fff;border:none;padding:12px 20px;border-radius:12px;font-weight:700}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end}
 .modal.active{display:flex}
-.box{background:#1c1c1c;width:100%;max-height:88vh;border-radius:20px 20px 0 0;padding:20px;overflow-y:auto}
-.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:8px}
-.wa{width:100%;background:#25D366;color:#fff;border:none;padding:16px;border-radius:12px;font-weight:800;margin-top:16px}
+.box{background:#1c1c1c;width:100%;max-height:90vh;border-radius:20px 20px 0 0;padding:20px;overflow-y:auto}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:8px;font-size:13px}
+.input.error{border-color:#ef4444;background:#1f0f0f}
+.label{font-size:11px;color:#9ca3af;margin-top:12px;display:block;font-weight:600}
+.label span{color:#ef4444}
+.error-msg{font-size:11px;color:#ef4444;margin-top:4px;display:none}
+.suggestions{background:#0f0f0f;border:1px solid #333;border-radius:10px;margin-top:4px;max-height:180px;overflow-y:auto;display:none;position:relative;z-index:10}
+.sugg-item{padding:10px 12px;font-size:12px;border-bottom:1px solid #222;cursor:pointer}
+.sugg-item:hover{background:#1f1f1f}
+.sugg-item:last-child{border-bottom:none}
+.wa{width:100%;background:#25D366;color:#fff;border:none;padding:16px;border-radius:12px;font-weight:800;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+.map-preview{margin-top:8px;border-radius:10px;overflow:hidden;border:1px solid #333;display:none}
+.map-preview iframe{width:100%;height:180px;border:0}
+.map-link{display:block;margin-top:6px;font-size:11px;color:#25D366;text-decoration:none}
+.steps{display:flex;gap:6px;margin-top:12px}
+.step{flex:1;height:4px;background:#333;border-radius:10px}
+.step.active{background:#25D366}
 </style>
 </head>
 <body>
 <div class="top">⚠️ DEMO - Así quedaría la carta de TU local</div>
 <script>
-const WHATSAPP="5491134890644"; let carrito={}; let catActiva='todos'; let tipo='retiro'; let envio=1500;
+const WHATSAPP="5491134890644"; let carrito={}; let catActiva='todos'; let tipo=''; let envio=1500;
+let selectedCoords=null; let selectedAddress='';
 const productos=[
 {id:1,cat:'hamburguesas',nombre:"Hamburguesa Doble",desc:"Doble carne, doble cheddar, bacon crocante",precio:12500,img:"https://images.unsplash.com/photo-1553979459-d2229ba7433b?q=80&w=600"},
 {id:2,cat:'pizzas',nombre:"Pizza Muzzarella",desc:"Mozza, salsa, oregano",precio:13900,img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600"},
-{id:3,cat:'panaderia',nombre:"Docena de Facturas Surtidas",desc:"Medialunas, vigilantes, cañoncitos, pastelitos",precio:8500,img:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600"},
+{id:3,cat:'panaderia',nombre:"Docena de Facturas Surtidas",desc:"Medialunas, vigilantes, cañoncitos",precio:8500,img:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600"},
 {id:4,cat:'bebidas',nombre:"Coca 1.5L",desc:"Fria",precio:3500,img:"https://images.unsplash.com/photo-1553456558-aff63285bdd1?q=80&w=600"}
 ];
 </script>
@@ -67,17 +82,166 @@ const productos=[
 <div class="menu" id="menu"></div>
 <div style="margin:24px 16px 0;background:#111;border:1px dashed #333;border-radius:14px;padding:16px;text-align:center"><h3 style="font-size:14px">¿Te gustó?</h3><p style="font-size:12px;color:#9ca3af;margin-top:6px">La tuya va con tu logo y tu WhatsApp. $65k/mes.</p><a href="https://wa.me/5491134890644?text=Vi%20la%20demo%20quiero%20la%20mia" style="display:inline-block;margin-top:10px;background:#fff;color:#000;padding:10px 16px;border-radius:20px;font-size:12px;font-weight:800;text-decoration:none">Quiero la mia</a></div>
 <div class="cart"><div><span id="count">0</span> prod - <b id="total">$0</b></div><button onclick="abrir()">Ver pedido</button></div>
-<div class="modal" id="modal" onclick="if(event.target==this) cerrar()"><div class="box"><div style="display:flex;justify-content:space-between"><h3>Pedido DEMO</h3><button onclick="cerrar()" style="background:#262626;border:none;color:#fff;width:30px;height:30px;border-radius:50%">X</button></div><div id="items" style="margin-top:12px"></div><input id="nombre" class="input" placeholder="Tu nombre"><div style="margin-top:12px;display:flex;gap:8px"><button id="b1" onclick="setTipo('retiro')" style="flex:1;padding:10px;border-radius:10px;background:#E11D48;border:1px solid #333;color:#fff">Retiro</button><button id="b2" onclick="setTipo('envio')" style="flex:1;padding:10px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff">Envio</button></div><div id="dirBox" style="display:none"><input id="dir" class="input" placeholder="Dirección"></div><div style="margin-top:12px;display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span id="mtotal">$0</span></div><button class="wa" onclick="enviar()" style="display:flex;align-items:center;justify-content:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12.04 2C6.46 2 2 6.46 2 12.04c0 1.77.46 3.45 1.32 4.95L2 22l5.25-1.38A9.9 9.9 0 0 0 12.04 22c5.58 0 10.04-4.46 10.04-10.04C22.08 6.46 17.62 2 12.04 2zm0 18.04a8.08 8.08 0 0 1-4.1-1.12l-.29-.17-3.12.82.83-3.04-.19-.31A8.07 8.07 0 0 1 4 12.04C4 7.56 7.56 4 12.04 4 16.52 4 20.08 7.56 20.08 12.04c0 4.48-3.56 8.04-8.04 8.04zm4.5-6.04c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.96-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.1-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg> Pedí por WhatsApp</button></div></div>
+
+<div class="modal" id="modal" onclick="if(event.target==this) cerrar()">
+<div class="box">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3>Finalizar pedido</h3><button onclick="cerrar()" style="background:#262626;border:none;color:#fff;width:30px;height:30px;border-radius:50%">X</button></div>
+
+<div class="steps"><div class="step active" id="s1"></div><div class="step" id="s2"></div><div class="step" id="s3"></div></div>
+<p style="font-size:11px;color:#9ca3af;margin-top:6px">Completá todos los campos <span style="color:#ef4444">*</span> obligatorios</p>
+
+<div id="items" style="margin-top:12px"></div>
+
+<div style="margin-top:16px;background:#111;border-radius:12px;padding:14px;border:1px solid #262626">
+<label class="label">Tu nombre <span>*</span></label>
+<input id="nombre" class="input" placeholder="Ej: Juan Pérez">
+<div class="error-msg" id="err-nombre">Poné tu nombre</div>
+
+<label class="label">Tu WhatsApp / Teléfono <span>*</span></label>
+<input id="telefono" class="input" placeholder="Ej: 11 1234-5678" inputmode="numeric">
+<div class="error-msg" id="err-telefono">Poné tu teléfono</div>
+
+<label class="label" style="margin-top:16px">¿Cómo lo querés recibir? <span>*</span></label>
+<div style="display:flex;gap:8px;margin-top:8px"><button id="b1" onclick="setTipo('retiro')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff;font-weight:700">🏪 Retiro</button><button id="b2" onclick="setTipo('envio')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff;font-weight:700">🛵 Envío</button></div>
+<div class="error-msg" id="err-tipo">Elegí retiro o envío</div>
+
+<div id="dirBox" style="display:none">
+<label class="label">Dirección de entrega <span>*</span> <span style="color:#25D366;font-size:10px">— con autocompletado Google Maps real</span></label>
+<input id="dir" class="input" placeholder="Escribí tu dirección, ej: Av. Mitre 1234, Lomas" autocomplete="off">
+<div class="suggestions" id="suggestions"></div>
+<div class="error-msg" id="err-dir">Poné tu dirección y seleccionala del listado</div>
+
+<div class="map-preview" id="mapPreview">
+<iframe id="mapFrame" loading="lazy"></iframe>
+<a id="mapLink" class="map-link" target="_blank">📍 Ver en Google Maps</a>
+</div>
+
+<label class="label">Piso / Depto / Aclaración</label>
+<input id="piso" class="input" placeholder="Ej: 2B, timbre 3, casa al fondo">
+
+</div>
+
+<label class="label">¿Efectivo o transferencia?</label>
+<select id="pago" class="input"><option value="">Seleccioná</option><option value="Efectivo">Efectivo</option><option value="MercadoPago / Transferencia">MercadoPago / Transferencia</option></select>
+</div>
+
+<div style="margin-top:16px;display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span id="mtotal">$0</span></div>
+<div id="envioTxt" style="font-size:12px;color:#9ca3af;margin-top:4px;display:none">+ $1.500 envío</div>
+
+<button class="wa" onclick="enviar()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12.04 2C6.46 2 2 6.46 2 12.04c0 1.77.46 3.45 1.32 4.95L2 22l5.25-1.38A9.9 9.9 0 0 0 12.04 22c5.58 0 10.04-4.46 10.04-10.04C22.08 6.46 17.62 2 12.04 2zm0 18.04a8.08 8.08 0 0 1-4.1-1.12l-.29-.17-3.12.82.83-3.04-.19-.31A8.07 8.07 0 0 1 4 12.04C4 7.56 7.56 4 12.04 4 16.52 4 20.08 7.56 20.08 12.04c0 4.48-3.56 8.04-8.04 8.04zm4.5-6.04c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.96-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.1-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg> Pedí por WhatsApp</button>
+<p style="text-align:center;font-size:10px;color:#666;margin-top:8px">* Campos obligatorios. No podés enviar si falta algo.</p>
+</div></div>
+
 <script>
 function filtrar(c,e){catActiva=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));e.classList.add('active');render()}
 function render(){let l=catActiva=='todos'?productos:productos.filter(p=>p.cat==catActiva);document.getElementById('menu').innerHTML=l.map(p=>`<div class="item"><img src="${p.img}"><div class="info"><h3>${p.nombre}</h3><p style="font-size:11px;color:#9ca3af">${p.desc}</p><div class="price">$${p.precio}</div></div><button class="add" onclick="add(${p.id})">+</button></div>`).join('')}
 function add(id){carrito[id]=(carrito[id]||0)+1;upd()}
-function upd(){let t=0,n=0;for(let id in carrito){let p=productos.find(x=>x.id==id);t+=p.precio*carrito[id];n+=carrito[id]}let f=tipo=='envio'?t+envio:t;document.getElementById('total').innerText='$'+f;document.getElementById('mtotal').innerText='$'+f;document.getElementById('count').innerText=n;let h='';for(let id in carrito){let p=productos.find(x=>x.id==id);h+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #262626"><span>${p.nombre} x${carrito[id]}</span><span><button onclick="chg(${id},-1)" style="width:24px;height:24px;border-radius:50%">-</button> ${carrito[id]} <button onclick="chg(${id},1)" style="width:24px;height:24px;border-radius:50%">+</button></span></div>`}document.getElementById('items').innerHTML=h||'<p style="color:#666;text-align:center">Vacío</p>'}
+function upd(){let t=0,n=0;for(let id in carrito){let p=productos.find(x=>x.id==id);t+=p.precio*carrito[id];n+=carrito[id]}let f=tipo=='envio'?t+envio:t;document.getElementById('total').innerText='$'+f.toLocaleString('es-AR');document.getElementById('mtotal').innerText='$'+f.toLocaleString('es-AR');document.getElementById('count').innerText=n;document.getElementById('envioTxt').style.display=tipo=='envio'?'block':'none';let h='';for(let id in carrito){let p=productos.find(x=>x.id==id);h+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #262626;font-size:13px"><span>${p.nombre} x${carrito[id]}</span><span><button onclick="chg(${id},-1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">-</button> ${carrito[id]} <button onclick="chg(${id},1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">+</button></span></div>`}document.getElementById('items').innerHTML=h||'<p style="color:#666;text-align:center">Carrito vacío</p>';updateSteps()}
 function chg(id,d){carrito[id]+=d;if(carrito[id]<=0) delete carrito[id];upd()}
 function abrir(){document.getElementById('modal').classList.add('active')} function cerrar(){document.getElementById('modal').classList.remove('active')}
-function setTipo(tt){tipo=tt;document.getElementById('b1').style.background=tt=='retiro'?'#E11D48':'#262626';document.getElementById('b2').style.background=tt=='envio'?'#E11D48':'#262626';document.getElementById('dirBox').style.display=tt=='envio'?'block':'none'}
-function enviar(){if(Object.keys(carrito).length==0){alert('Agrega algo');return}let nom=document.getElementById('nombre').value.trim();if(!nom){alert('Nombre');return}let msg=`Hola! Vi la DEMO - Pedido prueba de *${nom}*:%0A`;let tot=0;for(let id in carrito){let p=productos.find(x=>x.id==id);msg+=`• ${p.nombre} x${carrito[id]} - $${p.precio*carrito[id]}%0A`;tot+=p.precio*carrito[id]}msg+=`%0ATotal $${tot}%0A%0A_Es prueba de demo_`;window.open(`https://wa.me/${WHATSAPP}?text=${msg}`,'_blank')}
+function updateSteps(){
+ let s1=document.getElementById('s1'),s2=document.getElementById('s2'),s3=document.getElementById('s3');
+ s1.classList.toggle('active', document.getElementById('nombre').value.trim() && document.getElementById('telefono').value.trim());
+ s2.classList.toggle('active', tipo!=='');
+ s3.classList.toggle('active', tipo=='retiro' || (tipo=='envio' && selectedAddress));
+}
+function setTipo(tt){
+ tipo=tt;
+ document.getElementById('b1').style.background=tt=='retiro'?'#E11D48':'#262626';
+ document.getElementById('b2').style.background=tt=='envio'?'#E11D48':'#262626';
+ document.getElementById('dirBox').style.display=tt=='envio'?'block':'none';
+ document.getElementById('err-tipo').style.display='none';
+ upd();
+}
+
+// --- GOOGLE MAPS REAL con Nominatim (gratis, sin API key) ---
+let debounceTimer=null;
+document.getElementById('dir').addEventListener('input', function(e){
+ let q=e.target.value.trim();
+ selectedAddress=''; selectedCoords=null;
+ document.getElementById('mapPreview').style.display='none';
+ document.getElementById('err-dir').style.display='none';
+ if(q.length<3){document.getElementById('suggestions').style.display='none';return}
+ clearTimeout(debounceTimer);
+ debounceTimer=setTimeout(()=> buscarDireccion(q), 400);
+});
+
+async function buscarDireccion(q){
+ try{
+  let url=`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ar&q=${encodeURIComponent(q)}`;
+  let res=await fetch(url);
+  let data=await res.json();
+  let cont=document.getElementById('suggestions');
+  if(!data.length){cont.innerHTML='<div class="sugg-item">No se encontró, seguí escribiendo...</div>';cont.style.display='block';return}
+  cont.innerHTML=data.map(d=>`<div class="sugg-item" onclick="seleccionarDir('${d.display_name.replace(/'/g,"&#39;")}', ${d.lat}, ${d.lon})">📍 ${d.display_name}</div>`).join('');
+  cont.style.display='block';
+ }catch(err){
+  console.log(err);
+ }
+}
+
+function seleccionarDir(nombre, lat, lon){
+ selectedAddress=nombre; selectedCoords={lat,lon};
+ document.getElementById('dir').value=nombre;
+ document.getElementById('suggestions').style.display='none';
+ // Mostrar mapa real
+ let mapFrame=document.getElementById('mapFrame');
+ mapFrame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.005},${lat-0.005},${lon-0.005+0.01},${lat-0.005+0.01}&layer=mapnik&marker=${lat},${lon}`;
+ document.getElementById('mapLink').href=`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+ document.getElementById('mapPreview').style.display='block';
+ document.getElementById('err-dir').style.display='none';
+ updateSteps();
+}
+
+document.addEventListener('click', function(e){
+ if(!e.target.closest('#dir') && !e.target.closest('#suggestions')){
+  document.getElementById('suggestions').style.display='none';
+ }
+});
+
+function validar(){
+ let ok=true;
+ let nombre=document.getElementById('nombre'); let telefono=document.getElementById('telefono'); let dir=document.getElementById('dir');
+ // Reset
+ document.querySelectorAll('.input').forEach(i=>i.classList.remove('error'));
+ document.querySelectorAll('.error-msg').forEach(m=>m.style.display='none');
+
+ if(!nombre.value.trim()){nombre.classList.add('error');document.getElementById('err-nombre').style.display='block';ok=false;}
+ if(!telefono.value.trim()){telefono.classList.add('error');document.getElementById('err-telefono').style.display='block';ok=false;}
+ if(!tipo){document.getElementById('err-tipo').style.display='block';ok=false;}
+ if(tipo=='envio'){
+   if(!selectedAddress){dir.classList.add('error');document.getElementById('err-dir').style.display='block';ok=false;}
+ }
+ if(Object.keys(carrito).length==0){alert('Agregá al menos un producto al carrito');ok=false;}
+ return ok;
+}
+
+function enviar(){
+ if(!validar()) return;
+ let nom=document.getElementById('nombre').value.trim();
+ let tel=document.getElementById('telefono').value.trim();
+ let piso=document.getElementById('piso').value.trim();
+ let pago=document.getElementById('pago').value;
+ let msg=`Hola! DEMO - Pedido de *${nom}*:%0A`;
+ msg+=`📞 Tel: ${tel}%0A%0A`;
+ let tot=0;
+ for(let id in carrito){let p=productos.find(x=>x.id==id);msg+=`• ${p.nombre} x${carrito[id]} - $${(p.precio*carrito[id]).toLocaleString('es-AR')}%0A`;tot+=p.precio*carrito[id];}
+ msg+=`%0A*Subtotal: $${tot.toLocaleString('es-AR')}*%0A`;
+ if(tipo=='envio'){
+   msg+=`%0A*Tipo: 🛵 ENVÍO*%0A`;
+   msg+=`📍 Dirección: ${selectedAddress}%0A`;
+   if(piso) msg+=`Piso/Depto: ${piso}%0A`;
+   if(selectedCoords) msg+=`🗺️ Maps: https://www.google.com/maps/search/?api=1&query=${selectedCoords.lat},${selectedCoords.lon}%0A`;
+   msg+=`💰 Envío: $${envio}%0A*Total: $${(tot+envio).toLocaleString('es-AR')}*%0A`;
+ }else{
+   msg+=`%0A*Tipo: 🏪 RETIRO EN LOCAL*%0A*Total: $${tot.toLocaleString('es-AR')}*%0A`;
+ }
+ if(pago) msg+=`Pago: ${pago}%0A`;
+ msg+=`%0A_Es pedido de prueba DEMO_`;
+ window.open(`https://wa.me/${WHATSAPP}?text=${msg}`,'_blank');
+}
 render()
+document.getElementById('nombre').addEventListener('input', updateSteps);
+document.getElementById('telefono').addEventListener('input', updateSteps);
 </script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
-</html>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}ret
