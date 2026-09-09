@@ -23,213 +23,277 @@
 }
 </style>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CartasPro Admin - /cartas/</title>
+<title>CartasPro Admin - Final</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#0f0f0f;color:#fff;padding:16px}
-.box{max-width:900px;margin:0 auto;background:#1c1c1c;border:1px solid #222;border-radius:16px;padding:16px}
-input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px}
-button{padding:12px 18px;border:none;border-radius:10px;font-weight:800;cursor:pointer}
-.primary{background:#E11D48;color:#fff}
-.secondary{background:#262626;color:#fff}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:600px){.row{grid-template-columns:1fr}}
-.prod{border:1px solid #2a2a2a;border-radius:12px;padding:12px;margin-top:10px;background:#111}
-.badge{display:inline-block;background:#222;padding:4px 8px;border-radius:20px;font-size:11px}
-.ok{color:#25D366} .err{color:#ef4444}
-.small{font-size:11px;color:#888}
+body{background:#0f0f0f;color:#fff}
+.wrap{max-width:900px;margin:0 auto;padding:14px}
+.card{background:#1c1c1c;border:1px solid #222;border-radius:18px;padding:16px;margin-top:12px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px}
+.btn{padding:12px 18px;border:none;border-radius:12px;font-weight:800;cursor:pointer}
+.p{background:#E11D48;color:#fff} .s{background:#262626;color:#fff}
+.prod{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:12px;margin-top:10px}
+.small{font-size:11px;color:#888} .ok{color:#25D366} .err{color:#ef4444}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.link{color:#25D366;text-decoration:none;font-size:12px;word-break:break-all}
 </style>
 </head>
 <body>
-<div class="box">
-<h2>CartasPro Admin</h2>
-<p class="small">Repo fijo: <b>Cartaspro/cartas</b> | Base: <b>/cartas/</b> | Detectado: <span id="det"></span></p>
+<div class="wrap">
+<h2 style="font-weight:800">CartasPro Admin v6</h2>
+<p class="small">Repo: <b>Cartaspro/cartas</b> | Desde el celu, sin Excel, guardado REAL</p>
 
-<div style="margin-top:14px;padding:12px;background:#111;border-radius:12px;border:1px dashed #333">
-<label class="small">Token GitHub (con permiso repo) - se guarda solo en tu navegador</label>
+<div class="card">
+<label class="small">1. Token GitHub (una sola vez)</label>
 <input id="token" type="password" placeholder="ghp_...">
-<div class="row" style="margin-top:8px">
-<button class="secondary" onclick="guardarToken()">Guardar Token</button>
-<button class="secondary" onclick="borrarToken()">Borrar</button>
+<div class="grid2" style="margin-top:8px">
+<button class="s btn" onclick="saveT()">Guardar Token</button>
+<button class="s btn" onclick="delT()">Borrar Token</button>
 </div>
-<p id="tokenStatus" class="small"></p>
+<p id="tStatus" class="small"></p>
+<p class="small" style="margin-top:6px">Cómo sacarlo: GitHub > Settings > Developer settings > Personal access tokens (classic) > Generate > tildá repo > 90 días</p>
 </div>
 
-<div style="margin-top:14px">
-<label>Cliente (nombre carpeta)</label>
-<div class="row">
+<div class="card">
+<label>2. Cliente (nombre corto, sin espacios)</label>
+<div class="grid2">
 <input id="cliente" placeholder="ej: templar, demo, la-casona">
-<button class="primary" onclick="cargar()">Cargar</button>
+<button class="p btn" onclick="cargar()">Cargar / Crear</button>
 </div>
-<p id="status" class="small"></p>
-</div>
-
-<div id="configBox" style="margin-top:16px;display:none">
-<h3>Config</h3>
-<div class="row">
-<div><label>Nombre</label><input id="cfgNombre"></div>
-<div><label>WhatsApp (549...)</label><input id="cfgWa"></div>
-</div>
-<div class="row">
-<div><label>Color</label><input id="cfgColor" type="color" value="#E11D48"></div>
-<div><label>Envío</label><select id="cfgEnvioTipo"><option value="fijo">Fijo</option><option value="gratis">Gratis</option><option value="variable">Variable por km</option></select></div>
-</div>
-<div class="row">
-<div><label>Costo / Base</label><input id="cfgCosto" type="number" value="1500"></div>
-<div><label>Cada Km / Precio Tramo</label><input id="cfgTramo" type="number" value="500"></div>
-</div>
+<p id="cStatus" class="small"></p>
+<div id="links" style="margin-top:8px"></div>
 </div>
 
-<div id="productosBox" style="margin-top:16px;display:none">
-<div style="display:flex;justify-content:space-between;align-items:center"><h3>Productos</h3><button class="secondary" onclick="addProd()">+ Producto</button></div>
+<div id="cfgCard" class="card" style="display:none">
+<h3>Datos del local</h3>
+<div class="grid2">
+<div><label>Nombre</label><input id="cNombre"></div>
+<div><label>WhatsApp 549...</label><input id="cWa"></div>
+</div>
+<div class="grid2">
+<div><label>Color</label><input id="cColor" type="color" value="#E11D48"></div>
+<div><label>Envío</label><select id="cEnvio"><option value="fijo">Fijo</option><option value="gratis">Gratis</option><option value="variable">Variable x km</option></select></div>
+</div>
+<div class="grid2">
+<div><label>Costo / Base</label><input id="cCosto" type="number" value="1500"></div>
+<div><label>Precio x tramo (variable)</label><input id="cTramo" type="number" value="500"></div>
+</div>
+</div>
+
+<div id="prodsCard" class="card" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3>Productos (precios reales)</h3><button class="s btn" onclick="addP()">+ Agregar</button></div>
 <div id="lista"></div>
 </div>
 
-<div style="margin-top:18px;display:flex;gap:8px">
-<button class="primary" onclick="guardarTodo()">Guardar en GitHub</button>
-<button class="secondary" onclick="descargar()">Descargar JSONs (sin token)</button>
+<div class="card">
+<button class="p btn" style="width:100%;padding:16px;font-size:16px" onclick="guardarReal()">💾 GUARDAR REAL - Impacta para todos</button>
+<p id="saveStatus" class="small" style="margin-top:8px;text-align:center"></p>
+<p class="small" style="margin-top:8px;text-align:center">Este botón hace commit a GitHub. No es local. En 2 min se ve reflejado en la carta del cliente.</p>
+<div id="preview" style="margin-top:12px;text-align:center"></div>
 </div>
-<p id="saveStatus" class="small" style="margin-top:8px"></p>
 </div>
 
 <script>
-const REPO = 'Cartaspro/cartas';
-const BASE = '/cartas/';
-document.getElementById('det').innerText = location.pathname;
-let productos = [];
-let clienteActual = '';
-
-function guardarToken(){ localStorage.setItem('gh_token_cartas', document.getElementById('token').value.trim()); updTokenStatus(); }
-function borrarToken(){ localStorage.removeItem('gh_token_cartas'); document.getElementById('token').value=''; updTokenStatus(); }
-function getToken(){ return localStorage.getItem('gh_token_cartas')||''; }
-function updTokenStatus(){
-  const t=getToken();
-  document.getElementById('tokenStatus').innerHTML = t ? `<span class="ok">Token guardado (${t.slice(0,4)}...${t.slice(-4)}) listo para commitear a ${REPO}</span>` : `<span class="err">Sin token - solo podrás descargar archivos</span>`;
-  document.getElementById('token').value = t;
+const REPO='Cartaspro/cartas';
+const CARTA_TEMPLATE=`<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CARTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#E11D48}*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#0f0f0f;color:#fff;padding-bottom:110px}
+.top{background:var(--primary);color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:800;position:sticky;top:0;z-index:999}
+.header{padding:28px 20px;text-align:center}
+.logo{width:80px;height:80px;background:var(--primary);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
+.cats{display:flex;gap:8px;padding:0 16px;overflow-x:auto;margin:16px 0}
+.cat{background:#1c1c1c;padding:8px 16px;border-radius:20px;font-size:13px;border:1px solid #2a2a2a;cursor:pointer;white-space:nowrap}
+.cat.active{background:var(--primary)}
+.menu{padding:0 16px;display:grid;gap:14px;max-width:900px;margin:0 auto}
+.item{background:#1c1c1c;border-radius:16px;display:flex;overflow:hidden;border:1px solid #262626}
+.item img{width:88px;height:88px;object-fit:cover}
+.info{flex:1;padding:12px}
+.price{color:var(--primary);font-weight:800;margin-top:4px}
+.add{margin:12px;background:var(--primary);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#1c1c1c;border-top:1px solid #2a2a2a;padding:12px 16px;display:flex;justify-content:space-between;z-index:100;max-width:900px;margin:0 auto}
+.cart button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:12px;font-weight:700;cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end}
+.modal.active{display:flex}
+.box{background:#1c1c1c;width:100%;max-height:92vh;border-radius:20px 20px 0 0;padding:20px;overflow-y:auto;max-width:900px;margin:0 auto}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:8px;font-size:13px}
+.wa{width:100%;background:#25D366;color:#fff;border:none;padding:16px;border-radius:12px;font-weight:800;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+</style></head><body>
+<div class="top" id="topBar">Cargando...</div>
+<div class="header"><div class="logo" id="logoTxt">..</div><h1 id="hNombre">Carta</h1><p id="hDesc" style="color:#9ca3af;font-size:13px;margin-top:6px"></p></div>
+<div class="cats" id="cats"></div>
+<div class="menu" id="menu"></div>
+<div class="cart"><div><span id="count">0</span> prod - <b id="total">$0</b></div><button onclick="abrir()">Ver pedido</button></div>
+<div class="modal" id="modal" onclick="if(event.target==this) cerrar()"><div class="box">
+<div style="display:flex;justify-content:space-between"><h3>Finalizar pedido</h3><button onclick="cerrar()" style="background:#262626;border:none;color:#fff;width:30px;height:30px;border-radius:50%">X</button></div>
+<div id="items" style="margin-top:12px"></div>
+<div style="margin-top:16px">
+<input id="nombre" class="input" placeholder="Tu nombre">
+<input id="telefono" class="input" placeholder="Tu WhatsApp">
+<div style="display:flex;gap:8px;margin-top:8px"><button id="b1" onclick="setTipo('retiro')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff">Retiro</button><button id="b2" onclick="setTipo('envio')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff">Envío</button></div>
+<div id="dirBox" style="display:none"><input id="dir" class="input" placeholder="Dirección"><input id="piso" class="input" placeholder="Piso / Depto"></div>
+<select id="pago" class="input"><option value="">Efectivo o transferencia?</option><option>Efectivo</option><option>MercadoPago / Transferencia</option></select>
+</div>
+<div style="margin-top:16px;display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span id="mtotal">$0</span></div>
+<div id="envioTxt" style="font-size:12px;color:#9ca3af;margin-top:4px;display:none"></div>
+<button class="wa" onclick="enviar()">Pedir por WhatsApp</button>
+</div></div>
+<script>
+let WHATSAPP="5491134890644"; let carrito={}; let catActiva='todos'; let tipo=''; let envioConfig={tipo:'fijo',costo:1500,base:1500,cadaKm:2,precioPorTramo:500}; let productos=[];
+const cliente = location.pathname.split('/').filter(Boolean).pop();
+async function init(){
+ const base='../';
+ try{
+  let dataRes=await fetch(base+'data/'+cliente+'.json?v='+Date.now());
+  let cfgRes=await fetch(base+'config/'+cliente+'.json?v='+Date.now());
+  if(!dataRes.ok) dataRes=await fetch('./data/'+cliente+'.json?v='+Date.now());
+  if(!cfgRes.ok) cfgRes=await fetch('./config/'+cliente+'.json?v='+Date.now());
+  if(!dataRes.ok) throw new Error('No data');
+  productos=await dataRes.json();
+  const cfg=cfgRes.ok?await cfgRes.json():{};
+  WHATSAPP=cfg.whatsapp||WHATSAPP;
+  if(cfg.color) document.documentElement.style.setProperty('--primary',cfg.color);
+  document.getElementById('hNombre').innerText=cfg.nombre||cliente;
+  document.getElementById('topBar').innerText=cfg.nombre||cliente;
+  document.getElementById('logoTxt').innerText=(cfg.nombre||cliente).slice(0,2).toUpperCase();
+  envioConfig=cfg.envio||envioConfig;
+  renderCats(); render();
+ }catch(e){document.getElementById('hNombre').innerText='Carta no encontrada: '+cliente}
 }
-updTokenStatus();
+function renderCats(){
+ const cats=['todos',...new Set(productos.map(p=>(p.categoria||p.cat||'general').toLowerCase()))];
+ document.getElementById('cats').innerHTML=cats.map(c=>'<div class="cat '+(c===catActiva?'active':'')+'" onclick="filtrar(\\''+c+'\\',this)">'+(c==='todos'?'Todos':c)+'</div>').join('');
+}
+function filtrar(c,e){catActiva=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));e.classList.add('active');render()}
+function render(){let l=catActiva==='todos'?productos:productos.filter(p=>(p.categoria||p.cat||'').toLowerCase()===catActiva);
+document.getElementById('menu').innerHTML=l.map(p=>'<div class="item"><img src="'+p.img+'" onerror="this.src=\\'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=500\\'"><div class="info"><h3>'+p.nombre+'</h3><p style="font-size:11px;color:#9ca3af">'+(p.descripcion||p.desc||'')+'</p><div class="price">$'+p.precio.toLocaleString('es-AR')+'</div></div><button class="add" onclick="add('+p.id+')">+</button></div>').join('')}
+function add(id){carrito[id]=(carrito[id]||0)+1;upd()}
+function upd(){
+ let t=0,n=0;for(let id in carrito){let p=productos.find(x=>x.id==id);if(p){t+=p.precio*carrito[id];n+=carrito[id]}}
+ let costoEnvio=0;
+ if(tipo==='envio'){
+  if(envioConfig.tipo==='fijo') costoEnvio=envioConfig.costo||0;
+  else if(envioConfig.tipo==='gratis') costoEnvio=0;
+  else if(envioConfig.tipo==='variable') costoEnvio=envioConfig.base||0;
+ }
+ let f=tipo==='envio'?t+costoEnvio:t;
+ document.getElementById('total').innerText='$'+f.toLocaleString('es-AR');
+ document.getElementById('mtotal').innerText='$'+f.toLocaleString('es-AR');
+ document.getElementById('count').innerText=n;
+ let h='';for(let id in carrito){let p=productos.find(x=>x.id==id);if(!p) continue; h+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #262626;font-size:13px"><span>'+p.nombre+' x'+carrito[id]+'</span><span><button onclick="chg('+id+',-1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">-</button> '+carrito[id]+' <button onclick="chg('+id+',1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">+</button></span></div>'}document.getElementById('items').innerHTML=h||'<p style="color:#666;text-align:center">Carrito vacío</p>';
+ const txt=document.getElementById('envioTxt');
+ if(tipo==='envio'){txt.style.display='block';txt.innerText=costoEnvio?'+ $'+costoEnvio+' envío':''} else txt.style.display='none';
+}
+function chg(id,d){carrito[id]+=d;if(carrito[id]<=0) delete carrito[id];upd()}
+function abrir(){document.getElementById('modal').classList.add('active')} function cerrar(){document.getElementById('modal').classList.remove('active')}
+function setTipo(tt){tipo=tt;document.getElementById('b1').style.background=tt==='retiro'?'#E11D48':'#262626';document.getElementById('b2').style.background=tt==='envio'?'#E11D48':'#262626';document.getElementById('dirBox').style.display=tt==='envio'?'block':'none';upd()}
+function enviar(){
+ let nom=document.getElementById('nombre').value.trim(); let tel=document.getElementById('telefono').value.trim();
+ let dir=document.getElementById('dir')?.value||''; let piso=document.getElementById('piso')?.value||''; let pago=document.getElementById('pago').value;
+ if(!nom||!tel||!tipo){alert('Completá nombre, teléfono y tipo');return}
+ let msg='Hola! Pedido de *'+nom+'*:%0A Tel: '+tel+'%0A%0A'; let tot=0;
+ for(let id in carrito){let p=productos.find(x=>x.id==id);msg+='• '+p.nombre+' x'+carrito[id]+' - $'+(p.precio*carrito[id]).toLocaleString('es-AR')+'%0A';tot+=p.precio*carrito[id];}
+ let costoEnvio=0; if(tipo==='envio'){if(envioConfig.tipo==='fijo') costoEnvio=envioConfig.costo; else if(envioConfig.tipo==='variable') costoEnvio=envioConfig.base}
+ msg+='%0A*Tipo: '+tipo.toUpperCase()+'*%0A'; if(tipo==='envio'){msg+=' Dir: '+dir+' '+(piso||'')+'%0A'; if(costoEnvio) msg+=' Envío: $'+costoEnvio+'%0A'; msg+='*Total: $'+(tot+costoEnvio).toLocaleString('es-AR')+'*%0A';} else msg+='*Total: $'+tot.toLocaleString('es-AR')+'*%0A';
+ if(pago) msg+='Pago: '+pago+'%0A';
+ window.open('https://wa.me/'+WHATSAPP+'?text='+msg,'_blank');
+}
+init();
+<\/script></body></html>`;
 
+function saveT(){localStorage.setItem('gh_token_cartas',document.getElementById('token').value.trim()); updT();}
+function delT(){localStorage.removeItem('gh_token_cartas');document.getElementById('token').value='';updT();}
+function getT(){return localStorage.getItem('gh_token_cartas')||'';}
+function updT(){
+ const t=getT(); document.getElementById('token').value=t;
+ document.getElementById('tStatus').innerHTML=t?`<span class="ok">✅ Token OK (${t.slice(0,4)}...)</span>`:`<span class="err">Sin token - no guardará real</span>`;
+}
+updT();
+
+let productos=[]; let clienteActual='';
 async function cargar(){
-  clienteActual = document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
-  if(!clienteActual) return alert('Poné nombre cliente');
-  document.getElementById('status').innerText = 'Cargando '+clienteActual+' desde '+BASE+'...';
-  try{
-    const dataUrl = BASE + 'data/'+clienteActual+'.json';
-    const cfgUrl = BASE + 'config/'+clienteActual+'.json';
-    // intenta relativo también
-    let dataRes = await fetch('../data/'+clienteActual+'.json?v='+Date.now());
-    if(!dataRes.ok) dataRes = await fetch(dataUrl+'?v='+Date.now());
-    let cfgRes = await fetch('../config/'+clienteActual+'.json?v='+Date.now());
-    if(!cfgRes.ok) cfgRes = await fetch(cfgUrl+'?v='+Date.now());
-    
-    if(dataRes.ok){ productos = await dataRes.json(); } else { productos = []; }
-    if(cfgRes.ok){
-      const cfg = await cfgRes.json();
-      document.getElementById('cfgNombre').value = cfg.nombre||clienteActual;
-      document.getElementById('cfgWa').value = cfg.whatsapp||'';
-      document.getElementById('cfgColor').value = cfg.color||'#E11D48';
-      if(cfg.envio){
-        document.getElementById('cfgEnvioTipo').value = cfg.envio.tipo||'fijo';
-        document.getElementById('cfgCosto').value = cfg.envio.costo||cfg.envio.base||1500;
-        document.getElementById('cfgTramo').value = cfg.envio.precioPorTramo||500;
-      }
-    } else {
-      document.getElementById('cfgNombre').value = clienteActual;
-    }
-    document.getElementById('configBox').style.display='block';
-    document.getElementById('productosBox').style.display='block';
-    render();
-    document.getElementById('status').innerHTML = `<span class="ok">Cargado ${clienteActual} (${productos.length} prods) desde ${REPO}</span>`;
-  }catch(e){
-    document.getElementById('status').innerHTML = `<span class="err">Error: ${e.message} - Si no existe, creá nuevo</span>`;
-    document.getElementById('configBox').style.display='block';
-    document.getElementById('productosBox').style.display='block';
-    productos = [];
-    render();
+ clienteActual=document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
+ if(!clienteActual) return alert('Poné nombre cliente');
+ document.getElementById('cStatus').innerText='Cargando '+clienteActual+'...';
+ try{
+  let dataRes=await fetch('../data/'+clienteActual+'.json?v='+Date.now());
+  let cfgRes=await fetch('../config/'+clienteActual+'.json?v='+Date.now());
+  // fallback directo github pages
+  if(!dataRes.ok) dataRes=await fetch('https://cartaspro.github.io/cartas/data/'+clienteActual+'.json?v='+Date.now());
+  if(!cfgRes.ok) cfgRes=await fetch('https://cartaspro.github.io/cartas/config/'+clienteActual+'.json?v='+Date.now());
+  
+  if(dataRes.ok) productos=await dataRes.json(); else productos=[];
+  if(cfgRes.ok){
+   const cfg=await cfgRes.json();
+   document.getElementById('cNombre').value=cfg.nombre||clienteActual;
+   document.getElementById('cWa').value=cfg.whatsapp||'';
+   document.getElementById('cColor').value=cfg.color||'#E11D48';
+   document.getElementById('cEnvio').value=cfg.envio?.tipo||'fijo';
+   document.getElementById('cCosto').value=cfg.envio?.costo||cfg.envio?.base||1500;
+   document.getElementById('cTramo').value=cfg.envio?.precioPorTramo||500;
+  } else {
+   document.getElementById('cNombre').value=clienteActual;
   }
+  document.getElementById('cfgCard').style.display='block';
+  document.getElementById('prodsCard').style.display='block';
+  render();
+  document.getElementById('cStatus').innerHTML=`<span class="ok">Cargado ${clienteActual} con ${productos.length} productos</span>`;
+  document.getElementById('links').innerHTML=`
+   <a class="link" target="_blank" href="https://cartaspro.github.io/cartas/${clienteActual}/">🌐 Ver página cliente: /${clienteActual}/</a><br>
+   <a class="link" target="_blank" href="https://cartaspro.github.io/cartas/">📋 Ver listado general</a>
+  `;
+  document.getElementById('preview').innerHTML=`<a class="btn s" target="_blank" href="https://cartaspro.github.io/cartas/${clienteActual}/">👁️ Ver como cliente</a>`;
+ }catch(e){
+  document.getElementById('cStatus').innerHTML=`<span class="err">Error: ${e.message}. Si es nuevo, se creará.</span>`;
+  document.getElementById('cfgCard').style.display='block';
+  document.getElementById('prodsCard').style.display='block';
+  productos=[]; render();
+ }
 }
-
 function render(){
-  const c=document.getElementById('lista');
-  c.innerHTML = productos.map((p,i)=>`
+ document.getElementById('lista').innerHTML=productos.map((p,i)=>`
   <div class="prod">
-    <div class="row">
-      <div><label>Nombre</label><input value="${p.nombre||''}" oninput="productos[${i}].nombre=this.value"></div>
-      <div><label>Precio</label><input type="number" value="${p.precio||0}" oninput="productos[${i}].precio=parseInt(this.value)||0"></div>
-    </div>
-    <label>Descripción</label><input value="${(p.descripcion||p.desc||'').replace(/"/g,'&quot;')}" oninput="productos[${i}].descripcion=this.value">
-    <div class="row">
-      <div><label>Categoría</label><input value="${p.categoria||p.cat||''}" oninput="productos[${i}].categoria=this.value.toLowerCase()"></div>
-      <div><label>Imagen URL</label><input value="${p.img||''}" oninput="productos[${i}].img=this.value"></div>
-    </div>
-    <button class="secondary" style="margin-top:8px" onclick="productos.splice(${i},1);render()">Eliminar</button>
+   <div class="grid2"><div><label>Nombre</label><input value="${p.nombre||''}" oninput="productos[${i}].nombre=this.value"></div><div><label>Precio $</label><input type="number" value="${p.precio||0}" oninput="productos[${i}].precio=parseInt(this.value)||0"></div></div>
+   <label>Descripción</label><input value="${(p.descripcion||p.desc||'').replace(/"/g,'&quot;')}" oninput="productos[${i}].descripcion=this.value">
+   <div class="grid2"><div><label>Categoría</label><input value="${p.categoria||p.cat||''}" oninput="productos[${i}].categoria=this.value.toLowerCase()"></div><div><label>Imagen URL</label><input value="${p.img||''}" oninput="productos[${i}].img=this.value"></div></div>
+   <button class="s btn" style="margin-top:8px" onclick="productos.splice(${i},1);render()">Eliminar</button>
   </div>
-  `).join('') || '<p class="small">Sin productos</p>';
+ `).join('') || '<p class="small">Sin productos - Agregá uno</p>';
 }
-function addProd(){ productos.push({id:Date.now(), categoria:'general', nombre:'Nuevo producto', descripcion:'', precio:1000, img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'}); render(); }
+function addP(){productos.push({id:Date.now(),categoria:'general',nombre:'Nuevo',descripcion:'',precio:1000,img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'});render();}
 
-function getConfigObj(){
-  const tipo = document.getElementById('cfgEnvioTipo').value;
-  const costo = parseInt(document.getElementById('cfgCosto').value)||0;
-  const tramo = parseInt(document.getElementById('cfgTramo').value)||500;
-  let envio={tipo};
-  if(tipo==='fijo') envio={tipo:'fijo', costo};
-  if(tipo==='gratis') envio={tipo:'gratis', costo:0};
-  if(tipo==='variable') envio={tipo:'variable', base:costo, cadaKm:2, precioPorTramo:tramo};
-  return {
-    nombre: document.getElementById('cfgNombre').value||clienteActual,
-    whatsapp: document.getElementById('cfgWa').value||'5491134890644',
-    color: document.getElementById('cfgColor').value||'#E11D48',
-    envio
-  };
+function getCfg(){
+ const tipo=document.getElementById('cEnvio').value;
+ const costo=parseInt(document.getElementById('cCosto').value)||0;
+ const tramo=parseInt(document.getElementById('cTramo').value)||500;
+ let envio={tipo};
+ if(tipo==='fijo') envio={tipo:'fijo',costo};
+ if(tipo==='gratis') envio={tipo:'gratis',costo:0};
+ if(tipo==='variable') envio={tipo:'variable',base:costo,cadaKm:2,precioPorTramo:tramo};
+ return {nombre:document.getElementById('cNombre').value||clienteActual, whatsapp:document.getElementById('cWa').value||'5491134890644', color:document.getElementById('cColor').value||'#E11D48', envio};
 }
 
-async function guardarTodo(){
-  if(!clienteActual) return alert('Cargá un cliente primero');
-  const token=getToken();
-  if(!token) return alert('Poné el token primero arriba, o usa Descargar JSONs');
-  const cfg = getConfigObj();
-  document.getElementById('saveStatus').innerText = 'Guardando en GitHub...';
-  try{
-    await commitFile(`data/${clienteActual}.json`, JSON.stringify(productos,null,2));
-    await commitFile(`config/${clienteActual}.json`, JSON.stringify(cfg,null,2));
-    // si no existe carpeta cliente, intenta crear index base copiando de demo si existe
-    document.getElementById('saveStatus').innerHTML = `<span class="ok">Guardado OK en ${REPO}. Esperá 2 min y recargá https://cartaspro.github.io/cartas/${clienteActual}/</span>`;
-  }catch(e){
-    document.getElementById('saveStatus').innerHTML = `<span class="err">Error: ${e.message}</span>`;
-  }
+async function commit(path,content){
+ const token=getT(); if(!token) throw new Error('Sin token');
+ const url=`https://api.github.com/repos/${REPO}/contents/${path}`;
+ let sha=null;
+ try{ const r=await fetch(url,{headers:{Authorization:`token ${token}`}}); if(r.ok){const j=await r.json(); sha=j.sha;} }catch(e){}
+ const body={message:`admin: update ${path}`, content:btoa(unescape(encodeURIComponent(content))), ...(sha?{sha}:{})};
+ const res=await fetch(url,{method:'PUT', headers:{Authorization:`token ${token}`,'Content-Type':'application/json'}, body:JSON.stringify(body)});
+ if(!res.ok){ const t=await res.text(); throw new Error(t.slice(0,300)); }
 }
 
-async function commitFile(path, content){
-  const token=getToken();
-  const apiUrl = `https://api.github.com/repos/${REPO}/contents/${path}`;
-  // get sha if exists
-  let sha=null;
-  try{
-    const r=await fetch(apiUrl, {headers:{Authorization:`token ${token}`}});
-    if(r.ok){ const j=await r.json(); sha=j.sha; }
-  }catch(e){}
-  const body={
-    message:`Update ${path} via admin /cartas/`,
-    content: btoa(unescape(encodeURIComponent(content))),
-    ...(sha?{sha}:{})
-  };
-  const res=await fetch(apiUrl,{method:'PUT', headers:{Authorization:`token ${token}`, 'Content-Type':'application/json'}, body:JSON.stringify(body)});
-  if(!res.ok){ const t=await res.text(); throw new Error(t); }
-}
-
-function descargar(){
-  const cfg=getConfigObj();
-  const a=document.createElement('a');
-  a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(productos,null,2));
-  a.download=`${clienteActual}.json`;
-  a.click();
-  const b=document.createElement('a');
-  b.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(cfg,null,2));
-  b.download=`${clienteActual}-config.json`;
-  b.click();
-}
-</script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
-</html>
+async function guardarReal(){
+ if(!clienteActual) return alert('Cargá cliente');
+ const token=getT(); if(!token) return alert('Poné token primero');
+ document.getElementById('saveStatus').innerText='Guardando REAL en GitHub... esto impacta para todos...';
+ try{
+  const cfg=getCfg();
+  await commit(`data/${clienteActual}.json`, JSON.stringify(productos,null,2));
+  await commit(`config/${clienteActual}.json`, JSON.stringify(cfg,null,2));
+  // Crear página del cliente si no existe
+  const pageContent=CARTA_TEMPLAT
