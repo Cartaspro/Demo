@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "nombre": "Classic Burguer",
+    "categoria": "Hamburguesas",
+    "precio": 4500,
+    "descripcion": "Pan brioche, medallón 180g, cheddar, lechuga y tomate",
+    "img": "https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": 2,
+    "nombre": "Doble Cheese Bacon",
+    "categoria": "Hamburguesas",
+    "precio": 6200,
+    "descripcion": "Doble carne, doble cheddar, bacon crocante",
+    "img": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": 3,
+    "nombre": "Crispy Chicken",
+    "categoria": "Hamburguesas",
+    "precio": 5800,
+    "descripcion": "Pollo crispy, salsa CartasPro, pickles",
+    "img": "https://images.unsplash.com/photo-1606756790138-7c749659a591?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": 4,
+    "nombre": "Veggie Lenteja",
+    "categoria": "Hamburguesas",
+    "precio": 5200,
+    "descripcion": "Medallón de lentejas, palta, rúcula y mayo vegana",
+    "img": "https://images.unsplash.com/photo-1520072959219-c595dc870360?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": 5,
+    "nombre": "Papas CartasPro",
+    "categoria": "Acompañamientos",
+    "precio": 2500,
+    "descripcion": "Papas fritas con cheddar y verdeo",
+    "img": "https://images.unsplash.com/photo-1585109649139-366815a0d713?w=600&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": 6,
+    "nombre": "Lemon Pie Shake",
+    "categoria": "Bebidas",
+    "precio": 2200,
+    "descripcion": "Milkshake cremoso con crumble de lemon pie",
+    "img": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=600&q=80&auto=format&fit=crop"
+  }
+]
