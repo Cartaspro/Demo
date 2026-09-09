@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - CartasPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c;--border:#2a2a2a}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:var(--bg);color:#fff;padding:16px;max-width:800px;margin:0 auto}
+h1{font-size:20px;margin-bottom:4px}
+.sub{color:#9ca3af;font-size:13px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px}
+.label{font-size:11px;color:#9ca3af;font-weight:700;text-transform:uppercase;margin-top:12px;display:block}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prod{background:#0f0f0f;border:1px solid #333;border-radius:12px;padding:12px;position:relative}
+.prod img{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;background:#111}
+.del{position:absolute;top:8px;right:8px;background:#ef4444;border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;cursor:pointer;margin-top:12px}
+.primary{background:var(--primary);color:#fff}
+.secondary{background:#262626;color:#fff;border:1px solid #333}
+.green{background:#25D366;color:#fff}
+textarea{width:100%;height:220px;background:#0f0f0f;color:#8bff8b;border:1px solid #333;border-radius:12px;padding:12px;font-family:monospace;font-size:12px;margin-top:12px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{padding:10px 16px;border-radius:20px;background:#1c1c1c;border:1px solid #2a2a2a;font-size:13px;cursor:pointer}
+.tab.active{background:var(--primary);border-color:var(--primary)}
+.badge{font-size:10px;background:#f59e0b;color:#000;padding:3px 8px;border-radius:10px;margin-left:8px}
+</style>
+</head>
+<body>
+<h1>Admin CartasPro <span class="badge">DEMO</span></h1>
+<p class="sub">Editá fotos, precios y envío sin pifiarle. Luego copiás y pegás en GitHub.</p>
+
+<div class="tabs">
+<div class="tab active" onclick="showTab('productos',this)">Productos</div>
+<div class="tab" onclick="showTab('config',this)">Config / Envío</div>
+<div class="tab" onclick="showTab('exportar',this)">Exportar</div>
+</div>
+
+<div id="tab-productos">
+<div class="card">
+<button class="btn secondary" onclick="cargarDesdeGitHub()">🔄 Cargar desde data/demo.json actual</button>
+<p style="font-size:11px;color:#666;margin-top:8px">Carga lo que ya subiste para no empezar de cero</p>
+</div>
+
+<div id="lista"></div>
+
+<div class="card">
+<h3 style="font-size:14px">+ Agregar producto</h3>
+<label class="label">Nombre</label><input id="n_nombre" class="input" placeholder="Ej: Combo Familiar">
+<label class="label">Categoria</label><input id="n_cat" class="input" placeholder="hamburguesas / pizzas / papas / bebidas / combos">
+<label class="label">Precio</label><input id="n_precio" class="input" type="number" placeholder="12500">
+<label class="label">Descripcion</label><input id="n_desc" class="input" placeholder="Que trae">
+<label class="label">URL Imagen (Unsplash o la del cliente)</label><input id="n_img" class="input" placeholder="https://images.unsplash.com/...">
+<button class="btn primary" onclick="agregar()">Agregar</button>
+</div>
+</div>
+
+<div id="tab-config" style="display:none">
+<div class="card">
+<label class="label">Nombre del local</label><input id="c_nombre" class="input" value="DEMO">
+<label class="label">WhatsApp (sin + ni espacios)</label><input id="c_wa" class="input" value="5491134890644">
+<label class="label">Color primario</label><input id="c_color" class="input" type="color" value="#E11D48">
+<label class="label">Tipo de envío</label>
+<select id="c_tipo" class="input" onchange="toggleEnvio()">
+<option value="fijo">Fijo</option>
+<option value="variable">Variable cada X km</option>
+<option value="gratis">Gratis</option>
+</select>
+
+<div id="env-fijo">
+<label class="label">Costo fijo</label><input id="c_costo" class="input" type="number" value="1500">
+</div>
+
+<div id="env-variable" style="display:none">
+<label class="label">Base</label><input id="c_base" class="input" type="number" value="1500">
+<label class="label">Cada cuantos km cobra extra</label><input id="c_cada" class="input" type="number" value="2">
+<label class="label">Precio por tramo</label><input id="c_tramo" class="input" type="number" value="500">
+</div>
+
+</div>
+</div>
+
+<div id="tab-exportar" style="display:none">
+<div class="card">
+<h3 style="font-size:14px">Paso final para GitHub</h3>
+<p style="font-size:12px;color:#9ca3af;margin-top:8px">1. Copiá el primer cuadro y pegalo en <b>data/demo.json</b><br>2. Copiá el segundo y pegalo en <b>config/demo.json</b></p>
+<label class="label">data/demo.json</label>
+<textarea id="outData"></textarea>
+<button class="btn secondary" onclick="copiar('outData')">Copiar data/demo.json</button>
+
+<label class="label" style="margin-top:16px">config/demo.json</label>
+<textarea id="outConfig"></textarea>
+<button class="btn green" onclick="copiar('outConfig')">Copiar config/demo.json</button>
+</div>
+</div>
+
+<script>
+let productos = [
+{id:1,cat:'hamburguesas',nombre:"Hamburguesa Doble",desc:"Doble carne, doble cheddar, bacon crocante",precio:12500,img:"https://images.unsplash.com/photo-1553979459-d2229ba7433b?q=80&w=600"},
+{id:2,cat:'pizzas',nombre:"Pizza Muzzarella",desc:"Mozza, salsa, oregano - 8 porciones",precio:13900,img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600"},
+{id:3,cat:'papas',nombre:"Papas Fritas Grandes",desc:"Porcion grande, crocantes, con cheddar opcional",precio:5500,img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=600"},
+{id:4,cat:'bebidas',nombre:"Coca Cola 1.5L",desc:"Bien fria",precio:3500,img:"https://images.unsplash.com/photo-1553456558-aff63285bdd1?q=80&w=600"}
+];
+
+function showTab(id, el){
+ document.getElementById('tab-productos').style.display = id==='productos'?'block':'none';
+ document.getElementById('tab-config').style.display = id==='config'?'block':'none';
+ document.getElementById('tab-exportar').style.display = id==='exportar'?'block':'none';
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ el.classList.add('active');
+ if(id==='exportar') generar();
+}
+
+async function cargarDesdeGitHub(){
+ const rutas = ['../data/demo.json','data/demo.json','./data/demo.json','/Cartas-digitales/data/demo.json'];
+ for(let r of rutas){
+  try{
+   const resp = await fetch(r+'?t='+Date.now());
+   if(resp.ok){
+    const j = await resp.json();
+    if(Array.isArray(j)){
+      productos = j.map(p=>({id:p.id, cat:(p.categoria||p.cat||'').toLowerCase(), nombre:p.nombre, desc:p.descripcion||p.desc||'', precio:p.precio, img:p.img}));
+      render();
+      alert('Cargado desde '+r);
+      return;
+    }
+   }
+  }catch(e){}
+ }
+ alert('No pude cargar, verifica que data/demo.json exista en main');
+}
+
+function render(){
+ const cont = document.getElementById('lista');
+ cont.innerHTML = productos.map(p=>`
+  <div class="prod">
+    <button class="del" onclick="borrar(${p.id})">X</button>
+    <img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=400'" />
+    <input class="input" value="${p.nombre}" onchange="edit(${p.id},'nombre',this.value)" />
+    <div class="grid">
+      <input class="input" value="${p.cat}" onchange="edit(${p.id},'cat',this.value)" placeholder="cat" />
+      <input class="input" type="number" value="${p.precio}" onchange="edit(${p.id},'precio',this.value)" />
+    </div>
+    <input class="input" value="${p.desc}" onchange="edit(${p.id},'desc',this.value)" placeholder="desc" />
+    <input class="input" value="${p.img}" onchange="edit(${p.id},'img',this.value)" placeholder="url img" style="font-size:11px" />
+  </div>
+ `).join('');
+}
+
+function edit(id, campo, val){
+ const p = productos.find(x=>x.id===id);
+ if(!p) return;
+ if(campo==='precio') p[campo]=parseInt(val)||0;
+ else p[campo]=val;
+ render();
+}
+
+function borrar(id){ productos = productos.filter(p=>p.id!==id); render(); }
+
+function agregar(){
+ const nombre = document.getElementById('n_nombre').value.trim();
+ if(!nombre) return alert('Pone nombre');
+ const nuevo = {
+  id: Date.now(),
+  cat: (document.getElementById('n_cat').value.trim()||'otros').toLowerCase(),
+  nombre,
+  desc: document.getElementById('n_desc').value.trim(),
+  precio: parseInt(document.getElementById('n_precio').value)||0,
+  img: document.getElementById('n_img').value.trim()||'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'
+ };
+ productos.push(nuevo);
+ ['n_nombre','n_cat','n_precio','n_desc','n_img'].forEach(i=>document.getElementById(i).value='');
+ render();
+}
+
+function toggleEnvio(){
+ const tipo = document.getElementById('c_tipo').value;
+ document.getElementById('env-fijo').style.display = tipo==='fijo'?'block':'none';
+ document.getElementById('env-variable').style.display = tipo==='variable'?'block':'none';
+}
+
+function generar(){
+ const outData = productos.map(p=>({
+  id:p.id,
+  categoria:p.cat,
+  nombre:p.nombre,
+  descripcion:p.desc,
+  precio:p.precio,
+  img:p.img
+ }));
+ document.getElementById('outData').value = JSON.stringify(outData, null, 2);
+
+ const tipo = document.getElementById('c_tipo').value;
+ let envio = {tipo};
+ if(tipo==='fijo') envio.costo = parseInt(document.getElementById('c_costo').value)||0;
+ if(tipo==='variable'){
+  envio.base = parseInt(document.getElementById('c_base').value)||0;
+  envio.cadaKm = parseInt(document.getElementById('c_cada').value)||2;
+  envio.precioPorTramo = parseInt(document.getElementById('c_tramo').value)||0;
+ }
+ const cfg = {
+  nombre: document.getElementById('c_nombre').value,
+  whatsapp: document.getElementById('c_wa').value,
+  color: document.getElementById('c_color').value,
+  envio
+ };
+ document.getElementById('outConfig').value = JSON.stringify(cfg, null, 2);
+}
+
+function copiar(id){
+ const t = document.getElementById(id);
+ t.select(); document.execCommand('copy');
+ alert('Copiado! Ahora pegalo en GitHub');
+}
+
+render();
+</script>
+</body>
+</html>
