@@ -23,7 +23,7 @@
 }
 </style>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CartasPro - App Directa</title>
+<title>CartasPro - App</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c}
@@ -40,27 +40,27 @@ body{background:var(--bg);color:#fff;padding:16px;max-width:500px;margin:0 auto;
 </style>
 </head>
 <body>
-<h1 style="font-size:22px">CartasPro App</h1>
-<p class="small" style="margin:6px 0 14px">Sin tokens. Sin 404. 100% directa.</p>
+<h1 style="font-size:20px" id="titulo">CartasPro App</h1>
+<p class="small" id="baseInfo" style="margin:6px 0 14px"></p>
 
 <div class="card">
 <label class="label">Cliente (ej: templar)</label>
 <input id="cliente" class="input" value="templar">
 <div class="grid2">
-<button class="btn dark" onclick="cargar()">Cargar existente</button>
-<button class="btn dark" onclick="nuevo()">Nuevo cliente</button>
+<button class="btn dark" onclick="cargar()">Cargar</button>
+<button class="btn dark" onclick="nuevo()">Nuevo</button>
 </div>
 <div id="status" class="small" style="margin-top:8px"></div>
 </div>
 
 <div class="card">
 <label class="label">Nombre del local</label><input id="c_nombre" class="input" value="Templar">
-<label class="label">WhatsApp (sin +)</label><input id="c_wa" class="input" value="5491134890644">
+<label class="label">WhatsApp</label><input id="c_wa" class="input" value="5491134890644">
 <label class="label">Color</label><input id="c_color" class="input" type="color" value="#E11D48">
 <label class="label">Envío</label>
-<select id="c_tipo" class="input"><option value="fijo">Fijo</option><option value="variable" selected>Variable cada X km</option><option value="gratis">Gratis</option></select>
+<select id="c_tipo" class="input"><option value="fijo">Fijo</option><option value="variable" selected>Variable</option><option value="gratis">Gratis</option></select>
 <div class="grid2"><div><label class="label">Base</label><input id="c_base" class="input" type="number" value="1500"></div><div><label class="label">Cada km</label><input id="c_cada" class="input" type="number" value="2"></div></div>
-<label class="label">Precio por tramo</label><input id="c_tramo" class="input" type="number" value="500">
+<label class="label">Precio tramo</label><input id="c_tramo" class="input" type="number" value="500">
 </div>
 
 <div class="card">
@@ -70,13 +70,28 @@ body{background:var(--bg);color:#fff;padding:16px;max-width:500px;margin:0 auto;
 </div>
 
 <div class="card">
-<button class="btn green" onclick="guardar()">GENERAR ARCHIVOS Y DESCARGAR</button>
-<p class="small" style="margin-top:8px">Te baja 2 archivos .json + instrucciones para subir a GitHub en 10 seg arrastrando. No necesitas token.</p>
+<button class="btn green" onclick="guardar()">GENERAR ARCHIVOS</button>
 <div id="down" style="margin-top:10px"></div>
 </div>
 
 <script>
 let productos=[];
+let BASE_PATH = '';
+function detectarBase(){
+  // Ej: /cartas/admin/ -> base /cartas/
+  // Ej: /Demo/admin/ -> base /Demo/
+  // Ej: /admin/ -> base /
+  const path = window.location.pathname;
+  if(path.includes('/admin/')){
+    BASE_PATH = path.split('/admin/')[0] + '/';
+  } else {
+    BASE_PATH = '/cartas/';
+  }
+  if(BASE_PATH=='//') BASE_PATH='/';
+  document.getElementById('baseInfo').innerText = 'Repo detectado: ' + BASE_PATH + ' | Carga desde: ' + BASE_PATH + 'data/';
+  document.getElementById('titulo').innerText = 'CartasPro App ('+BASE_PATH+')';
+}
+detectarBase();
 function render(){
  const cont=document.getElementById('lista');
  let h='';
@@ -96,25 +111,26 @@ function borrar(i){ productos.splice(i,1); render(); }
 function nuevo(){ 
   productos=[
     {id:1,categoria:'hamburguesas',nombre:'Templar Clásica',descripcion:'Doble carne, cheddar, bacon',precio:4500,img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'},
-    {id:2,categoria:'hamburguesas',nombre:'Templar Doble',descripcion:'Triple carne',precio:6200,img:'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600'}
   ];
-  document.getElementById('status').innerText='Plantilla Templar cargada. Editá y guardá.';
+  document.getElementById('status').innerText='Plantilla cargada';
   render();
 }
 async function cargar(){
  const name=document.getElementById('cliente').value.trim().toLowerCase();
  if(!name) return;
- document.getElementById('status').innerText='Buscando '+name+'...';
+ document.getElementById('status').innerText='Buscando '+BASE_PATH+'data/'+name+'.json ...';
  try{
-  const r=await fetch('https://cartaspro.github.io/data/'+name+'.json?v='+Date.now());
-  if(!r.ok) throw new Error('No existe aun');
+  const r=await fetch(BASE_PATH+'data/'+name+'.json?v='+Date.now());
+  if(!r.ok) throw new Error('No existe en '+BASE_PATH+'data/'+name+'.json');
   const data=await r.json();
   productos=data.map(p=>({id:p.id,categoria:p.categoria||p.cat,nombre:p.nombre,descripcion:p.descripcion||p.desc,precio:p.precio,img:p.img}));
-  const rc=await fetch('https://cartaspro.github.io/config/'+name+'.json?v='+Date.now()).then(x=>x.json()).catch(()=>null);
-  if(rc){ document.getElementById('c_nombre').value=rc.nombre||name; document.getElementById('c_wa').value=rc.whatsapp||''; document.getElementById('c_color').value=rc.color||'#E11D48'; }
-  document.getElementById('status').innerText='Cargado '+name+' ('+productos.length+' productos)';
+  try{
+   const rc=await fetch(BASE_PATH+'config/'+name+'.json?v='+Date.now()).then(x=>x.json());
+   if(rc){ document.getElementById('c_nombre').value=rc.nombre||name; document.getElementById('c_wa').value=rc.whatsapp||''; document.getElementById('c_color').value=rc.color||'#E11D48'; }
+  }catch(e){}
+  document.getElementById('status').innerText='Cargado '+name+' ('+productos.length+') desde '+BASE_PATH;
   render();
- }catch(e){ document.getElementById('status').innerText='No existe aun, usa Nuevo cliente'; nuevo(); }
+ }catch(e){ document.getElementById('status').innerText=e.message; nuevo(); }
 }
 function descargar(nombre, contenido){
  const blob=new Blob([contenido],{type:'application/json'});
@@ -123,7 +139,7 @@ function descargar(nombre, contenido){
 }
 function guardar(){
  const name=document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
- if(!name) return alert('Pone nombre cliente');
+ if(!name) return alert('Nombre');
  const outData=productos.map(p=>({id:p.id||Date.now(),categoria:p.categoria.toLowerCase(),nombre:p.nombre,descripcion:p.descripcion,precio:p.precio,img:p.img}));
  const envioTipo=document.getElementById('c_tipo').value;
  let envio={tipo:envioTipo};
@@ -132,15 +148,16 @@ function guardar(){
  const cfg={nombre:document.getElementById('c_nombre').value, whatsapp:document.getElementById('c_wa').value, color:document.getElementById('c_color').value, envio:envio};
  descargar(name+'.json', JSON.stringify(outData,null,2));
  setTimeout(()=>{ descargar(name+'-config.json', JSON.stringify(cfg,null,2)); }, 500);
+ const finalUrl = window.location.origin + BASE_PATH + name + '/';
  document.getElementById('down').innerHTML=`
   <div style="background:#0f0f0f;border:1px solid #25D366;border-radius:12px;padding:12px">
-  <b style="color:#25D366">Archivos generados!</b><br>
-  <p class=small style="margin-top:6px">1. Bajaste <b>${name}.json</b> y <b>${name}-config.json</b><br>
-  2. Anda a <a href="https://github.com/cartaspro/cartaspro.github.io/upload/main" target="_blank" style="color:#25D366">Subir archivos a GitHub</a><br>
-  3. Arrastra los 2 archivos<br>
-  4. En la segunda subida, sube <b>${name}.json</b> a la carpeta <b>data/</b> (renombralo a <b>data/${name}.json</b> antes) y <b>${name}-config.json</b> a <b>config/${name}.json</b><br><br>
-  O mas facil: crea los archivos manual como te dije: data/${name}.json y config/${name}.json y pega el contenido.<br><br>
-  <a href="https://cartaspro.github.io/${name}/" target="_blank" style="color:#25D366">Ver carta de ${name} en 1 min</a></p>
+  <b style="color:#25D366">Listo!</b><br>
+  <p class=small style="margin-top:6px">
+  Subí <b>${name}.json</b> a <b>${BASE_PATH}data/</b> como <b>${BASE_PATH}data/${name}.json</b><br>
+  Subí <b>${name}-config.json</b> a <b>${BASE_PATH}config/</b> como <b>${BASE_PATH}config/${name}.json</b><br><br>
+  Tu carta va a estar en:<br>
+  <a href="${finalUrl}" target="_blank" style="color:#25D366">${finalUrl}</a>
+  </p>
   </div>
  `;
 }
