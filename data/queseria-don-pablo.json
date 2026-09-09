@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "categoria": "quesos duros",
+    "nombre": "Queso Sardo 1kg",
+    "descripcion": "Estacionado 12 meses, ideal para rallar",
+    "precio": 12500,
+    "img": "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=400"
+  },
+  {
+    "id": 2,
+    "categoria": "quesos blandos",
+    "nombre": "Muzzarella 1kg",
+    "descripcion": "Fresca, hilada, para pizza",
+    "precio": 7800,
+    "img": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400"
+  },
+  {
+    "id": 3,
+    "categoria": "quesos blandos",
+    "nombre": "Cremoso 1kg",
+    "descripcion": "El más vendido, cremoso artesanal",
+    "precio": 8200,
+    "img": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400"
+  },
+  {
+    "id": 4,
+    "categoria": "picadas",
+    "nombre": "Picada para 2",
+    "descripcion": "Sardo, fontina, salame, aceitunas",
+    "precio": 15500,
+    "img": "https://images.unsplash.com/photo-1544148103-077ea10c9e28?w=400"
+  },
+  {
+    "id": 5,
+    "categoria": "fiambres",
+    "nombre": "Jamón Crudo 500g",
+    "descripcion": "Bodega, 12 meses",
+    "precio": 18900,
+    "img": "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=400"
+  }
+]
