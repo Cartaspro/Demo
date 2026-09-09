@@ -5,5 +5,7 @@
   "envio": {
     "tipo": "fijo",
     "costo": 2500
-  }
+  },
+  "activo": false,
+  "estado": "baja"
 }
