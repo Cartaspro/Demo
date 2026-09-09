@@ -21,77 +21,69 @@
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
 </style><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin FINAL - Lector Universal</title>
+<title>Admin FINAL FIX - Campos visibles</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:#0f0f0f;color:#fff}
-.top{padding:14px 20px;border-bottom:1px solid #1c1c1c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f0f0f;z-index:20}
+.top{padding:14px 18px;border-bottom:1px solid #1c1c1c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f0f0f;z-index:20}
 .main{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;min-height:100vh}
-@media(max-width:950px){.main{grid-template-columns:1fr}}
+@media(max-width:980px){.main{grid-template-columns:1fr}}
 .left{border-right:1px solid #1c1c1c;padding:14px}
-.right{padding:14px;display:grid;gap:14px}
-.card{background:#1c1c1c;border:1px solid #262626;border-radius:16px;padding:14px}
-input,select,textarea{background:#0f0f0f;border:1px solid #262626;border-radius:10px;padding:10px;color:#fff;width:100%;font-size:13px}
-textarea{min-height:80px;resize:vertical}
+.right{padding:14px;display:flex;flex-direction:column;gap:14px}
+.card{background:#1c1c1c;border:1px solid #262626;border-radius:18px;padding:16px}
+input,select,textarea{background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;width:100%;font-size:14px}
+textarea{min-height:70px}
 .btn{padding:10px 16px;border-radius:100px;border:0;font-weight:800;cursor:pointer;font-size:12px}
 .btn-w{background:#fff;color:#000} .btn-r{background:#E11D48;color:#fff} .btn-g{background:#262626;color:#fff}
-.client{padding:10px 12px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c;font-size:13px}
+.client{padding:11px 12px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c;font-size:13px}
 .client.active{background:#fff;color:#000}
-.preview{width:100%;height:460px;border-radius:16px;border:1px solid #262626;background:#000}
-.kv{display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;margin-bottom:8px}
-.kv label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px}
-.sep{height:1px;background:#262626;margin:12px 0}
-.badge{font-size:10px;background:#0f0f0f;border:1px solid #262626;padding:4px 8px;border-radius:100px;color:#888}
-.prod{display:grid;grid-template-columns:60px 1fr 120px 100px 40px;gap:8px;align-items:center;background:#0f0f0f;border:1px solid #1c1c1c;border-radius:12px;padding:8px;margin-bottom:8px}
-.prod img{width:50px;height:50px;border-radius:10px;object-fit:cover;background:#1c1c1c}
-.small{font-size:11px;color:#666;margin-top:4px;line-height:1.4}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.preview{width:100%;height:520px;border-radius:16px;border:1px solid #262626;background:#000}
+.kv{margin-bottom:14px}
+.kv label{display:block;font-size:11px;color:#E11D48;font-weight:800;letter-spacing:.6px;margin-bottom:6px;text-transform:uppercase}
+.kv input{font-size:14px}
+.group{border:1px solid #2a2a2a;border-radius:14px;padding:12px;margin-bottom:12px;background:#151515}
+.group b{font-size:12px;display:block;margin-bottom:10px;color:#fff}
+.badge{font-size:10px;background:#0f0f0f;border:1px solid #262626;padding:5px 9px;border-radius:100px;color:#888;margin-right:4px;display:inline-block;margin-bottom:4px}
+.prod-card{background:#101010;border:1px solid #262626;border-radius:16px;padding:12px;display:grid;grid-template-columns:80px 1fr;gap:12px;margin-bottom:12px}
+.prod-card img{width:80px;height:80px;border-radius:12px;object-fit:cover;background:#1c1c1c}
+.field{display:flex;flex-direction:column;margin-bottom:8px}
+.field label{font-size:10px;color:#888;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.small{font-size:11px;color:#777;margin-top:6px;line-height:1.4}
 </style>
 </head><body>
 <div class="top">
-<div style="font-weight:900;display:flex;gap:8px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin FINAL - Universal</div>
-<div style="display:flex;gap:8px"><input id="token" type="password" placeholder="ghp_..." style="width:220px"><button class="btn btn-w" onclick="saveTok()">Guardar token</button></div>
+<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin FINAL FIX - Campos visibles</div>
+<div style="display:flex;gap:8px"><input id="token" type="password" placeholder="ghp_..." style="width:200px"><button class="btn btn-w" onclick="saveTok()">Guardar token</button></div>
 </div>
 
 <div class="main">
 <div class="left">
-<div class="card"><b style="font-size:13px">Clientes (lee de /data)</b><div id="list" style="margin-top:10px">Cargando...</div></div>
-<div class="card">
-<b style="font-size:13px">Subir cliente nuevo</b>
-<input id="slugNew" placeholder="slug: el-fuego" style="margin-top:8px">
-<div id="drop" style="margin-top:8px;border:1px dashed #333;border-radius:12px;padding:14px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá 3 archivos<input id="fileIn" type="file" multiple hidden></div>
-<button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir</button><div id="upOut" class="small"></div>
-</div>
-<div class="card"><span class="badge">MODO UNIVERSAL</span><div class="small" style="margin-top:8px">Este admin NO tiene campos fijos. Lee todo lo que tenga el config.json y data.json y te deja editarlo. Si mañana le agregás "horarios", "colores", "envio variable", aparece solo acá para editar. No hay que hacer admin nuevo nunca más.</div></div>
+<div class="card"><b style="font-size:13px">Clientes</b><div id="list" style="margin-top:10px">Cargando...</div></div>
+<div class="card"><b style="font-size:12px">Subir 3 archivos</b><input id="slugNew" placeholder="slug: el-fuego" style="margin-top:8px"><div id="drop" style="margin-top:8px;border:1px dashed #444;border-radius:12px;padding:14px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá acá<input id="fileIn" type="file" multiple hidden></div><button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir</button><div id="upOut" class="small"></div></div>
+<div class="card"><span class="badge">FIX VISIBLE</span><div class="small">Ahora cada campo tiene su etiqueta grande. Si es envío, vas a ver "ENVIO.TIPO", "ENVIO.COSTOFIJO" con su valor completo, no cortado.</div></div>
 </div>
 
 <div class="right">
-<div class="card"><div style="display:flex;justify-content:space-between"><b id="title">Elegí un cliente</b><div><button class="btn btn-g" onclick="reload()">↻ Vista</button> <button class="btn btn-g" onclick="openReal()">Abrir real</button></div></div><iframe id="prev" class="preview" style="margin-top:10px"></iframe></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b id="title">Elegí cliente</b><div><button class="btn btn-g" onclick="reload()">↻</button> <button class="btn btn-g" onclick="openReal()">Abrir real</button></div></div><iframe id="prev" class="preview" style="margin-top:10px"></iframe></div>
 
-<div class="grid2">
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG.JSON - Todo editable</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
-<div class="small">Lee cualquier campo que le pongas al config. Si agregás envío, horarios, etc, aparece acá.</div>
-<div id="configEditor" style="margin-top:12px"></div>
-<div style="margin-top:10px"><button class="btn btn-g" onclick="addConfigField()">+ Agregar campo nuevo</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG.JSON - Todo editable con etiqueta</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
+<div class="small" id="configInfo">Acá vas a ver Nombre, WhatsApp, y si tiene envío: tipo, costoFijo, costoPorKm, kmGratis, mensaje... todo con etiqueta clara.</div>
+<div id="configEditor" style="margin-top:14px"></div>
+<div style="margin-top:10px"><button class="btn btn-g" onclick="addConfigField()">+ Campo nuevo</button></div>
 <div id="outC" class="small"></div>
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>DATA.JSON - Productos</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
-<div class="small">Detecta automáticamente todas las columnas. Si un producto tiene "costoEnvio", "stock", etc, lo muestra.</div>
-<div id="prods" style="margin-top:12px"></div>
-<div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-g" onclick="addProd()">+ Producto</button><button class="btn btn-g" onclick="addCol()">+ Columna nueva</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>DATA.JSON - Productos con campos completos</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
+<div id="prods" style="margin-top:14px"></div>
+<div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-g" onclick="addProd()">+ Producto</button><button class="btn btn-g" onclick="addCol()">+ Columna</button></div>
 <div id="out" class="small"></div>
 </div>
-</div>
 
-<div class="card">
-<b>RAW JSON (por si querés pegar)</b>
-<div class="grid2" style="margin-top:8px"><div><label class="small">config.json raw</label><textarea id="rawConfig"></textarea></div><div><label class="small">data.json raw</label><textarea id="rawData"></textarea></div></div>
-</div>
-
+<div class="card"><b>RAW (avanzado)</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px"><textarea id="rawConfig" style="height:200px"></textarea><textarea id="rawData" style="height:200px"></textarea></div></div>
 </div>
 </div>
 
@@ -101,8 +93,7 @@ document.getElementById('token').value=TOKEN;
 let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[]; let CUSTOM_COLS=[];
 function saveTok(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); listar(); }
 async function gh(p,m='GET',b=null){ return fetch(`https://api.github.com/repos/${REPO}/contents/${p}`,{method:m,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:b?JSON.stringify(b):null}); }
-
-async function listar(){ if(!TOKEN){document.getElementById('list').innerText='Poné token';return;} const r=await gh('data'); const j=await r.json(); if(!Array.isArray(j)){document.getElementById('list').innerText=j.message;return;} const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json','')); document.getElementById('list').innerHTML=slugs.map(s=>`<div class="client ${CURRENT===s?'active':''}" onclick="selectCli('${s}')"><span>${s}</span><span>→</span></div>`).join('')||'Vacío'; }
+async function listar(){ if(!TOKEN){document.getElementById('list').innerText='Poné token';return;} const r=await gh('data'); const j=await r.json(); if(!Array.isArray(j)){document.getElementById('list').innerText=j.message;return;} const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json','')); document.getElementById('list').innerHTML=slugs.map(s=>`<div class="client ${CURRENT===s?'active':''}" onclick="selectCli('${s}')"><span>${s}</span><span>→</span></div>`).join('')||'Sin clientes'; }
 
 async function selectCli(s){
  CURRENT=s; document.getElementById('title').innerText=s+' — cartaspro.github.io/cartas/'+s+'/'; document.getElementById('prev').src=`../${s}/?v=${Date.now()}`;
@@ -112,80 +103,59 @@ async function selectCli(s){
 }
 
 function renderConfig(){
- const container=document.getElementById('configEditor'); container.innerHTML='';
- function renderObj(obj, prefix=''){
-   for(const [k,v] of Object.entries(obj)){
-     const fullKey = prefix?`${prefix}.${k}`:k;
-     if(v!==null && typeof v==='object' && !Array.isArray(v)){
-       container.innerHTML+=`<div class="sep"></div><div style="font-weight:800;font-size:12px;margin-bottom:6px">${fullKey}</div>`;
-       // render nested
-       for(const [sk,sv] of Object.entries(v)){
-         const id=`cfg_${fullKey}_${sk}`.replace(/\./g,'_');
-         container.innerHTML+=`<div class="kv"><label>${sk}</label><input id="${id}" value="${String(sv).replace(/"/g,'&quot;')}" oninput="setNested('${fullKey}','${sk}',this.value)"></div>`;
-       }
-     } else {
-       const id=`cfg_${fullKey}`.replace(/\./g,'_');
-       container.innerHTML+=`<div class="kv"><label>${k}</label><input id="${id}" value="${String(v).replace(/"/g,'&quot;')}" oninput="setFlat('${k}',this.value)"></div>`;
+ const c=document.getElementById('configEditor'); c.innerHTML='';
+ // top level
+ for(const [k,v] of Object.entries(CONFIG)){
+   if(v!==null && typeof v==='object' && !Array.isArray(v)){
+     let html=`<div class="group"><b>${k.toUpperCase()}</b>`;
+     for(const [sk,sv] of Object.entries(v)){
+       html+=`<div class="kv"><label>${k}.${sk}</label><input value="${escapeHtml(String(sv))}" oninput="setNested('${k}','${sk}',this.value)"></div>`;
      }
+     html+=`</div>`; c.innerHTML+=html;
+   } else {
+     c.innerHTML+=`<div class="kv"><label>${k}</label><input value="${escapeHtml(String(v))}" oninput="setFlat('${k}',this.value)"></div>`;
    }
  }
- renderObj(CONFIG);
+ if(!Object.keys(CONFIG).length) c.innerHTML='<div class="small">Vacío</div>';
 }
-
-function setFlat(k,val){ // intenta número / bool
- let v=val; if(!isNaN(val)&&val!=='' ) { if(val.includes('.')) v=parseFloat(val); else { const n=Number(val); if(String(n)===val) v=n; } } if(val==='true') v=true; if(val==='false') v=false; CONFIG[k]=v; document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
-function setNested(path,sk,val){ const parts=path.split('.'); let cur=CONFIG; for(let i=0;i<parts.length;i++){ cur=cur[parts[i]]; } let v=val; if(!isNaN(val)&&val!=='') { if(val.includes('.')) v=parseFloat(val); else { const n=Number(val); if(String(n)===val) v=n; } } if(val==='true') v=true; if(val==='false') v=false; cur[sk]=v; document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
-
-function addConfigField(){ const k=prompt('Nombre del campo nuevo (ej: horarios, colorPrincipal, envio)'); if(!k) return; if(k.includes('.')){ const [p,c]=k.split('.'); CONFIG[p]=CONFIG[p]||{}; CONFIG[p][c]=''; } else { CONFIG[k]=''; } renderConfig(); }
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function setFlat(k,val){ let v=coerce(val); CONFIG[k]=v; document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
+function setNested(path,sk,val){ let v=coerce(val); CONFIG[path][sk]=v; document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
+function coerce(val){ if(val==='true') return true; if(val==='false') return false; if(val!=='' && !isNaN(val)){ const n=Number(val); if(String(n)===val) return n; if(val.includes('.')){ const f=parseFloat(val); if(!isNaN(f)) return f; } } return val; }
+function addConfigField(){ const k=prompt('Nuevo campo. Ej: horarios o envio.topeMax'); if(!k) return; if(k.includes('.')){ const [p,s]=k.split('.'); CONFIG[p]=CONFIG[p]||{}; CONFIG[p][s]=''; } else CONFIG[k]=''; renderConfig(); }
 
 function renderData(){
- // union de keys
- const allKeys=new Set(); DATA.forEach(p=>Object.keys(p).forEach(k=>allKeys.add(k))); CUSTOM_COLS.forEach(c=>allKeys.add(c));
- const keys=[...allKeys];
- // asegurar id, nombre, precio primero
- const order=['id','nombre','precio','categoria','descripcion','img']; const sorted=[...order.filter(k=>keys.includes(k)), ...keys.filter(k=>!order.includes(k))];
- document.getElementById('prods').innerHTML=`
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${sorted.map(k=>`<span class="badge">${k}</span>`).join('')}</div>
-  ${DATA.map((p,i)=>`
-   <div class="prod">
+ const allKeys=new Set(); DATA.forEach(p=>Object.keys(p).forEach(k=>allKeys.add(k))); CUSTOM_COLS.forEach(k=>allKeys.add(k));
+ const container=document.getElementById('prods'); container.innerHTML='';
+ DATA.forEach((p,i)=>{
+   const extraKeys=[...allKeys].filter(k=>!['id','nombre','precio','categoria','descripcion','img'].includes(k));
+   container.innerHTML+=`
+   <div class="prod-card">
     <img src="${p.img||''}" onerror="this.style.display='none'">
     <div>
-     <input value="${p.nombre||''}" oninput="DATA[${i}].nombre=this.value" placeholder="nombre">
-     <div style="display:flex;gap:4px;margin-top:4px"><input value="${p.categoria||''}" oninput="DATA[${i}].categoria=this.value" placeholder="cat" style="font-size:11px"><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)" placeholder="precio" style="font-size:11px"></div>
+     <div class="field"><label>NOMBRE DEL PRODUCTO</label><input value="${escapeHtml(p.nombre||'')}" oninput="DATA[${i}].nombre=this.value"></div>
+     <div class="row2">
+      <div class="field"><label>PRECIO $</label><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)"></div>
+      <div class="field"><label>CATEGORIA</label><input value="${escapeHtml(p.categoria||'')}" oninput="DATA[${i}].categoria=this.value"></div>
+     </div>
+     <div class="field"><label>DESCRIPCION COMPLETA</label><textarea oninput="DATA[${i}].descripcion=this.value">${escapeHtml(p.descripcion||'')}</textarea></div>
+     <div class="field"><label>IMAGEN URL (completa)</label><input value="${escapeHtml(p.img||'')}" oninput="DATA[${i}].img=this.value"></div>
+     ${extraKeys.map(k=>`<div class="field"><label>${k.toUpperCase()}</label><input value="${escapeHtml(String(p[k]||''))}" oninput="DATA[${i}]['${k}']=coerce(this.value)"></div>`).join('')}
+     <div style="display:flex;justify-content:space-between;margin-top:6px"><span class="badge">ID: ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar</button></div>
     </div>
-    <div>
-     ${sorted.filter(k=>!['id','nombre','precio','categoria','img'].includes(k)).map(k=>`<input value="${p[k]||''}" oninput="DATA[${i}]['${k}']=isNaN(this.value)||this.value==='' ? this.value : Number(this.value)" placeholder="${k}" style="font-size:11px;margin-bottom:4px">`).join('')}
-    </div>
-    <div><input value="${p.img||''}" oninput="DATA[${i}].img=this.value" placeholder="img url" style="font-size:11px"><div class="small">id:${p.id}</div></div>
-    <button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">X</button>
-   </div>`).join('')}
- `;
+   </div>`;
+ });
  document.getElementById('rawData').value=JSON.stringify(DATA,null,2);
 }
-function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; DATA.push({id:nid,nombre:'Nuevo',precio:0,categoria:'',descripcion:'',img:''}); renderData(); }
-function addCol(){ const c=prompt('Nombre de columna nueva (ej: stock, envio, disponible)'); if(!c) return; CUSTOM_COLS.push(c); DATA.forEach(p=>p[c]=p[c]||''); renderData(); }
-
-async function guardarConfig(){
- if(!CURRENT) return; try{ CONFIG=JSON.parse(document.getElementById('rawConfig').value); }catch(e){ return alert('JSON config inválido: '+e.message); }
- document.getElementById('outC').innerText='Guardando...'; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json();
- const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`edit config universal ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))});
- document.getElementById('outC').innerText=res.ok?'✓ Config guardado - cualquier campo nuevo ya es editable':'Error '+(await res.json()).message; reload();
-}
-async function guardarData(){
- if(!CURRENT) return; try{ DATA=JSON.parse(document.getElementById('rawData').value); }catch(e){ return alert('JSON data inválido: '+e.message); }
- document.getElementById('out').innerText='Guardando...'; const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json();
- const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`edit data universal ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))});
- document.getElementById('out').innerText=res.ok?'✓ Data guardada - cualquier columna nueva ya es editable':'Error '+(await res.json()).message; reload();
-}
+function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; DATA.push({id:nid,nombre:'Nuevo producto',precio:0,categoria:'',descripcion:'',img:''}); renderData(); }
+function addCol(){ const c=prompt('Nueva columna, ej: stock'); if(!c) return; CUSTOM_COLS.push(c); DATA.forEach(p=>p[c]=p[c]||''); renderData(); }
+async function guardarConfig(){ if(!CURRENT) return; try{ CONFIG=JSON.parse(document.getElementById('rawConfig').value); }catch(e){ return alert('JSON config malo '+e.message); } document.getElementById('outC').innerText='Guardando...'; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`fix config ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); document.getElementById('outC').innerText=res.ok?'✓ Guardado':'Error '+(await res.json()).message; reload(); }
+async function guardarData(){ if(!CURRENT) return; try{ DATA=JSON.parse(document.getElementById('rawData').value); }catch(e){ return alert('JSON data malo '+e.message); } document.getElementById('out').innerText='Guardando...'; const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`fix data ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))}); document.getElementById('out').innerText=res.ok?'✓ Guardado':'Error '+(await res.json()).message; reload(); }
 function reload(){ if(CURRENT) document.getElementById('prev').src=`../${CURRENT}/?v=${Date.now()}`; }
 function openReal(){ if(CURRENT) window.open(`../${CURRENT}/`,'_blank'); }
-
-// upload
 const drop=document.getElementById('drop'); const fileIn=document.getElementById('fileIn');
-drop.addEventListener('click',()=>fileIn.click());
-drop.addEventListener('dragover',e=>{e.preventDefault();}); drop.addEventListener('drop',e=>{e.preventDefault(); FILES=[...e.dataTransfer.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');});
-fileIn.addEventListener('change',()=>{ FILES=[...fileIn.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');});
-async function subir(){ const slug=document.getElementById('slugNew').value.trim().toLowerCase().replace(/\s+/g,'-'); if(!slug||!FILES.length) return alert('Falta'); for(let file of FILES){ const text=await file.text(); let path=''; const n=file.name.toLowerCase(); if(n.endsWith('.html')) path=`${slug}/index.html`; else { try{ const j=JSON.parse(text); if(Array.isArray(j)) path=`data/${slug}.json`; else path=`config/${slug}.json`; }catch{ path=`config/${slug}.json`; } } const ex=await gh(path); let sha=null; if(ex.ok){ const ej=await ex.json(); sha=ej.sha; } await gh(path,'PUT',{message:`upload ${path}`,content:btoa(unescape(encodeURIComponent(text))),...(sha?{sha}:{})}); } document.getElementById('upOut').innerText+='\n✓ Subido'; listar(); }
+drop.addEventListener('click',()=>fileIn.click()); drop.addEventListener('dragover',e=>e.preventDefault()); drop.addEventListener('drop',e=>{e.preventDefault(); FILES=[...e.dataTransfer.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');}); fileIn.addEventListener('change',()=>{ FILES=[...fileIn.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');});
+async function subir(){ const slug=document.getElementById('slugNew').value.trim().toLowerCase().replace(/\s+/g,'-'); if(!slug||!FILES.length) return alert('Falta'); for(let file of FILES){ const text=await file.text(); let path=''; if(file.name.toLowerCase().endsWith('.html')) path=`${slug}/index.html`; else { try{ const j=JSON.parse(text); if(Array.isArray(j)) path=`data/${slug}.json`; else path=`config/${slug}.json`; }catch{ path=`config/${slug}.json`; } } const ex=await gh(path); let sha=null; if(ex.ok){ const ej=await ex.json(); sha=ej.sha; } await gh(path,'PUT',{message:`upload ${path}`,content:btoa(unescape(encodeURIComponent(text))),...(sha?{sha}:{})}); } document.getElementById('upOut').innerText+='\n✓ Subido'; listar(); }
 listar();
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body></html>
