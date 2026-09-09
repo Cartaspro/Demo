@@ -2,220 +2,292 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - CartasPro</title>
+<title>CartasPro - Admin Maestro</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c;--border:#2a2a2a}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--bg);color:#fff;padding:16px;max-width:800px;margin:0 auto}
-h1{font-size:20px;margin-bottom:4px}
-.sub{color:#9ca3af;font-size:13px;margin-bottom:20px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px}
+body{background:var(--bg);color:#fff;padding:16px;max-width:900px;margin:0 auto;padding-bottom:100px}
+h1{font-size:22px} .sub{color:#9ca3af;font-size:13px;margin:6px 0 16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
 .label{font-size:11px;color:#9ca3af;font-weight:700;text-transform:uppercase;margin-top:12px;display:block}
 .input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px;font-size:14px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.prod{background:#0f0f0f;border:1px solid #333;border-radius:12px;padding:12px;position:relative}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;cursor:pointer;margin-top:10px}
+.primary{background:var(--primary);color:#fff} .secondary{background:#262626;color:#fff;border:1px solid #333} .green{background:#25D366;color:#fff} .ghost{background:transparent;border:1px dashed #333;color:#9ca3af}
+.prod{background:#0f0f0f;border:1px solid #333;border-radius:12px;padding:12px;position:relative;margin-bottom:10px}
 .prod img{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;background:#111}
 .del{position:absolute;top:8px;right:8px;background:#ef4444;border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer}
-.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;cursor:pointer;margin-top:12px}
-.primary{background:var(--primary);color:#fff}
-.secondary{background:#262626;color:#fff;border:1px solid #333}
-.green{background:#25D366;color:#fff}
-textarea{width:100%;height:220px;background:#0f0f0f;color:#8bff8b;border:1px solid #333;border-radius:12px;padding:12px;font-family:monospace;font-size:12px;margin-top:12px}
-.tabs{display:flex;gap:8px;margin-bottom:16px}
-.tab{padding:10px 16px;border-radius:20px;background:#1c1c1c;border:1px solid #2a2a2a;font-size:13px;cursor:pointer}
-.tab.active{background:var(--primary);border-color:var(--primary)}
-.badge{font-size:10px;background:#f59e0b;color:#000;padding:3px 8px;border-radius:10px;margin-left:8px}
+.client{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;background:#0f0f0f;border:1px solid #333;margin-bottom:8px;cursor:pointer}
+.client.active{border-color:var(--primary);background:#1f1114}
+.tag{font-size:10px;background:#262626;padding:3px 8px;border-radius:10px}
+.status{font-size:11px;color:#25D366}
+textarea{width:100%;height:140px;background:#0f0f0f;color:#8bff8b;border:1px solid #333;border-radius:12px;padding:12px;font-family:monospace;font-size:11px;margin-top:8px}
 </style>
 </head>
 <body>
-<h1>Admin CartasPro <span class="badge">DEMO</span></h1>
-<p class="sub">Editá fotos, precios y envío sin pifiarle. Luego copiás y pegás en GitHub.</p>
+<h1>CartasPro Admin Maestro</h1>
+<p class="sub">Un solo panel para todos tus clientes. Editas y tocas Guardar, se actualiza solo en GitHub.</p>
 
-<div class="tabs">
-<div class="tab active" onclick="showTab('productos',this)">Productos</div>
-<div class="tab" onclick="showTab('config',this)">Config / Envío</div>
-<div class="tab" onclick="showTab('exportar',this)">Exportar</div>
+<div class="card" id="setupCard">
+<h3 style="font-size:14px">🔑 Configuración GitHub (una sola vez)</h3>
+<p style="font-size:11px;color:#9ca3af;margin-top:6px">Necesitás un token para que el admin pueda guardar solo. Se guarda en tu celular/PC, no se sube a ningún lado.</p>
+<label class="label">Owner / Organización</label><input id="gh_owner" class="input" value="cartaspro">
+<label class="label">Repo</label><input id="gh_repo" class="input" value="cartaspro.github.io">
+<label class="label">Branch</label><input id="gh_branch" class="input" value="main">
+<label class="label">Personal Access Token (classic, con permiso repo)</label><input id="gh_token" class="input" type="password" placeholder="ghp_...">
+<div class="grid2">
+<button class="btn secondary" onclick="guardarSetup()">Guardar config</button>
+<button class="btn ghost" onclick="window.open('https://github.com/settings/tokens/new','_blank')">Crear token</button>
+</div>
+<p style="font-size:10px;color:#666;margin-top:8px">Como crearlo: GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic) > Generate new token > marca repo > Generate</p>
+<div id="setupStatus" class="status" style="margin-top:8px"></div>
 </div>
 
-<div id="tab-productos">
 <div class="card">
-<button class="btn secondary" onclick="cargarDesdeGitHub()">🔄 Cargar desde data/demo.json actual</button>
-<p style="font-size:11px;color:#666;margin-top:8px">Carga lo que ya subiste para no empezar de cero</p>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h3 style="font-size:14px">Tus clientes</h3>
+<button onclick="cargarClientes()" style="background:#262626;border:1px solid #333;color:#fff;padding:6px 10px;border-radius:8px;font-size:11px">🔄 Recargar</button>
+</div>
+<div id="clientList" style="margin-top:12px"></div>
+<div style="margin-top:12px;display:flex;gap:8px">
+<input id="newClientName" class="input" placeholder="nuevo-cliente ej: templar" style="margin-top:0">
+<button class="btn secondary" style="width:auto;margin-top:0;padding:12px 16px" onclick="crearNuevoCliente()">+ Nuevo</button>
+</div>
 </div>
 
-<div id="lista"></div>
-
+<div id="editor" style="display:none">
 <div class="card">
-<h3 style="font-size:14px">+ Agregar producto</h3>
-<label class="label">Nombre</label><input id="n_nombre" class="input" placeholder="Ej: Combo Familiar">
-<label class="label">Categoria</label><input id="n_cat" class="input" placeholder="hamburguesas / pizzas / papas / bebidas / combos">
-<label class="label">Precio</label><input id="n_precio" class="input" type="number" placeholder="12500">
-<label class="label">Descripcion</label><input id="n_desc" class="input" placeholder="Que trae">
-<label class="label">URL Imagen (Unsplash o la del cliente)</label><input id="n_img" class="input" placeholder="https://images.unsplash.com/...">
-<button class="btn primary" onclick="agregar()">Agregar</button>
-</div>
-</div>
-
-<div id="tab-config" style="display:none">
-<div class="card">
-<label class="label">Nombre del local</label><input id="c_nombre" class="input" value="DEMO">
-<label class="label">WhatsApp (sin + ni espacios)</label><input id="c_wa" class="input" value="5491134890644">
-<label class="label">Color primario</label><input id="c_color" class="input" type="color" value="#E11D48">
-<label class="label">Tipo de envío</label>
+<h3 style="font-size:14px">Editando: <span id="editingName" style="color:var(--primary)"></span> <span id="editingLink" style="font-size:11px"></span></h3>
+<label class="label">Nombre local</label><input id="c_nombre" class="input">
+<label class="label">WhatsApp</label><input id="c_wa" class="input">
+<label class="label">Color</label><input id="c_color" class="input" type="color">
+<label class="label">Tipo envío</label>
 <select id="c_tipo" class="input" onchange="toggleEnvio()">
-<option value="fijo">Fijo</option>
-<option value="variable">Variable cada X km</option>
-<option value="gratis">Gratis</option>
+<option value="fijo">Fijo</option><option value="variable">Variable cada X km</option><option value="gratis">Gratis</option>
 </select>
-
-<div id="env-fijo">
-<label class="label">Costo fijo</label><input id="c_costo" class="input" type="number" value="1500">
+<div id="env-fijo"><label class="label">Costo fijo</label><input id="c_costo" class="input" type="number"></div>
+<div id="env-variable" style="display:none"><label class="label">Base</label><input id="c_base" class="input" type="number"><label class="label">Cada km</label><input id="c_cada" class="input" type="number"><label class="label">Precio por tramo</label><input id="c_tramo" class="input" type="number"></div>
 </div>
 
-<div id="env-variable" style="display:none">
-<label class="label">Base</label><input id="c_base" class="input" type="number" value="1500">
-<label class="label">Cada cuantos km cobra extra</label><input id="c_cada" class="input" type="number" value="2">
-<label class="label">Precio por tramo</label><input id="c_tramo" class="input" type="number" value="500">
-</div>
-
-</div>
-</div>
-
-<div id="tab-exportar" style="display:none">
 <div class="card">
-<h3 style="font-size:14px">Paso final para GitHub</h3>
-<p style="font-size:12px;color:#9ca3af;margin-top:8px">1. Copiá el primer cuadro y pegalo en <b>data/demo.json</b><br>2. Copiá el segundo y pegalo en <b>config/demo.json</b></p>
-<label class="label">data/demo.json</label>
-<textarea id="outData"></textarea>
-<button class="btn secondary" onclick="copiar('outData')">Copiar data/demo.json</button>
+<h3 style="font-size:14px">Productos</h3>
+<div id="lista"></div>
+<div style="margin-top:12px;border-top:1px solid #222;padding-top:12px">
+<label class="label">+ Agregar producto</label>
+<input id="n_nombre" class="input" placeholder="Nombre">
+<div class="grid2"><input id="n_cat" class="input" placeholder="categoria"><input id="n_precio" class="input" type="number" placeholder="precio"></div>
+<input id="n_desc" class="input" placeholder="descripcion">
+<input id="n_img" class="input" placeholder="url imagen https://...">
+<button class="btn primary" onclick="agregar()">Agregar producto</button>
+</div>
+</div>
 
-<label class="label" style="margin-top:16px">config/demo.json</label>
-<textarea id="outConfig"></textarea>
-<button class="btn green" onclick="copiar('outConfig')">Copiar config/demo.json</button>
+<div class="card">
+<button class="btn green" id="btnGuardar" onclick="guardarTodo()">💾 GUARDAR CAMBIOS EN GITHUB</button>
+<div id="saveStatus" style="margin-top:8px;font-size:12px"></div>
+<label class="label">Preview JSON (por si falla)</label>
+<textarea id="outData"></textarea><textarea id="outConfig" style="margin-top:8px"></textarea>
 </div>
 </div>
 
 <script>
-let productos = [
-{id:1,cat:'hamburguesas',nombre:"Hamburguesa Doble",desc:"Doble carne, doble cheddar, bacon crocante",precio:12500,img:"https://images.unsplash.com/photo-1553979459-d2229ba7433b?q=80&w=600"},
-{id:2,cat:'pizzas',nombre:"Pizza Muzzarella",desc:"Mozza, salsa, oregano - 8 porciones",precio:13900,img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600"},
-{id:3,cat:'papas',nombre:"Papas Fritas Grandes",desc:"Porcion grande, crocantes, con cheddar opcional",precio:5500,img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=600"},
-{id:4,cat:'bebidas',nombre:"Coca Cola 1.5L",desc:"Bien fria",precio:3500,img:"https://images.unsplash.com/photo-1553456558-aff63285bdd1?q=80&w=600"}
-];
+let GH = {owner:'cartaspro', repo:'cartaspro.github.io', branch:'main', token:''};
+let clientes = []; // {name}
+let current = null;
+let productos = [];
+let config = {};
 
-function showTab(id, el){
- document.getElementById('tab-productos').style.display = id==='productos'?'block':'none';
- document.getElementById('tab-config').style.display = id==='config'?'block':'none';
- document.getElementById('tab-exportar').style.display = id==='exportar'?'block':'none';
- document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
- el.classList.add('active');
- if(id==='exportar') generar();
+function loadSetup(){
+ try{
+  const s = JSON.parse(localStorage.getItem('cartaspro_gh')||'{}');
+  GH.owner = s.owner||GH.owner; GH.repo = s.repo||GH.repo; GH.branch=s.branch||GH.branch; GH.token=s.token||'';
+  document.getElementById('gh_owner').value=GH.owner;
+  document.getElementById('gh_repo').value=GH.repo;
+  document.getElementById('gh_branch').value=GH.branch;
+  document.getElementById('gh_token').value=GH.token;
+  if(GH.token) document.getElementById('setupStatus').innerText='✅ Token guardado, listo para guardar automático';
+ }catch(e){}
+}
+loadSetup();
+
+function guardarSetup(){
+ GH.owner=document.getElementById('gh_owner').value.trim()||'cartaspro';
+ GH.repo=document.getElementById('gh_repo').value.trim()||'cartaspro.github.io';
+ GH.branch=document.getElementById('gh_branch').value.trim()||'main';
+ GH.token=document.getElementById('gh_token').value.trim();
+ localStorage.setItem('cartaspro_gh', JSON.stringify(GH));
+ document.getElementById('setupStatus').innerText='✅ Guardado. Ahora podés recargar clientes.';
+ cargarClientes();
 }
 
-async function cargarDesdeGitHub(){
- const rutas = ['../data/demo.json','data/demo.json','./data/demo.json','/Cartas-digitales/data/demo.json'];
- for(let r of rutas){
-  try{
-   const resp = await fetch(r+'?t='+Date.now());
-   if(resp.ok){
-    const j = await resp.json();
-    if(Array.isArray(j)){
-      productos = j.map(p=>({id:p.id, cat:(p.categoria||p.cat||'').toLowerCase(), nombre:p.nombre, desc:p.descripcion||p.desc||'', precio:p.precio, img:p.img}));
-      render();
-      alert('Cargado desde '+r);
-      return;
-    }
-   }
-  }catch(e){}
+async function ghApi(path, method='GET', body=null){
+ if(!GH.token) throw new Error('Falta token');
+ const url = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${path}?ref=${GH.branch}`;
+ const headers = {Authorization:`token ${GH.token}`, Accept:'application/vnd.github.v3+json'};
+ const opts = {method, headers};
+ if(body) opts.body = JSON.stringify(body);
+ const res = await fetch(url, opts);
+ if(!res.ok){ const t = await res.text(); throw new Error(res.status+' '+t); }
+ return res.json();
+}
+
+async function cargarClientes(){
+ const status = document.getElementById('clientList');
+ if(!GH.token){ status.innerHTML='<p style="color:#f59e0b;font-size:12px">Primero poné tu token arriba y guardá.</p>'; return; }
+ status.innerHTML='Cargando...';
+ try{
+  const dataFiles = await ghApi('data').catch(()=>[]);
+  const list = Array.isArray(dataFiles) ? dataFiles.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json','')) : [];
+  // tambien busca carpetas con index.html para detectar clientes sin data aún
+  const rootFiles = await ghApi('').catch(()=>[]);
+  const folders = rootFiles.filter(f=>f.type==='dir' && !['data','config','admin','images','assets','.github'].includes(f.name)).map(f=>f.name);
+  const merged = [...new Set([...list, ...folders])];
+  clientes = merged;
+  renderClientes();
+ }catch(e){
+  status.innerHTML=`<p style="color:#ef4444;font-size:12px">Error: ${e.message}</p>`;
  }
- alert('No pude cargar, verifica que data/demo.json exista en main');
 }
 
-function render(){
- const cont = document.getElementById('lista');
- cont.innerHTML = productos.map(p=>`
-  <div class="prod">
-    <button class="del" onclick="borrar(${p.id})">X</button>
-    <img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=400'" />
-    <input class="input" value="${p.nombre}" onchange="edit(${p.id},'nombre',this.value)" />
-    <div class="grid">
-      <input class="input" value="${p.cat}" onchange="edit(${p.id},'cat',this.value)" placeholder="cat" />
-      <input class="input" type="number" value="${p.precio}" onchange="edit(${p.id},'precio',this.value)" />
-    </div>
-    <input class="input" value="${p.desc}" onchange="edit(${p.id},'desc',this.value)" placeholder="desc" />
-    <input class="input" value="${p.img}" onchange="edit(${p.id},'img',this.value)" placeholder="url img" style="font-size:11px" />
+function renderClientes(){
+ const cont = document.getElementById('clientList');
+ if(clientes.length===0){ cont.innerHTML='<p style="color:#666;font-size:12px">No hay clientes aún. Crea uno abajo.</p>'; return; }
+ cont.innerHTML = clientes.map(name=>`
+  <div class="client ${current===name?'active':''}" onclick="abrirCliente('${name}')">
+    <div><b>${name}</b> <span class="tag">${name}</span><br><span style="font-size:11px;color:#9ca3af">cartaspro.github.io/${name}/</span></div>
+    <div>→</div>
   </div>
  `).join('');
 }
 
-function edit(id, campo, val){
- const p = productos.find(x=>x.id===id);
- if(!p) return;
- if(campo==='precio') p[campo]=parseInt(val)||0;
- else p[campo]=val;
- render();
-}
-
-function borrar(id){ productos = productos.filter(p=>p.id!==id); render(); }
-
-function agregar(){
- const nombre = document.getElementById('n_nombre').value.trim();
- if(!nombre) return alert('Pone nombre');
- const nuevo = {
-  id: Date.now(),
-  cat: (document.getElementById('n_cat').value.trim()||'otros').toLowerCase(),
-  nombre,
-  desc: document.getElementById('n_desc').value.trim(),
-  precio: parseInt(document.getElementById('n_precio').value)||0,
-  img: document.getElementById('n_img').value.trim()||'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'
- };
- productos.push(nuevo);
- ['n_nombre','n_cat','n_precio','n_desc','n_img'].forEach(i=>document.getElementById(i).value='');
- render();
+async function abrirCliente(name){
+ current=name;
+ document.getElementById('editingName').innerText=name;
+ document.getElementById('editingLink').innerHTML=`<a href="https://${GH.owner}.github.io/${name}/" target="_blank" style="color:#25D366">ver carta</a>`;
+ document.getElementById('editor').style.display='block';
+ renderClientes();
+ // cargar data y config
+ try{
+  const dataContent = await ghApi(`data/${name}.json`);
+  const decoded = atob(dataContent.content);
+  const json = JSON.parse(decodeURIComponent(escape(decoded)));
+  productos = json.map(p=>({id:p.id, cat:(p.categoria||p.cat||'otros').toLowerCase(), nombre:p.nombre, desc:p.descripcion||p.desc||'', precio:p.precio, img:p.img}));
+ }catch(e){ productos = []; }
+ try{
+  const cfgContent = await ghApi(`config/${name}.json`);
+  const decoded = atob(cfgContent.content);
+  const json = JSON.parse(decodeURIComponent(escape(decoded)));
+  config = json;
+  document.getElementById('c_nombre').value=json.nombre||name;
+  document.getElementById('c_wa').value=json.whatsapp||'';
+  document.getElementById('c_color').value=json.color||'#E11D48';
+  document.getElementById('c_tipo').value=json.envio?.tipo||'fijo';
+  document.getElementById('c_costo').value=json.envio?.costo||1500;
+  document.getElementById('c_base').value=json.envio?.base||1500;
+  document.getElementById('c_cada').value=json.envio?.cadaKm||2;
+  document.getElementById('c_tramo').value=json.envio?.precioPorTramo||500;
+  toggleEnvio();
+ }catch(e){
+  config={nombre:name, whatsapp:'', color:'#E11D48', envio:{tipo:'fijo',costo:1500}};
+  document.getElementById('c_nombre').value=name;
+ }
+ renderProductos();
+ generarPreview();
 }
 
 function toggleEnvio(){
- const tipo = document.getElementById('c_tipo').value;
- document.getElementById('env-fijo').style.display = tipo==='fijo'?'block':'none';
- document.getElementById('env-variable').style.display = tipo==='variable'?'block':'none';
+ const tipo=document.getElementById('c_tipo').value;
+ document.getElementById('env-fijo').style.display=tipo==='fijo'?'block':'none';
+ document.getElementById('env-variable').style.display=tipo==='variable'?'block':'none';
 }
 
-function generar(){
- const outData = productos.map(p=>({
-  id:p.id,
-  categoria:p.cat,
-  nombre:p.nombre,
-  descripcion:p.desc,
-  precio:p.precio,
-  img:p.img
- }));
- document.getElementById('outData').value = JSON.stringify(outData, null, 2);
-
- const tipo = document.getElementById('c_tipo').value;
- let envio = {tipo};
- if(tipo==='fijo') envio.costo = parseInt(document.getElementById('c_costo').value)||0;
- if(tipo==='variable'){
-  envio.base = parseInt(document.getElementById('c_base').value)||0;
-  envio.cadaKm = parseInt(document.getElementById('c_cada').value)||2;
-  envio.precioPorTramo = parseInt(document.getElementById('c_tramo').value)||0;
- }
- const cfg = {
-  nombre: document.getElementById('c_nombre').value,
-  whatsapp: document.getElementById('c_wa').value,
-  color: document.getElementById('c_color').value,
-  envio
- };
- document.getElementById('outConfig').value = JSON.stringify(cfg, null, 2);
+function renderProductos(){
+ const cont=document.getElementById('lista');
+ cont.innerHTML=productos.map(p=>`
+  <div class="prod">
+    <button class="del" onclick="borrar(${p.id})">X</button>
+    <img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=400'" />
+    <input class="input" value="${p.nombre}" onchange="edit(${p.id},'nombre',this.value)" />
+    <div class="grid2"><input class="input" value="${p.cat}" onchange="edit(${p.id},'cat',this.value)" /><input class="input" type="number" value="${p.precio}" onchange="edit(${p.id},'precio',this.value)" /></div>
+    <input class="input" value="${p.desc}" onchange="edit(${p.id},'desc',this.value)" />
+    <input class="input" value="${p.img}" onchange="edit(${p.id},'img',this.value)" style="font-size:11px" />
+  </div>
+ `).join('')||'<p style="color:#666;font-size:12px">Sin productos</p>';
+ generarPreview();
 }
 
-function copiar(id){
- const t = document.getElementById(id);
- t.select(); document.execCommand('copy');
- alert('Copiado! Ahora pegalo en GitHub');
+function edit(id,campo,val){
+ const p=productos.find(x=>x.id===id); if(!p) return;
+ if(campo==='precio') p[campo]=parseInt(val)||0; else p[campo]=val;
+ generarPreview();
+}
+function borrar(id){ productos=productos.filter(p=>p.id!==id); renderProductos(); }
+function agregar(){
+ const nombre=document.getElementById('n_nombre').value.trim(); if(!nombre) return alert('Nombre');
+ productos.push({id:Date.now(), cat:(document.getElementById('n_cat').value||'otros').toLowerCase(), nombre, desc:document.getElementById('n_desc').value, precio:parseInt(document.getElementById('n_precio').value)||0, img:document.getElementById('n_img').value||'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'});
+ ['n_nombre','n_cat','n_precio','n_desc','n_img'].forEach(i=>document.getElementById(i).value='');
+ renderProductos();
 }
 
-render();
+function generarPreview(){
+ const outData = productos.map(p=>({id:p.id,categoria:p.cat,nombre:p.nombre,descripcion:p.desc,precio:p.precio,img:p.img}));
+ document.getElementById('outData').value=JSON.stringify(outData,null,2);
+ const tipo=document.getElementById('c_tipo').value;
+ let envio={tipo};
+ if(tipo==='fijo') envio.costo=parseInt(document.getElementById('c_costo').value)||0;
+ if(tipo==='variable'){ envio.base=parseInt(document.getElementById('c_base').value)||0; envio.cadaKm=parseInt(document.getElementById('c_cada').value)||2; envio.precioPorTramo=parseInt(document.getElementById('c_tramo').value)||0; }
+ const cfg={nombre:document.getElementById('c_nombre').value, whatsapp:document.getElementById('c_wa').value, color:document.getElementById('c_color').value, envio};
+ document.getElementById('outConfig').value=JSON.stringify(cfg,null,2);
+}
+
+async function getShaIfExists(path){
+ try{ const f=await ghApi(path); return f.sha; }catch(e){ return null; }
+}
+
+async function crearNuevoCliente(){
+ const name=document.getElementById('newClientName').value.trim().toLowerCase().replace(/\s+/g,'-');
+ if(!name) return alert('Pone nombre');
+ // crear carpeta con index.html base
+ const templateIndex = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>${name}</title></head><body><script>window.CLIENTE='${name}'; location.href='../plantilla.html?c=${name}';</script></body></html>`;
+ // Mejor: copiar el index editable que ya tenes, pero por ahora crea data y config vacios y usa el mismo index de demo como base
+ try{
+  document.getElementById('saveStatus').innerText='Creando...';
+  // data
+  const emptyData = JSON.stringify([{id:1,categoria:"otros",nombre:"Producto ejemplo",descripcion:"Descripcion",precio:1000,img:"https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600"}],null,2);
+  await ghApi(`data/${name}.json`, 'PUT', {message:`feat: nuevo cliente ${name} data`, content:btoa(unescape(encodeURIComponent(emptyData))), branch:GH.branch});
+  const emptyConfig = JSON.stringify({nombre:name, whatsapp:"5491134890644", color:"#E11D48", envio:{tipo:"fijo",costo:1500}},null,2);
+  await ghApi(`config/${name}.json`, 'PUT', {message:`feat: nuevo cliente ${name} config`, content:btoa(unescape(encodeURIComponent(emptyConfig))), branch:GH.branch});
+  // index.html del cliente (usa el mismo template editable pero apuntando a su json)
+  // Para no duplicar logica, creamos un index que reutiliza el de Demo pero carga su nombre
+  const clientIndex = await fetch('../Demo/index.html').then(r=>r.text()).catch(()=>`<!DOCTYPE html><html><body><h1>${name}</h1><p>Subi index.html de Demo aqui</p></body></html>`);
+  // Si no pudo, usa plantilla simple que carga desde data
+  let finalIndex = clientIndex;
+  // reemplazar productos hardcoded por carga dinamica ya la tiene, solo necesita existir
+  const shaIndex = await getShaIfExists(`${name}/index.html`);
+  await ghApi(`${name}/index.html`, 'PUT', {message:`feat: cliente ${name} index`, content:btoa(unescape(encodeURIComponent(finalIndex))), branch:GH.branch, sha:shaIndex||undefined});
+  document.getElementById('saveStatus').innerText='✅ Cliente creado';
+  document.getElementById('newClientName').value='';
+  cargarClientes();
+ }catch(e){ document.getElementById('saveStatus').innerText='❌ '+e.message; }
+}
+
+async function guardarTodo(){
+ if(!current) return alert('Elegí cliente');
+ const btn=document.getElementById('btnGuardar'); btn.innerText='Guardando...'; btn.disabled=true;
+ try{
+  generarPreview();
+  const dataStr=document.getElementById('outData').value;
+  const configStr=document.getElementById('outConfig').value;
+  const shaData=await getShaIfExists(`data/${current}.json`);
+  await ghApi(`data/${current}.json`, 'PUT', {message:`update: ${current} productos`, content:btoa(unescape(encodeURIComponent(dataStr))), branch:GH.branch, sha:shaData||undefined});
+  const shaCfg=await getShaIfExists(`config/${current}.json`);
+  await ghApi(`config/${current}.json`, 'PUT', {message:`update: ${current} config`, content:btoa(unescape(encodeURIComponent(configStr))), branch:GH.branch, sha:shaCfg||undefined});
+  document.getElementById('saveStatus').innerHTML=`✅ Guardado! <a href="https://${GH.owner}.github.io/${current}/?v=${Date.now()}" target="_blank" style="color:#25D366">Ver carta actualizada</a>`;
+ }catch(e){
+  document.getElementById('saveStatus').innerHTML=`❌ Error: ${e.message}<br><span style="font-size:11px;color:#9ca3af">Si falla, copiá el JSON de abajo y pegalo manual en GitHub (fallback)</span>`;
+ }finally{ btn.innerText='💾 GUARDAR CAMBIOS EN GITHUB'; btn.disabled=false; }
+}
 </script>
 </body>
 </html>
