@@ -1,102 +1,84 @@
 <!DOCTYPE html>
-<html lang="es"><head><style>
-@font-face {
-  font-family: "Optimistic";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Optimistic Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
-}
-:where(html) {
-  font-family: "Optimistic", system-ui, sans-serif;
-}
-:where(code, pre, kbd, samp) {
-  font-family: "Optimistic Mono", ui-monospace, monospace;
-}
-</style><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin FINAL FIX - Campos visibles</title>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin FINAL - Con Borrar</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:#0f0f0f;color:#fff}
 .top{padding:14px 18px;border-bottom:1px solid #1c1c1c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f0f0f;z-index:20}
-.main{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.main{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;min-height:100vh}
 @media(max-width:980px){.main{grid-template-columns:1fr}}
 .left{border-right:1px solid #1c1c1c;padding:14px}
 .right{padding:14px;display:flex;flex-direction:column;gap:14px}
 .card{background:#1c1c1c;border:1px solid #262626;border-radius:18px;padding:16px}
-input,select,textarea{background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;width:100%;font-size:14px}
-textarea{min-height:70px}
+input,textarea{background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;width:100%;font-size:14px}
 .btn{padding:10px 16px;border-radius:100px;border:0;font-weight:800;cursor:pointer;font-size:12px}
-.btn-w{background:#fff;color:#000} .btn-r{background:#E11D48;color:#fff} .btn-g{background:#262626;color:#fff}
-.client{padding:11px 12px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c;font-size:13px}
+.btn-w{background:#fff;color:#000} .btn-r{background:#E11D48;color:#fff} .btn-g{background:#262626;color:#fff} .btn-del{background:#ff0033;color:#fff}
+.client{padding:11px 12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c;font-size:13px}
 .client.active{background:#fff;color:#000}
 .preview{width:100%;height:520px;border-radius:16px;border:1px solid #262626;background:#000}
 .kv{margin-bottom:14px}
 .kv label{display:block;font-size:11px;color:#E11D48;font-weight:800;letter-spacing:.6px;margin-bottom:6px;text-transform:uppercase}
-.kv input{font-size:14px}
 .group{border:1px solid #2a2a2a;border-radius:14px;padding:12px;margin-bottom:12px;background:#151515}
-.group b{font-size:12px;display:block;margin-bottom:10px;color:#fff}
-.badge{font-size:10px;background:#0f0f0f;border:1px solid #262626;padding:5px 9px;border-radius:100px;color:#888;margin-right:4px;display:inline-block;margin-bottom:4px}
+.group b{font-size:12px;display:block;margin-bottom:10px}
 .prod-card{background:#101010;border:1px solid #262626;border-radius:16px;padding:12px;display:grid;grid-template-columns:80px 1fr;gap:12px;margin-bottom:12px}
 .prod-card img{width:80px;height:80px;border-radius:12px;object-fit:cover;background:#1c1c1c}
 .field{display:flex;flex-direction:column;margin-bottom:8px}
-.field label{font-size:10px;color:#888;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.field label{font-size:10px;color:#888;font-weight:700;margin-bottom:4px;text-transform:uppercase}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .small{font-size:11px;color:#777;margin-top:6px;line-height:1.4}
+.badge{font-size:10px;background:#0f0f0f;border:1px solid #262626;padding:5px 9px;border-radius:100px;color:#888}
+.del-box{border:1px solid #ff0033;background:#1a0a0d;border-radius:14px;padding:12px;margin-top:12px}
 </style>
 </head><body>
 <div class="top">
-<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin FINAL FIX - Campos visibles</div>
+<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin FINAL - Con Borrado</div>
 <div style="display:flex;gap:8px"><input id="token" type="password" placeholder="ghp_..." style="width:200px"><button class="btn btn-w" onclick="saveTok()">Guardar token</button></div>
 </div>
 
 <div class="main">
 <div class="left">
-<div class="card"><b style="font-size:13px">Clientes</b><div id="list" style="margin-top:10px">Cargando...</div></div>
+<div class="card"><b>Clientes (de /data)</b><div id="list" style="margin-top:10px">Cargando...</div></div>
 <div class="card"><b style="font-size:12px">Subir 3 archivos</b><input id="slugNew" placeholder="slug: el-fuego" style="margin-top:8px"><div id="drop" style="margin-top:8px;border:1px dashed #444;border-radius:12px;padding:14px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá acá<input id="fileIn" type="file" multiple hidden></div><button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir</button><div id="upOut" class="small"></div></div>
-<div class="card"><span class="badge">FIX VISIBLE</span><div class="small">Ahora cada campo tiene su etiqueta grande. Si es envío, vas a ver "ENVIO.TIPO", "ENVIO.COSTOFIJO" con su valor completo, no cortado.</div></div>
 </div>
 
 <div class="right">
-<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b id="title">Elegí cliente</b><div><button class="btn btn-g" onclick="reload()">↻</button> <button class="btn btn-g" onclick="openReal()">Abrir real</button></div></div><iframe id="prev" class="preview" style="margin-top:10px"></iframe></div>
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center"><b id="title">Elegí cliente</b><div><button class="btn btn-g" onclick="reload()">↻</button> <button class="btn btn-g" onclick="openReal()">Abrir real</button></div></div>
+<iframe id="prev" class="preview" style="margin-top:10px"></iframe>
+<div id="delZone"></div>
+</div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG.JSON - Todo editable con etiqueta</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
-<div class="small" id="configInfo">Acá vas a ver Nombre, WhatsApp, y si tiene envío: tipo, costoFijo, costoPorKm, kmGratis, mensaje... todo con etiqueta clara.</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG.JSON</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
 <div id="configEditor" style="margin-top:14px"></div>
-<div style="margin-top:10px"><button class="btn btn-g" onclick="addConfigField()">+ Campo nuevo</button></div>
 <div id="outC" class="small"></div>
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>DATA.JSON - Productos con campos completos</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>DATA.JSON</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
 <div id="prods" style="margin-top:14px"></div>
-<div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-g" onclick="addProd()">+ Producto</button><button class="btn btn-g" onclick="addCol()">+ Columna</button></div>
+<div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-g" onclick="addProd()">+ Producto</button></div>
 <div id="out" class="small"></div>
 </div>
 
-<div class="card"><b>RAW (avanzado)</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px"><textarea id="rawConfig" style="height:200px"></textarea><textarea id="rawData" style="height:200px"></textarea></div></div>
+<div class="card"><b>RAW</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px"><textarea id="rawConfig" style="height:180px"></textarea><textarea id="rawData" style="height:180px"></textarea></div></div>
 </div>
 </div>
 
 <script>
 let TOKEN=localStorage.getItem('cp_token')||''; let REPO=localStorage.getItem('cp_repo')||'Cartaspro/cartas';
 document.getElementById('token').value=TOKEN;
-let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[]; let CUSTOM_COLS=[];
+let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[];
 function saveTok(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); listar(); }
 async function gh(p,m='GET',b=null){ return fetch(`https://api.github.com/repos/${REPO}/contents/${p}`,{method:m,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:b?JSON.stringify(b):null}); }
-async function listar(){ if(!TOKEN){document.getElementById('list').innerText='Poné token';return;} const r=await gh('data'); const j=await r.json(); if(!Array.isArray(j)){document.getElementById('list').innerText=j.message;return;} const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json','')); document.getElementById('list').innerHTML=slugs.map(s=>`<div class="client ${CURRENT===s?'active':''}" onclick="selectCli('${s}')"><span>${s}</span><span>→</span></div>`).join('')||'Sin clientes'; }
+
+async function listar(){ if(!TOKEN){document.getElementById('list').innerText='Poné token';return;} const r=await gh('data'); const j=await r.json(); if(!Array.isArray(j)){document.getElementById('list').innerText=j.message;return;} const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json','')); document.getElementById('list').innerHTML=slugs.map(s=>`
+<div class="client ${CURRENT===s?'active':''}"><span style="flex:1;cursor:pointer" onclick="selectCli('${s}')">${s}</span><button class="btn btn-g" style="padding:6px 10px;font-size:10px" onclick="borrarCliente('${s}')">🗑️</button></div>`).join('')||'Sin clientes'; }
 
 async function selectCli(s){
  CURRENT=s; document.getElementById('title').innerText=s+' — cartaspro.github.io/cartas/'+s+'/'; document.getElementById('prev').src=`../${s}/?v=${Date.now()}`;
+ document.getElementById('delZone').innerHTML=`<div class="del-box"><b style="font-size:12px">Zona de peligro: ${s}</b><div class="small" style="margin:8px 0">Borra definitivamente data/${s}.json, config/${s}.json y ${s}/index.html de GitHub. No hay vuelta atrás.</div><button class="btn btn-del" onclick="borrarCliente('${s}')">🗑️ BORRAR TODO ${s}</button> <span id="delOut" class="small"></span></div>`;
  const rd=await gh(`data/${s}.json`); if(rd.ok){ const j=await rd.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content)))); document.getElementById('rawData').value=JSON.stringify(DATA,null,2); renderData(); }
  const rc=await gh(`config/${s}.json`); if(rc.ok){ const j=await rc.json(); CONFIG=JSON.parse(decodeURIComponent(escape(atob(j.content)))); document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); renderConfig(); }
  listar();
@@ -104,53 +86,43 @@ async function selectCli(s){
 
 function renderConfig(){
  const c=document.getElementById('configEditor'); c.innerHTML='';
- // top level
  for(const [k,v] of Object.entries(CONFIG)){
    if(v!==null && typeof v==='object' && !Array.isArray(v)){
      let html=`<div class="group"><b>${k.toUpperCase()}</b>`;
-     for(const [sk,sv] of Object.entries(v)){
-       html+=`<div class="kv"><label>${k}.${sk}</label><input value="${escapeHtml(String(sv))}" oninput="setNested('${k}','${sk}',this.value)"></div>`;
-     }
+     for(const [sk,sv] of Object.entries(v)){ html+=`<div class="kv"><label>${k}.${sk}</label><input value="${String(sv).replace(/"/g,'&quot;')}" oninput="CONFIG['${k}']['${sk}']=coerce(this.value); syncRaw()"></div>`; }
      html+=`</div>`; c.innerHTML+=html;
    } else {
-     c.innerHTML+=`<div class="kv"><label>${k}</label><input value="${escapeHtml(String(v))}" oninput="setFlat('${k}',this.value)"></div>`;
+     c.innerHTML+=`<div class="kv"><label>${k}</label><input value="${String(v).replace(/"/g,'&quot;')}" oninput="CONFIG['${k}']=coerce(this.value); syncRaw()"></div>`;
    }
  }
- if(!Object.keys(CONFIG).length) c.innerHTML='<div class="small">Vacío</div>';
 }
-function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-function setFlat(k,val){ let v=coerce(val); CONFIG[k]=v; document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
-function setNested(path,sk,val){ let v=coerce(val); CONFIG[path][sk]=v; document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
-function coerce(val){ if(val==='true') return true; if(val==='false') return false; if(val!=='' && !isNaN(val)){ const n=Number(val); if(String(n)===val) return n; if(val.includes('.')){ const f=parseFloat(val); if(!isNaN(f)) return f; } } return val; }
-function addConfigField(){ const k=prompt('Nuevo campo. Ej: horarios o envio.topeMax'); if(!k) return; if(k.includes('.')){ const [p,s]=k.split('.'); CONFIG[p]=CONFIG[p]||{}; CONFIG[p][s]=''; } else CONFIG[k]=''; renderConfig(); }
+function coerce(val){ if(val==='true') return true; if(val==='false') return false; if(val!=='' && !isNaN(val)){ const n=Number(val); if(String(n)===val) return n; } return val; }
+function syncRaw(){ document.getElementById('rawConfig').value=JSON.stringify(CONFIG,null,2); }
 
 function renderData(){
- const allKeys=new Set(); DATA.forEach(p=>Object.keys(p).forEach(k=>allKeys.add(k))); CUSTOM_COLS.forEach(k=>allKeys.add(k));
  const container=document.getElementById('prods'); container.innerHTML='';
  DATA.forEach((p,i)=>{
-   const extraKeys=[...allKeys].filter(k=>!['id','nombre','precio','categoria','descripcion','img'].includes(k));
-   container.innerHTML+=`
-   <div class="prod-card">
-    <img src="${p.img||''}" onerror="this.style.display='none'">
-    <div>
-     <div class="field"><label>NOMBRE DEL PRODUCTO</label><input value="${escapeHtml(p.nombre||'')}" oninput="DATA[${i}].nombre=this.value"></div>
-     <div class="row2">
-      <div class="field"><label>PRECIO $</label><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)"></div>
-      <div class="field"><label>CATEGORIA</label><input value="${escapeHtml(p.categoria||'')}" oninput="DATA[${i}].categoria=this.value"></div>
-     </div>
-     <div class="field"><label>DESCRIPCION COMPLETA</label><textarea oninput="DATA[${i}].descripcion=this.value">${escapeHtml(p.descripcion||'')}</textarea></div>
-     <div class="field"><label>IMAGEN URL (completa)</label><input value="${escapeHtml(p.img||'')}" oninput="DATA[${i}].img=this.value"></div>
-     ${extraKeys.map(k=>`<div class="field"><label>${k.toUpperCase()}</label><input value="${escapeHtml(String(p[k]||''))}" oninput="DATA[${i}]['${k}']=coerce(this.value)"></div>`).join('')}
-     <div style="display:flex;justify-content:space-between;margin-top:6px"><span class="badge">ID: ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar</button></div>
-    </div>
-   </div>`;
+   container.innerHTML+=`<div class="prod-card"><img src="${p.img||''}" onerror="this.style.display='none'"><div><div class="field"><label>NOMBRE</label><input value="${p.nombre||''}" oninput="DATA[${i}].nombre=this.value"></div><div class="row2"><div class="field"><label>PRECIO</label><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)"></div><div class="field"><label>CATEGORIA</label><input value="${p.categoria||''}" oninput="DATA[${i}].categoria=this.value"></div></div><div class="field"><label>DESCRIPCION</label><textarea oninput="DATA[${i}].descripcion=this.value">${p.descripcion||''}</textarea></div><div class="field"><label>IMG URL</label><input value="${p.img||''}" oninput="DATA[${i}].img=this.value"></div><div style="display:flex;justify-content:space-between"><span class="badge">ID ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar producto</button></div></div></div>`;
  });
  document.getElementById('rawData').value=JSON.stringify(DATA,null,2);
 }
-function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; DATA.push({id:nid,nombre:'Nuevo producto',precio:0,categoria:'',descripcion:'',img:''}); renderData(); }
-function addCol(){ const c=prompt('Nueva columna, ej: stock'); if(!c) return; CUSTOM_COLS.push(c); DATA.forEach(p=>p[c]=p[c]||''); renderData(); }
-async function guardarConfig(){ if(!CURRENT) return; try{ CONFIG=JSON.parse(document.getElementById('rawConfig').value); }catch(e){ return alert('JSON config malo '+e.message); } document.getElementById('outC').innerText='Guardando...'; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`fix config ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); document.getElementById('outC').innerText=res.ok?'✓ Guardado':'Error '+(await res.json()).message; reload(); }
-async function guardarData(){ if(!CURRENT) return; try{ DATA=JSON.parse(document.getElementById('rawData').value); }catch(e){ return alert('JSON data malo '+e.message); } document.getElementById('out').innerText='Guardando...'; const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`fix data ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))}); document.getElementById('out').innerText=res.ok?'✓ Guardado':'Error '+(await res.json()).message; reload(); }
+function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; DATA.push({id:nid,nombre:'Nuevo',precio:0,categoria:'',descripcion:'',img:''}); renderData(); }
+
+async function guardarConfig(){ if(!CURRENT) return; try{ CONFIG=JSON.parse(document.getElementById('rawConfig').value); }catch(e){ return alert('JSON malo'); } const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`edit ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); document.getElementById('outC').innerText=res.ok?'✓ Guardado':'Error'; reload(); }
+async function guardarData(){ if(!CURRENT) return; try{ DATA=JSON.parse(document.getElementById('rawData').value); }catch(e){ return alert('JSON malo'); } const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`edit ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))}); document.getElementById('out').innerText=res.ok?'✓ Guardado':'Error'; reload(); }
+
+async function borrarCliente(slug){
+ if(!confirm(`¿Borrar DEFINITIVAMENTE ${slug}? Se borrará data/${slug}.json, config/${slug}.json y ${slug}/index.html`)) return;
+ const out=document.getElementById('delOut')||document.getElementById('upOut');
+ if(out) out.innerText='Borrando...';
+ const paths=[`data/${slug}.json`,`config/${slug}.json`,`${slug}/index.html`];
+ for(const p of paths){
+   const r=await gh(p); if(r.ok){ const j=await r.json(); await gh(p,'DELETE',{message:`delete ${p}`,sha:j.sha}); }
+ }
+ if(out) out.innerText='✓ Borrado';
+ CURRENT=''; document.getElementById('title').innerText='Elegí cliente'; document.getElementById('prev').src=''; document.getElementById('delZone').innerHTML=''; listar();
+}
+
 function reload(){ if(CURRENT) document.getElementById('prev').src=`../${CURRENT}/?v=${Date.now()}`; }
 function openReal(){ if(CURRENT) window.open(`../${CURRENT}/`,'_blank'); }
 const drop=document.getElementById('drop'); const fileIn=document.getElementById('fileIn');
@@ -158,4 +130,4 @@ drop.addEventListener('click',()=>fileIn.click()); drop.addEventListener('dragov
 async function subir(){ const slug=document.getElementById('slugNew').value.trim().toLowerCase().replace(/\s+/g,'-'); if(!slug||!FILES.length) return alert('Falta'); for(let file of FILES){ const text=await file.text(); let path=''; if(file.name.toLowerCase().endsWith('.html')) path=`${slug}/index.html`; else { try{ const j=JSON.parse(text); if(Array.isArray(j)) path=`data/${slug}.json`; else path=`config/${slug}.json`; }catch{ path=`config/${slug}.json`; } } const ex=await gh(path); let sha=null; if(ex.ok){ const ej=await ex.json(); sha=ej.sha; } await gh(path,'PUT',{message:`upload ${path}`,content:btoa(unescape(encodeURIComponent(text))),...(sha?{sha}:{})}); } document.getElementById('upOut').innerText+='\n✓ Subido'; listar(); }
 listar();
 </script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body></html>
+</body></html>
