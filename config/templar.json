@@ -1,9 +1,0 @@
-{
-  "nombre": "Templar bar",
-  "whatsapp": "12312412431",
-  "color": "#cbe21d",
-  "envio": {
-    "tipo": "fijo",
-    "costo": 1500
-  }
-}
