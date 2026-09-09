@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "categoria": "hamburguesas",
+    "nombre": "Templar Clásica",
+    "descripcion": "Doble carne, cheddar, bacon",
+    "precio": 4500,
+    "img": "https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600"
+  },
+  {
+    "id": 2,
+    "categoria": "hamburguesas",
+    "nombre": "Templar Doble",
+    "descripcion": "Triple carne",
+    "precio": 6200,
+    "img": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600"
+  }
+]
