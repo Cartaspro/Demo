@@ -1,226 +1,150 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CartasPro - Admin Maestro V2</title>
+<title>CartasPro - App Directa</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c;--border:#2a2a2a}
+:root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--bg);color:#fff;padding:14px;max-width:900px;margin:0 auto;padding-bottom:120px}
-h1{font-size:20px} .sub{color:#9ca3af;font-size:12px;margin:6px 0 14px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px}
-.label{font-size:10px;color:#9ca3af;font-weight:700;text-transform:uppercase;margin-top:10px;display:block}
-.input{width:100%;padding:11px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:5px;font-size:13px}
+body{background:var(--bg);color:#fff;padding:16px;max-width:500px;margin:0 auto;padding-bottom:100px}
+.card{background:var(--card);border:1px solid #222;border-radius:18px;padding:14px;margin-bottom:12px}
+.input{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px}
+.btn{width:100%;padding:14px;border-radius:14px;border:none;font-weight:800;margin-top:10px;cursor:pointer}
+.primary{background:var(--primary);color:#fff} .green{background:#25D366;color:#fff} .dark{background:#262626;color:#fff;border:1px solid #333}
+.prod{background:#0f0f0f;border:1px solid #333;border-radius:14px;padding:10px;margin-bottom:10px;position:relative}
+.label{font-size:10px;color:#888;font-weight:700;margin-top:10px;display:block;text-transform:uppercase}
+.small{font-size:11px;color:#888}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.btn{width:100%;padding:13px;border-radius:12px;border:none;font-weight:800;cursor:pointer;margin-top:8px}
-.primary{background:var(--primary);color:#fff} .secondary{background:#262626;color:#fff;border:1px solid #333} .green{background:#25D366;color:#fff} .ghost{background:transparent;border:1px dashed #333;color:#9ca3af}
-.prod{background:#0f0f0f;border:1px solid #333;border-radius:12px;padding:10px;position:relative;margin-bottom:10px}
-.prod img{width:100%;height:110px;object-fit:cover;border-radius:8px;margin-bottom:8px;background:#111}
-.del{position:absolute;top:8px;right:8px;background:#ef4444;border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-weight:800}
-.client{display:flex;align-items:center;justify-content:space-between;padding:11px;border-radius:12px;background:#0f0f0f;border:1px solid #333;margin-bottom:7px;cursor:pointer}
-.client.active{border-color:var(--primary);background:#1f1114}
-.tag{font-size:10px;background:#262626;padding:3px 8px;border-radius:10px}
-.status{font-size:11px;margin-top:6px}
 </style>
 </head>
 <body>
-<h1>CartasPro Admin Maestro</h1>
-<p class="sub">Un solo panel para todos los clientes. Versión arreglada.</p>
+<h1 style="font-size:22px">CartasPro App</h1>
+<p class="small" style="margin:6px 0 14px">Sin tokens. Sin 404. 100% directa.</p>
 
-<div class="card" id="setupCard">
-<h3 style="font-size:13px">🔑 GitHub (solo 1 vez)</h3>
-<label class="label">Owner</label><input id="gh_owner" class="input" value="cartaspro">
-<label class="label">Repo</label><input id="gh_repo" class="input" value="cartaspro.github.io">
-<label class="label">Branch</label><input id="gh_branch" class="input" value="main">
-<label class="label">Token ghp_...</label><input id="gh_token" class="input" type="password" placeholder="pega tu token aqui">
+<div class="card">
+<label class="label">Cliente (ej: templar)</label>
+<input id="cliente" class="input" value="templar">
 <div class="grid2">
-<button class="btn secondary" onclick="guardarSetup()">Guardar</button>
-<button class="btn ghost" onclick="window.open('https://github.com/settings/tokens/new','_blank')">Crear token</button>
+<button class="btn dark" onclick="cargar()">Cargar existente</button>
+<button class="btn dark" onclick="nuevo()">Nuevo cliente</button>
 </div>
-<div id="setupStatus" class="status"></div>
-<p style="font-size:10px;color:#666;margin-top:6px">Token classic > marca solo repo > Generate. Se guarda solo en tu celu.</p>
+<div id="status" class="small" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<label class="label">Nombre del local</label><input id="c_nombre" class="input" value="Templar">
+<label class="label">WhatsApp (sin +)</label><input id="c_wa" class="input" value="5491134890644">
+<label class="label">Color</label><input id="c_color" class="input" type="color" value="#E11D48">
+<label class="label">Envío</label>
+<select id="c_tipo" class="input"><option value="fijo">Fijo</option><option value="variable" selected>Variable cada X km</option><option value="gratis">Gratis</option></select>
+<div class="grid2"><div><label class="label">Base</label><input id="c_base" class="input" type="number" value="1500"></div><div><label class="label">Cada km</label><input id="c_cada" class="input" type="number" value="2"></div></div>
+<label class="label">Precio por tramo</label><input id="c_tramo" class="input" type="number" value="500">
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<h3 style="font-size:13px">Clientes</h3>
-<button onclick="cargarClientes()" style="background:#262626;border:1px solid #333;color:#fff;padding:5px 10px;border-radius:8px;font-size:11px">Recargar</button>
-</div>
-<div id="clientList" style="margin-top:10px"></div>
-<div style="margin-top:10px;display:flex;gap:8px">
-<input id="newClientName" class="input" placeholder="ej: templar" style="margin-top:0">
-<button class="btn secondary" style="width:auto;margin-top:0;padding:11px 14px" onclick="crearNuevoCliente()">+ Nuevo</button>
-</div>
-<div id="saveStatus" class="status"></div>
+<h3 style="font-size:14px">Productos</h3>
+<div id="lista" style="margin-top:10px"></div>
+<button class="btn dark" onclick="agregarVacio()" style="margin-top:10px">+ Producto</button>
 </div>
 
-<div id="editor" style="display:none">
 <div class="card">
-<h3 style="font-size:13px">Editando: <span id="editingName" style="color:#E11D48"></span> <a id="editingLink" target="_blank" style="font-size:11px;color:#25D366;margin-left:6px"></a></h3>
-<label class="label">Nombre</label><input id="c_nombre" class="input">
-<label class="label">WhatsApp</label><input id="c_wa" class="input">
-<label class="label">Color</label><input id="c_color" class="input" type="color">
-<label class="label">Tipo envio</label>
-<select id="c_tipo" class="input" onchange="toggleEnvio()"><option value="fijo">Fijo</option><option value="variable">Variable cada X km</option><option value="gratis">Gratis</option></select>
-<div id="env-fijo"><label class="label">Costo fijo</label><input id="c_costo" class="input" type="number"></div>
-<div id="env-variable" style="display:none"><div class="grid2"><div><label class="label">Base</label><input id="c_base" class="input" type="number"></div><div><label class="label">Cada km</label><input id="c_cada" class="input" type="number"></div></div><label class="label">Precio por tramo</label><input id="c_tramo" class="input" type="number"></div>
-</div>
-<div class="card">
-<h3 style="font-size:13px">Productos</h3>
-<div id="lista"></div>
-<div style="margin-top:10px;border-top:1px solid #222;padding-top:10px">
-<label class="label">+ Agregar</label>
-<input id="n_nombre" class="input" placeholder="Nombre">
-<div class="grid2"><input id="n_cat" class="input" placeholder="categoria"><input id="n_precio" class="input" type="number" placeholder="precio"></div>
-<input id="n_desc" class="input" placeholder="descripcion">
-<input id="n_img" class="input" placeholder="url imagen">
-<button class="btn primary" onclick="agregar()">Agregar producto</button>
-</div>
-</div>
-<div class="card">
-<button class="btn green" id="btnGuardar" onclick="guardarTodo()">GUARDAR EN GITHUB</button>
-<div id="saveStatus2" class="status"></div>
-<p style="font-size:10px;color:#666;margin-top:6px">Si falla el guardado automatico, avísame y te paso los 2 JSON para pegar manual.</p>
-</div>
+<button class="btn green" onclick="guardar()">GENERAR ARCHIVOS Y DESCARGAR</button>
+<p class="small" style="margin-top:8px">Te baja 2 archivos .json + instrucciones para subir a GitHub en 10 seg arrastrando. No necesitas token.</p>
+<div id="down" style="margin-top:10px"></div>
 </div>
 
 <script>
-let GH={owner:'cartaspro',repo:'cartaspro.github.io',branch:'main',token:''};
-let clientes=[]; let current=null; let productos=[]; 
-function loadSetup(){
- try{ const s=JSON.parse(localStorage.getItem('cartaspro_gh')||'{}'); GH.owner=s.owner||GH.owner; GH.repo=s.repo||GH.repo; GH.branch=s.branch||GH.branch; GH.token=s.token||''; document.getElementById('gh_owner').value=GH.owner; document.getElementById('gh_repo').value=GH.repo; document.getElementById('gh_branch').value=GH.branch; document.getElementById('gh_token').value=GH.token; if(GH.token) document.getElementById('setupStatus').innerText='Token cargado'; }catch(e){}
-}
-loadSetup();
-function guardarSetup(){ GH.owner=document.getElementById('gh_owner').value.trim()||'cartaspro'; GH.repo=document.getElementById('gh_repo').value.trim()||'cartaspro.github.io'; GH.branch=document.getElementById('gh_branch').value.trim()||'main'; GH.token=document.getElementById('gh_token').value.trim(); localStorage.setItem('cartaspro_gh',JSON.stringify(GH)); document.getElementById('setupStatus').innerText='Guardado. Ahora recarga clientes.'; cargarClientes(); }
-async function ghApi(path, method, body){
- if(!GH.token) throw new Error('Falta token');
- const url='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path+'?ref='+GH.branch;
- const headers={Authorization:'token '+GH.token, Accept:'application/vnd.github.v3+json'};
- const opts={method:method||'GET', headers:headers};
- if(body) opts.body=JSON.stringify(body);
- const res=await fetch(url, opts);
- if(!res.ok){ const t=await res.text(); throw new Error(res.status+' '+t.substring(0,300)); }
- return res.json();
-}
-function toBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
-function fromBase64(b64){ try{ return decodeURIComponent(escape(atob(b64))); }catch(e){ return atob(b64); } }
-async function cargarClientes(){
- const listDiv=document.getElementById('clientList');
- if(!GH.token){ listDiv.innerHTML='<p style="color:#f59e0b;font-size:11px">Pone token arriba primero.</p>'; return; }
- listDiv.innerHTML='Cargando...';
- try{
-  const dataFiles=await ghApi('data').catch(function(){return [];});
-  let names=[];
-  if(Array.isArray(dataFiles)){ names=dataFiles.filter(function(f){return f.name.endsWith('.json');}).map(function(f){return f.name.replace('.json','');}); }
-  const root=await ghApi('').catch(function(){return [];});
-  let folders=[];
-  if(Array.isArray(root)){ folders=root.filter(function(f){return f.type==='dir' && ['data','config','admin','images','.github'].indexOf(f.name)===-1;}).map(function(f){return f.name;}); }
-  let merged={}; names.concat(folders).forEach(function(n){merged[n]=1;});
-  clientes=Object.keys(merged);
-  renderClientes();
- }catch(e){ listDiv.innerHTML='<p style="color:#ef4444;font-size:11px">Error: '+e.message+'</p>'; }
-}
-function renderClientes(){
- const cont=document.getElementById('clientList');
- if(clientes.length===0){ cont.innerHTML='<p style="color:#666;font-size:11px">Sin clientes. Crea uno abajo.</p>'; return; }
- let html='';
- clientes.forEach(function(name){
-  const active=current===name?' active':'';
-  html+='<div class="client'+active+'" onclick="abrirCliente(\''+name+'\')"><div><b>'+name+'</b> <span class="tag">'+name+'</span><br><span style="font-size:10px;color:#9ca3af">cartaspro.github.io/'+name+'/</span></div><div>-></div></div>';
- });
- cont.innerHTML=html;
-}
-async function abrirCliente(name){
- current=name;
- document.getElementById('editingName').innerText=name;
- document.getElementById('editingLink').innerText='ver carta';
- document.getElementById('editingLink').href='https://'+GH.owner+'.github.io/'+name+'/';
- document.getElementById('editor').style.display='block';
- renderClientes();
- productos=[];
- try{
-  const dataContent=await ghApi('data/'+name+'.json');
-  const txt=fromBase64(dataContent.content.replace(/\n/g,''));
-  const json=JSON.parse(txt);
-  productos=json.map(function(p){ return {id:p.id, cat:(p.categoria||p.cat||'otros').toLowerCase(), nombre:p.nombre, desc:p.descripcion||p.desc||'', precio:p.precio, img:p.img}; });
- }catch(e){ productos=[]; }
- try{
-  const cfgContent=await ghApi('config/'+name+'.json');
-  const txt=fromBase64(cfgContent.content.replace(/\n/g,''));
-  const json=JSON.parse(txt);
-  document.getElementById('c_nombre').value=json.nombre||name;
-  document.getElementById('c_wa').value=json.whatsapp||'';
-  document.getElementById('c_color').value=json.color||'#E11D48';
-  document.getElementById('c_tipo').value=(json.envio&&json.envio.tipo)||'fijo';
-  document.getElementById('c_costo').value=(json.envio&&json.envio.costo)||1500;
-  document.getElementById('c_base').value=(json.envio&&json.envio.base)||1500;
-  document.getElementById('c_cada').value=(json.envio&&json.envio.cadaKm)||2;
-  document.getElementById('c_tramo').value=(json.envio&&json.envio.precioPorTramo)||500;
-  toggleEnvio();
- }catch(e){
-  document.getElementById('c_nombre').value=name;
-  document.getElementById('c_wa').value='5491134890644';
-  document.getElementById('c_color').value='#E11D48';
-  document.getElementById('c_tipo').value='fijo';
-  document.getElementById('c_costo').value=1500;
-  toggleEnvio();
- }
- renderProductos();
-}
-function toggleEnvio(){ const t=document.getElementById('c_tipo').value; document.getElementById('env-fijo').style.display=t==='fijo'?'block':'none'; document.getElementById('env-variable').style.display=t==='variable'?'block':'none'; }
-function renderProductos(){
+let productos=[];
+function render(){
  const cont=document.getElementById('lista');
- let html='';
- productos.forEach(function(p){
-  html+='<div class="prod"><button class="del" onclick="borrar('+p.id+')">X</button><img src="'+p.img+'" onerror="this.src=\'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=400\'" /><input class="input" value="'+p.nombre.replace(/"/g,'&quot;')+'" onchange="edit('+p.id+',\'nombre\',this.value)" /><div class="grid2"><input class="input" value="'+p.cat+'" onchange="edit('+p.id+',\'cat\',this.value)" /><input class="input" type="number" value="'+p.precio+'" onchange="edit('+p.id+',\'precio\',this.value)" /></div><input class="input" value="'+(p.desc||'').replace(/"/g,'&quot;')+'" onchange="edit('+p.id+',\'desc\',this.value)" /><input class="input" value="'+p.img+'" onchange="edit('+p.id+',\'img\',this.value)" style="font-size:10px" /></div>';
+ let h='';
+ productos.forEach((p,i)=>{
+  h+=`<div class="prod">
+  <div style="display:flex;justify-content:space-between"><b style="font-size:13px">${p.nombre||'Nuevo'}</b><button onclick="borrar(${i})" style="background:#ef4444;border:none;color:#fff;border-radius:50%;width:22px;height:22px">X</button></div>
+  <input class="input" placeholder="Nombre" value="${p.nombre}" oninput="productos[${i}].nombre=this.value">
+  <div class="grid2"><input class="input" placeholder="Cat" value="${p.categoria}" oninput="productos[${i}].categoria=this.value"><input class="input" type="number" placeholder="Precio" value="${p.precio}" oninput="productos[${i}].precio=parseInt(this.value)||0"></div>
+  <input class="input" placeholder="Descripción" value="${p.descripcion}" oninput="productos[${i}].descripcion=this.value">
+  <input class="input" placeholder="URL imagen" value="${p.img}" oninput="productos[${i}].img=this.value">
+  </div>`;
  });
- if(html==='') html='<p style="color:#666;font-size:11px">Sin productos</p>';
- cont.innerHTML=html;
+ cont.innerHTML=h||'<p class=small>Sin productos</p>';
 }
-function edit(id,campo,val){ const p=productos.find(function(x){return x.id===id}); if(!p) return; if(campo==='precio') p[campo]=parseInt(val)||0; else p[campo]=val; }
-function borrar(id){ productos=productos.filter(function(p){return p.id!==id;}); renderProductos(); }
-function agregar(){ const nombre=document.getElementById('n_nombre').value.trim(); if(!nombre) return alert('Nombre'); productos.push({id:Date.now(), cat:(document.getElementById('n_cat').value||'otros').toLowerCase(), nombre:nombre, desc:document.getElementById('n_desc').value, precio:parseInt(document.getElementById('n_precio').value)||0, img:document.getElementById('n_img').value||'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'}); ['n_nombre','n_cat','n_precio','n_desc','n_img'].forEach(function(i){document.getElementById(i).value='';}); renderProductos(); }
-async function getSha(path){ try{ const f=await ghApi(path); return f.sha; }catch(e){ return null; } }
-async function crearNuevoCliente(){
- const input=document.getElementById('newClientName'); let name=input.value.trim().toLowerCase().replace(/\s+/g,'-'); if(!name) return alert('Pone nombre ej templar'); if(!GH.token) return alert('Falta token');
- document.getElementById('saveStatus').innerText='Creando '+name+'...';
+function agregarVacio(){ productos.push({id:Date.now(), categoria:'hamburguesas', nombre:'', descripcion:'', precio:0, img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'}); render(); }
+function borrar(i){ productos.splice(i,1); render(); }
+function nuevo(){ 
+  productos=[
+    {id:1,categoria:'hamburguesas',nombre:'Templar Clásica',descripcion:'Doble carne, cheddar, bacon',precio:4500,img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'},
+    {id:2,categoria:'hamburguesas',nombre:'Templar Doble',descripcion:'Triple carne',precio:6200,img:'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600'}
+  ];
+  document.getElementById('status').innerText='Plantilla Templar cargada. Editá y guardá.';
+  render();
+}
+async function cargar(){
+ const name=document.getElementById('cliente').value.trim().toLowerCase();
+ if(!name) return;
+ document.getElementById('status').innerText='Buscando '+name+'...';
  try{
-  const emptyData=JSON.stringify([{id:1,categoria:'otros',nombre:'Producto ejemplo',descripcion:'Descripcion',precio:1000,img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'}],null,2);
-  await ghApi('data/'+name+'.json','PUT',{message:'feat: nuevo cliente '+name+' data', content:toBase64(emptyData), branch:GH.branch});
-  const emptyConfig=JSON.stringify({nombre:name, whatsapp:'5491134890644', color:'#E11D48', envio:{tipo:'fijo',costo:1500}},null,2);
-  await ghApi('config/'+name+'.json','PUT',{message:'feat: nuevo cliente '+name+' config', content:toBase64(emptyConfig), branch:GH.branch});
-  const simpleIndex='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+name+'</title></head><body><h1 style="font-family:sans-serif;text-align:center;margin-top:50px">Cliente '+name+' creado. Copia el index de Demo aqui.</h1><p style="text-align:center"><a href="../Demo/">Ver Demo</a></p></body></html>';
-  const shaIndex=await getSha(name+'/index.html');
-  let body={message:'feat: cliente '+name+' index', content:toBase64(simpleIndex), branch:GH.branch};
-  if(shaIndex) body.sha=shaIndex;
-  await ghApi(name+'/index.html','PUT',body);
-  document.getElementById('saveStatus').innerText='Cliente '+name+' creado. Ahora avisame y lo llenamos.';
-  input.value=''; cargarClientes();
- }catch(e){ document.getElementById('saveStatus').innerText='Error: '+e.message; }
+  const r=await fetch('https://cartaspro.github.io/data/'+name+'.json?v='+Date.now());
+  if(!r.ok) throw new Error('No existe aun');
+  const data=await r.json();
+  productos=data.map(p=>({id:p.id,categoria:p.categoria||p.cat,nombre:p.nombre,descripcion:p.descripcion||p.desc,precio:p.precio,img:p.img}));
+  const rc=await fetch('https://cartaspro.github.io/config/'+name+'.json?v='+Date.now()).then(x=>x.json()).catch(()=>null);
+  if(rc){ document.getElementById('c_nombre').value=rc.nombre||name; document.getElementById('c_wa').value=rc.whatsapp||''; document.getElementById('c_color').value=rc.color||'#E11D48'; }
+  document.getElementById('status').innerText='Cargado '+name+' ('+productos.length+' productos)';
+  render();
+ }catch(e){ document.getElementById('status').innerText='No existe aun, usa Nuevo cliente'; nuevo(); }
 }
-async function guardarTodo(){
- if(!current) return alert('Elegi cliente');
- const btn=document.getElementById('btnGuardar'); btn.innerText='Guardando...'; btn.disabled=true;
- try{
-  const outData=productos.map(function(p){ return {id:p.id,categoria:p.cat,nombre:p.nombre,descripcion:p.desc,precio:p.precio,img:p.img}; });
-  const tipo=document.getElementById('c_tipo').value;
-  let envio={tipo:tipo};
-  if(tipo==='fijo') envio.costo=parseInt(document.getElementById('c_costo').value)||0;
-  if(tipo==='variable'){ envio.base=parseInt(document.getElementById('c_base').value)||0; envio.cadaKm=parseInt(document.getElementById('c_cada').value)||2; envio.precioPorTramo=parseInt(document.getElementById('c_tramo').value)||0; }
-  const cfg={nombre:document.getElementById('c_nombre').value, whatsapp:document.getElementById('c_wa').value, color:document.getElementById('c_color').value, envio:envio};
-  const dataStr=JSON.stringify(outData,null,2);
-  const configStr=JSON.stringify(cfg,null,2);
-  const shaData=await getSha('data/'+current+'.json');
-  let bodyData={message:'update: '+current+' productos', content:toBase64(dataStr), branch:GH.branch}; if(shaData) bodyData.sha=shaData;
-  await ghApi('data/'+current+'.json','PUT',bodyData);
-  const shaCfg=await getSha('config/'+current+'.json');
-  let bodyCfg={message:'update: '+current+' config', content:toBase64(configStr), branch:GH.branch}; if(shaCfg) bodyCfg.sha=shaCfg;
-  await ghApi('config/'+current+'.json','PUT',bodyCfg);
-  document.getElementById('saveStatus2').innerHTML='Guardado! <a href="https://'+GH.owner+'.github.io/'+current+'/?v='+Date.now()+'" target="_blank" style="color:#25D366">Ver carta</a>';
-  document.getElementById('saveStatus').innerText='Guardado OK';
- }catch(e){ document.getElementById('saveStatus2').innerText='Error: '+e.message; } finally{ btn.innerText='GUARDAR EN GITHUB'; btn.disabled=false; }
+function descargar(nombre, contenido){
+ const blob=new Blob([contenido],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a'); a.href=url; a.download=nombre; a.click();
 }
+function guardar(){
+ const name=document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
+ if(!name) return alert('Pone nombre cliente');
+ const outData=productos.map(p=>({id:p.id||Date.now(),categoria:p.categoria.toLowerCase(),nombre:p.nombre,descripcion:p.descripcion,precio:p.precio,img:p.img}));
+ const envioTipo=document.getElementById('c_tipo').value;
+ let envio={tipo:envioTipo};
+ if(envioTipo==='fijo') envio.costo=1500;
+ if(envioTipo==='variable'){ envio.base=parseInt(document.getElementById('c_base').value)||1500; envio.cadaKm=parseInt(document.getElementById('c_cada').value)||2; envio.precioPorTramo=parseInt(document.getElementById('c_tramo').value)||500; }
+ const cfg={nombre:document.getElementById('c_nombre').value, whatsapp:document.getElementById('c_wa').value, color:document.getElementById('c_color').value, envio:envio};
+ descargar(name+'.json', JSON.stringify(outData,null,2));
+ setTimeout(()=>{ descargar(name+'-config.json', JSON.stringify(cfg,null,2)); }, 500);
+ document.getElementById('down').innerHTML=`
+  <div style="background:#0f0f0f;border:1px solid #25D366;border-radius:12px;padding:12px">
+  <b style="color:#25D366">Archivos generados!</b><br>
+  <p class=small style="margin-top:6px">1. Bajaste <b>${name}.json</b> y <b>${name}-config.json</b><br>
+  2. Anda a <a href="https://github.com/cartaspro/cartaspro.github.io/upload/main" target="_blank" style="color:#25D366">Subir archivos a GitHub</a><br>
+  3. Arrastra los 2 archivos<br>
+  4. En la segunda subida, sube <b>${name}.json</b> a la carpeta <b>data/</b> (renombralo a <b>data/${name}.json</b> antes) y <b>${name}-config.json</b> a <b>config/${name}.json</b><br><br>
+  O mas facil: crea los archivos manual como te dije: data/${name}.json y config/${name}.json y pega el contenido.<br><br>
+  <a href="https://cartaspro.github.io/${name}/" target="_blank" style="color:#25D366">Ver carta de ${name} en 1 min</a></p>
+  </div>
+ `;
+}
+nuevo();
 </script>
-</body>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
