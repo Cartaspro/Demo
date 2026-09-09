@@ -21,96 +21,63 @@
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
 </style><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Visual - CartasPro</title>
+<title>Admin - Editar Menú Directo</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#f6f5f2;color:#111}
-.top{max-width:1200px;margin:0 auto;padding:18px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:900;font-size:18px;display:flex;gap:8px;align-items:center}
-.dot{width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900}
-.wrap{max-width:1200px;margin:0 auto;padding:0 18px 40px;display:grid;grid-template-columns:300px 1fr;gap:18px}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #e8e6e1;border-radius:20px;padding:16px}
-.card h3{font-size:14px;font-weight:800;margin-bottom:10px;letter-spacing:-0.2px}
-input,textarea,select{width:100%;background:#f6f5f2;border:1px solid #e8e6e1;border-radius:12px;padding:11px 12px;font-size:13px;margin-top:6px}
-.btn{padding:11px 16px;border-radius:100px;border:0;font-weight:800;font-size:13px;cursor:pointer}
-.btn-black{background:#111;color:#fff}
-.btn-red{background:#E11D48;color:#fff}
-.btn-light{background:#f6f5f2;color:#111;border:1px solid #e8e6e1}
-.small{font-size:11px;color:#999;margin-top:6px;line-height:1.4}
-.list-item{padding:10px 12px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;border:1px solid transparent}
-.list-item:hover{background:#f6f5f2}
-.list-item.active{background:#111;color:#fff;border-color:#111}
-.drop{border:2px dashed #e8e6e1;border-radius:16px;padding:20px;text-align:center;cursor:pointer}
-.drop.dragover{border-color:#111;background:#f6f5f2}
-.prod-card{background:#f6f5f2;border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center;margin-bottom:10px}
-.prod-card img{width:60px;height:60px;border-radius:12px;object-fit:cover;background:#fff}
-.prod-fields{flex:1;display:grid;grid-template-columns:1fr 90px;gap:8px}
-.preview{width:100%;height:700px;border-radius:20px;border:1px solid #e8e6e1;background:#fff}
+body{background:#0f0f0f;color:#fff}
+.top{padding:16px 20px;border-bottom:1px solid #1c1c1c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f0f0f;z-index:10}
+.logo{font-weight:900;display:flex;gap:8px;align-items:center}
+.dot{width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.main{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.left{border-right:1px solid #1c1c1c;padding:16px}
+.right{padding:16px}
+.card{background:#1c1c1c;border:1px solid #262626;border-radius:16px;padding:14px;margin-bottom:12px}
+input{background:#0f0f0f;border:1px solid #262626;border-radius:10px;padding:10px;color:#fff;width:100%;font-size:13px}
+.btn{padding:10px 16px;border-radius:100px;border:0;font-weight:800;cursor:pointer;font-size:13px}
+.btn-w{background:#fff;color:#000}
+.btn-r{background:#E11D48;color:#fff}
+.btn-g{background:#262626;color:#fff}
+.client{padding:10px 12px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c}
+.client.active{background:#fff;color:#000;border-color:#fff}
+.preview{width:100%;height:520px;border-radius:16px;border:1px solid #262626;background:#000}
+.prod{display:flex;gap:10px;align-items:center;background:#0f0f0f;border:1px solid #1c1c1c;border-radius:14px;padding:10px;margin-bottom:8px}
+.prod img{width:50px;height:50px;border-radius:10px;object-fit:cover;background:#1c1c1c}
+.small{font-size:11px;color:#666;margin-top:4px}
 </style>
 </head><body>
 <div class="top">
-<div class="logo"><div class="dot">C</div>CartasPro Admin Visual</div>
-<div style="display:flex;gap:8px"><input id="token" type="password" placeholder="Token ghp_..." style="width:220px"><button class="btn btn-black" onclick="saveToken()">Guardar</button></div>
+<div class="logo"><div class="dot">C</div> Admin - Editar menú directo</div>
+<div style="display:flex;gap:8px"><input id="token" type="password" placeholder="Token ghp_..." style="width:200px"><button class="btn btn-w" onclick="saveTok()">Guardar</button><button class="btn btn-g" onclick="listar()">↻</button></div>
 </div>
 
-<div class="wrap">
-<!-- LEFT -->
-<div>
+<div class="main">
+<div class="left">
 <div class="card">
-<h3>Clientes</h3>
-<div id="clientList" style="margin-top:8px">Cargando...</div>
-<div style="margin-top:12px" class="small">Click para editar y ver en vivo</div>
+<b style="font-size:13px">Clientes</b>
+<div id="list" style="margin-top:10px">Cargando...</div>
 </div>
-
-<div class="card" style="margin-top:14px">
-<h3>+ Nuevo cliente</h3>
-<input id="newSlug" placeholder="Slug: el-fuego">
-<input id="newNombre" placeholder="Nombre: El Fuego">
-<input id="newWa" placeholder="WhatsApp: 54911...">
-<button class="btn btn-black" style="width:100%;margin-top:10px" onclick="crearClienteVisual()">Crear carta vacía</button>
-<div class="small">Te crea los 3 archivos automáticamente con la base simple</div>
-</div>
-
-<div class="card" style="margin-top:14px">
-<h3>Subir archivos que te paso</h3>
-<div class="small">Arrastrá acá los 3 archivos que te paso yo (index.html, data.json, config.json). Detecta el cliente solo.</div>
-<div id="dropZone" class="drop" style="margin-top:10px">
-<strong>Arrastrá los archivos acá</strong><br><span class="small">o click para seleccionar</span>
-<input id="fileInput" type="file" multiple hidden>
-</div>
-<div id="uploadStatus" class="small" style="margin-top:8px"></div>
-</div>
-</div>
-
-<!-- RIGHT -->
-<div>
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<h3>Vista previa en vivo</h3>
-<div style="display:flex;gap:6px">
-<button class="btn btn-light" onclick="reloadPreview()">Recargar</button>
-<button class="btn btn-light" onclick="openCarta()">Abrir link</button>
+<b style="font-size:13px">+ Subir 3 archivos que te paso</b>
+<div class="small">Slug + arrastrá data.json, config.json, index.html</div>
+<input id="slugNew" placeholder="Slug: el-fuego" style="margin-top:8px">
+<div id="drop" style="margin-top:8px;border:1px dashed #333;border-radius:12px;padding:16px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá acá los 3 archivos<br><span class="small">click para seleccionar</span><input id="fileIn" type="file" multiple hidden></div>
+<button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir a GitHub</button>
+<div id="upOut" class="small"></div>
 </div>
-</div>
-<div style="margin-top:12px;display:flex;gap:8px">
-<input id="editSlug" placeholder="Slug actual" style="flex:1">
-<button class="btn btn-light" onclick="cargarCliente()">Cargar</button>
-</div>
-<iframe id="preview" class="preview" style="margin-top:12px"></iframe>
 </div>
 
-<div class="card" style="margin-top:14px">
-<div style="display:flex;justify-content:space-between;align-items:center"><h3>Productos - tocá para editar</h3><button class="btn btn-black" onclick="guardarTodo()">Guardar TODO en GitHub</button></div>
+<div class="right">
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center"><b id="title">Seleccioná un cliente</b><div><button class="btn btn-g" onclick="reload()">Recargar vista</button> <button class="btn btn-g" onclick="openReal()">Abrir real</button></div></div>
+<iframe id="prev" class="preview" style="margin-top:12px"></iframe>
+</div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center"><b>Editar precios - impacta en el código real</b><button class="btn btn-w" onclick="guardar()">💾 Guardar cambios en GitHub</button></div>
 <div id="prods" style="margin-top:12px"></div>
-<div class="prod-card">
-<div style="flex:1;display:grid;grid-template-columns:1fr 100px 1fr;gap:8px">
-<input id="pNombre" placeholder="Nuevo producto"><input id="pPrecio" type="number" placeholder="Precio"><input id="pImg" placeholder="URL imagen">
-</div>
-<button class="btn btn-black" onclick="addProdVisual()">+</button>
-</div>
-<div id="saveStatus" class="small"></div>
+<div id="out" class="small"></div>
 </div>
 </div>
 </div>
@@ -118,79 +85,86 @@ input,textarea,select{width:100%;background:#f6f5f2;border:1px solid #e8e6e1;bor
 <script>
 let TOKEN=localStorage.getItem('cp_token')||''; let REPO=localStorage.getItem('cp_repo')||'Cartaspro/cartas';
 document.getElementById('token').value=TOKEN;
-const BASE='https://api.github.com/repos/'+REPO+'/contents/';
-let DATA=[], CONFIG={}, CURRENT='';
+let DATA=[]; let CURRENT=''; let FILES=[];
 
-function saveToken(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); alert('Guardado'); listar(); }
+function saveTok(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); listar(); }
 
-async function gh(path,method='GET',body=null){
- const r=await fetch(BASE+path,{method,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:body?JSON.stringify(body):null});
- return r;
+async function gh(p,m='GET',b=null){
+ const url=`https://api.github.com/repos/${REPO}/contents/${p}`;
+ return fetch(url,{method:m,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:b?JSON.stringify(b):null});
 }
 
 async function listar(){
- if(!TOKEN) {document.getElementById('clientList').innerText='Poné token'; return;}
+ if(!TOKEN){document.getElementById('list').innerText='Falta token'; return;}
+ document.getElementById('list').innerText='Cargando...';
  const r=await gh('data'); const j=await r.json();
- if(!Array.isArray(j)){document.getElementById('clientList').innerText=j.message; return;}
+ if(!Array.isArray(j)){document.getElementById('list').innerText='Error: '+j.message; return;}
  const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json',''));
- document.getElementById('clientList').innerHTML=slugs.map(s=>`<div class="list-item ${CURRENT===s?'active':''}" onclick="document.getElementById('editSlug').value='${s}';cargarCliente()"><span>${s}</span><span style="font-size:11px;opacity:.6">ver</span></div>`).join('')||'Sin clientes';
+ document.getElementById('list').innerHTML=slugs.map(s=>`<div class="client ${CURRENT===s?'active':''}" onclick="selectCli('${s}')"><span>${s}</span><span>→</span></div>`).join('')||'Vacío';
 }
 
-async function crearClienteVisual(){
- const slug=document.getElementById('newSlug').value.trim().toLowerCase().replace(/\s+/g,'-');
- const nombre=document.getElementById('newNombre').value.trim()||slug;
- const wa=document.getElementById('newWa').value.trim();
- if(!slug) return alert('Slug');
- const cfg={nombre, whatsapp:wa, subtitulo:'Menú digital'};
- const data=[{id:1,nombre:'Producto ejemplo',precio:1000,categoria:'general',descripcion:'',img:''}];
- const tpl=await fetch('../index-base-v9-simple-pedir.html').then(r=>r.text()).catch(()=>document.documentElement.outerHTML); // fallback
- // usamos la base simple que ya tenés en /mnt
- const baseTemplate = localStorage.getItem('base_template') || `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Carta</title></head><body><script>const s=location.pathname.split('/').filter(Boolean).pop(); fetch('../data/'+s+'.json').then(r=>r.json()).then(d=>document.body.innerHTML=JSON.stringify(d));<\/script></body></html>`;
- try{
-  await gh(`data/${slug}.json`,'PUT',{message:`new ${slug} data`,content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))))});
-  await gh(`config/${slug}.json`,'PUT',{message:`new ${slug} cfg`,content:btoa(unescape(encodeURIComponent(JSON.stringify(cfg,null,2))))});
-  // para index usamos la base simple que ya está en tu repo si existe, si no usamos plantilla genérica
-  const rIdx=await gh(`${slug}/index.html`);
-  if(!rIdx.ok){
-   const baseRes=await fetch(`../${slug}/index.html`).then(r=>r.text()).catch(async()=>{
-    // si no existe, pedimos el archivo base v9 que subiste
-    const b=await fetch('data:text/html;base64,PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVzIj48aGVhZD48bWV0YSBjaGFyc2V0PSJVVEYtOCI+PG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIj4KPHRpdGxlIGlkPSJ0Ij5DYXJ0YTwvdGl0bGU+CjxsaW5rIGhyZWY9Imh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9SW50ZXI6d2dodEA0MDA7NjAwOzgwMDs5MDAmZGlzcGxheT1zd2FwIiByZWw9InN0eWxlc2hlZXQiPgo8c3R5bGU+Cip7bWFyZ2luOjA7cGFkZGluZzowO2JveC1zaXppbmc6Ym9yZGVyLWJveDtmb250LWZhbWlseTonSW50ZXInLHNhbnMtc2VyaWZ9CmJvZHl7YmFja2dyb3VuZDojMGYwZjBmO2NvbG9yOiNmZmY7cGFkZGluZy1ib3R0b206MTEwcHh9Ci5oZWFkZXJ7cGFkZGluZzoyMnB4IDIwcHg7cG9zaXRpb246c3RpY2t5O3RvcDowO3otaW5kZXg6MTA7YmFja2dyb3VuZDpyZ2JhKDE1LDE1LDE1LC45Mik7YmFja2Ryb3AtZmlsdGVyOmJsdXIoMTJweCk7Ym9yZGVyLWJvdHRvbToxcHggc29saWQgIzFjMWMxY30KLmhlYWRlciBoMXtmb250LXNpemU6MjJweDtmb250LXdlaWdodDo5MDB9Ci5oZWFkZXIgcHtjb2xvcjojODg4O2ZvbnQtc2l6ZToxM3B4O21hcmdpbi10b3A6NHB4fQouZ3JpZHttYXgtd2lkdGg6MTAwMHB4O21hcmdpbjowIGF1dG87cGFkZGluZzoxNnB4O2Rpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KGF1dG8tZmlsbCxtaW5tYXgoMjgwcHgsMWZyKSk7Z2FwOjEycHh9Ci5pdGVte2JhY2tncm91bmQ6IzFjMWMxYztib3JkZXI6MXB4IHNvbGlkICMyNjI2MjY7Ym9yZGVyLXJhZGl1czoyMHB4O292ZXJmbG93OmhpZGRlbjtkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1ufQouaXRlbSBpbWd7d2lkdGg6MTAwJTtoZWlnaHQ6MTYwcHg7b2JqZWN0LWZpdDpjb3ZlcjtiYWNrZ3JvdW5kOiMxMTF9Ci5pbmZve3BhZGRpbmc6MTRweDtmbGV4OjE7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbn0KLm5hbWV7Zm9udC13ZWlnaHQ6ODAwO2ZvbnQtc2l6ZToxNXB4fQouZGVzY3tmb250LXNpemU6MTJweDtjb2xvcjojODg4O21hcmdpbi10b3A6NHB4O2xpbmUtaGVpZ2h0OjEuNDtmbGV4OjF9Ci5wcmljZXtmb250LXdlaWdodDo5MDA7Zm9udC1zaXplOjE2cHg7bWFyZ2luLXRvcDoxMHB4fQouYWRke21hcmdpbi10b3A6MTJweDt3aWR0aDoxMDAlO2JhY2tncm91bmQ6I2ZmZjtjb2xvcjojMDAwO2JvcmRlcjowO3BhZGRpbmc6MTJweDtib3JkZXItcmFkaXVzOjEycHg7Zm9udC13ZWlnaHQ6ODAwO2N1cnNvcjpwb2ludGVyfQouY2FydHtwb3NpdGlvbjpmaXhlZDtsZWZ0OjA7cmlnaHQ6MDtib3R0b206MDtiYWNrZ3JvdW5kOiMxYzFjMWM7Ym9yZGVyLXRvcDoxcHggc29saWQgIzI2MjYyNjtwYWRkaW5nOjE0cHg7ei1pbmRleDoyMH0KLmNhcnQtaW5uZXJ7bWF4LXdpZHRoOjEwMDBweDttYXJnaW46MCBhdXRvO2Rpc3BsYXk6ZmxleDtnYXA6MTJweDthbGlnbi1pdGVtczpjZW50ZXJ9Ci5jYXJ0LWxpc3R7ZmxleDoxO2ZvbnQtc2l6ZToxM3B4O2NvbG9yOiNhYWE7bGluZS1oZWlnaHQ6MS40O21heC1oZWlnaHQ6ODBweDtvdmVyZmxvdzphdXRvfQouY2FydC10b3RhbHtmb250LXdlaWdodDo5MDB9Ci5zZW5ke2JhY2tncm91bmQ6I0UxMUQ0ODtjb2xvcjojZmZmO2JvcmRlcjowO3BhZGRpbmc6MTRweCAyMHB4O2JvcmRlci1yYWRpdXM6MTAwcHg7Zm9udC13ZWlnaHQ6ODAwO2N1cnNvcjpwb2ludGVyO3doaXRlLXNwYWNlOm5vd3JhcH0KLmVtcHR5e2NvbG9yOiM1NTU7Zm9udC1zaXplOjEzcHh9Cjwvc3R5bGU+CjwvaGVhZD48Ym9keT4KPGRpdiBjbGFzcz0iaGVhZGVyIj48aDEgaWQ9Im4iPkNhcmdhbmRvLi4uPC9oMT48cCBpZD0iZCI+PC9wPjwvZGl2Pgo8ZGl2IGNsYXNzPSJncmlkIiBpZD0iZ3JpZCI+PC9kaXY+Cgo8ZGl2IGNsYXNzPSJjYXJ0Ij4KPGRpdiBjbGFzcz0iY2FydC1pbm5lciI+CjxkaXYgY2xhc3M9ImNhcnQtbGlzdCIgaWQ9ImNhcnRMaXN0Ij48c3BhbiBjbGFzcz0iZW1wdHkiPkNhcnJpdG8gdmFjw61vPC9zcGFuPjwvZGl2Pgo8ZGl2IHN0eWxlPSJ0ZXh0LWFsaWduOnJpZ2h0Ij4KPGRpdiBjbGFzcz0iY2FydC10b3RhbCIgaWQ9InRvdGFsIj48L2Rpdj4KPGJ1dHRvbiBjbGFzcz0ic2VuZCIgb25jbGljaz0icGVkaXIoKSI+UGVkaXIgcG9yIFdoYXRzQXBwPC9idXR0b24+CjwvZGl2Pgo8L2Rpdj4KPC9kaXY+Cgo8c2NyaXB0Pgpjb25zdCBzbHVnID0gbG9jYXRpb24ucGF0aG5hbWUuc3BsaXQoJy8nKS5maWx0ZXIoQm9vbGVhbikucG9wKCkgfHwgJ2RlbW8nOwpsZXQgREFUQT1bXSwgQ09ORklHPXt9LCBDQVJSSVRPPVtdOwoKYXN5bmMgZnVuY3Rpb24gbG9hZCgpewogdHJ5ewogIGNvbnN0IFtkYXRhLCBjb25maWddID0gYXdhaXQgUHJvbWlzZS5hbGwoWwogICBmZXRjaChgLi4vZGF0YS8ke3NsdWd9Lmpzb24/dj0ke0RhdGUubm93KCl9YCkudGhlbihyPT5yLmpzb24oKSksCiAgIGZldGNoKGAuLi9jb25maWcvJHtzbHVnfS5qc29uP3Y9JHtEYXRlLm5vdygpfWApLnRoZW4ocj0+ci5qc29uKCkpLmNhdGNoKCgpPT4oe30pKQogIF0pOwogIERBVEE9ZGF0YTsgQ09ORklHPWNvbmZpZzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbicpLmlubmVyVGV4dCA9IENPTkZJRy5ub21icmUgfHwgc2x1ZzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZCcpLmlubmVyVGV4dCA9IENPTkZJRy5zdWJ0aXR1bG8gfHwgJ01lbsO6IGRpZ2l0YWwnOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0JykuaW5uZXJUZXh0ID0gQ09ORklHLm5vbWJyZSB8fCBzbHVnOwogIHJlbmRlcigpOwogfWNhdGNoKGUpeyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbicpLmlubmVyVGV4dD0nRXJyb3I6ICcrc2x1ZzsgfQp9CgpmdW5jdGlvbiByZW5kZXIoKXsKIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdncmlkJykuaW5uZXJIVE1MID0gREFUQS5tYXAocD0+YAogIDxkaXYgY2xhc3M9Iml0ZW0iPgogICA8aW1nIHNyYz0iJHtwLmltZ3x8Jyd9IiBvbmVycm9yPSJ0aGlzLnN0eWxlLmRpc3BsYXk9J25vbmUnIj4KICAgPGRpdiBjbGFzcz0iaW5mbyI+CiAgICA8ZGl2IGNsYXNzPSJuYW1lIj4ke3Aubm9tYnJlfTwvZGl2PgogICAgPGRpdiBjbGFzcz0iZGVzYyI+JHtwLmRlc2NyaXBjaW9ufHwnJ308L2Rpdj4KICAgIDxkaXYgY2xhc3M9InByaWNlIj4kJHtOdW1iZXIocC5wcmVjaW98fDApLnRvTG9jYWxlU3RyaW5nKCdlcy1BUicpfTwvZGl2PgogICAgPGJ1dHRvbiBjbGFzcz0iYWRkIiBvbmNsaWNrPSJhZGQoJHtwLmlkfSkiPkFncmVnYXI8L2J1dHRvbj4KICAgPC9kaXY+CiAgPC9kaXY+CiBgKS5qb2luKCcnKTsKfQoKZnVuY3Rpb24gYWRkKGlkKXsKIGNvbnN0IHByb2QgPSBEQVRBLmZpbmQoeD0+eC5pZD09PWlkKTsKIGNvbnN0IGV4ID0gQ0FSUklUTy5maW5kKHg9PnguaWQ9PT1pZCk7CiBpZihleCkgZXguY2FudCsrOyBlbHNlIENBUlJJVE8ucHVzaCh7Li4ucHJvZCwgY2FudDoxfSk7CiB1cGRhdGVDYXJ0KCk7Cn0KCmZ1bmN0aW9uIHVwZGF0ZUNhcnQoKXsKIGlmKCFDQVJSSVRPLmxlbmd0aCl7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjYXJ0TGlzdCcpLmlubmVySFRNTD0nPHNwYW4gY2xhc3M9ImVtcHR5Ij5DYXJyaXRvIHZhY8Otbzwvc3Bhbj4nOyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndG90YWwnKS5pbm5lclRleHQ9Jyc7IHJldHVybjsgfQogbGV0IHRvdGFsPTAsIHR4dD0nJzsKIENBUlJJVE8uZm9yRWFjaChjPT57IHRvdGFsKz1jLnByZWNpbypjLmNhbnQ7IHR4dCs9YCR7Yy5jYW50fXggJHtjLm5vbWJyZX08YnI+YDsgfSk7CiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY2FydExpc3QnKS5pbm5lckhUTUw9dHh0OwogZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3RvdGFsJykuaW5uZXJUZXh0PSckJyt0b3RhbC50b0xvY2FsZVN0cmluZygnZXMtQVInKTsKfQoKZnVuY3Rpb24gcGVkaXIoKXsKIGlmKCFDQVJSSVRPLmxlbmd0aCkgcmV0dXJuIGFsZXJ0KCdBZ3JlZ8OhIGFsZ28gcHJpbWVybycpOwogbGV0IG1zZyA9IGBIb2xhICR7Q09ORklHLm5vbWJyZXx8Jyd9ISBRdWllcm8gcGVkaXI6JTBBYDsKIENBUlJJVE8uZm9yRWFjaChjPT57IG1zZys9YOKAoiAke2MuY2FudH14ICR7Yy5ub21icmV9IC0gJCR7Yy5wcmVjaW8qYy5jYW50fSUwQWA7IH0pOwogY29uc3QgdG90YWwgPSBDQVJSSVRPLnJlZHVjZSgocyxjKT0+cytjLnByZWNpbypjLmNhbnQsMCk7CiBtc2crPWAlMEFUb3RhbDogJCR7dG90YWx9YDsKIGNvbnN0IHdhID0gKENPTkZJRy53aGF0c2FwcHx8JycpLnJlcGxhY2UoL1teMC05XS9nLCcnKTsKIHdpbmRvdy5vcGVuKGBodHRwczovL3dhLm1lLyR7d2F9P3RleHQ9JHttc2d9YCwnX2JsYW5rJyk7Cn0KCmxvYWQoKTsKPC9zY3JpcHQ+CjwvYm9keT48L2h0bWw+Cg==').then(x=>x.text()).catch(()=>baseTemplate);
-    return b;
-   });
-   // usamos la plantilla v9 simple que ya generamos
-   const simple = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${nombre}</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}body{background:#0f0f0f;color:#fff;padding-bottom:110px}.header{padding:22px 20px;position:sticky;top:0;z-index:10;background:rgba(15,15,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid #1c1c1c}.header h1{font-size:22px;font-weight:900}.grid{max-width:1000px;margin:0 auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}.item{background:#1c1c1c;border:1px solid #262626;border-radius:20px;overflow:hidden}.item img{width:100%;height:160px;object-fit:cover}.info{padding:14px}.name{font-weight:800}.price{font-weight:900;margin-top:8px}.add{margin-top:10px;width:100%;background:#fff;color:#000;border:0;padding:12px;border-radius:12px;font-weight:800}.cart{position:fixed;left:0;right:0;bottom:0;background:#1c1c1c;border-top:1px solid #262626;padding:14px}.cart-inner{max-width:1000px;margin:0 auto;display:flex;gap:12px;align-items:center}.cart-list{flex:1;font-size:13px;color:#aaa}.send{background:#E11D48;color:#fff;border:0;padding:14px 20px;border-radius:100px;font-weight:800}<\/style></head><body><div class="header"><h1 id="n">${nombre}</h1><p style="color:#888;font-size:13px">Menú digital</p></div><div class="grid" id="grid"></div><div class="cart"><div class="cart-inner"><div class="cart-list" id="cartList">Carrito vacío</div><div><div id="total" style="font-weight:900"></div><button class="send" onclick="pedir()">Pedir por WhatsApp</button></div></div></div><script>const slug=location.pathname.split('/').filter(Boolean).pop()||'demo';let DATA=[],CONFIG={},CARRITO=[];async function load(){const[d,c]=await Promise.all([fetch('../data/'+slug+'.json?v='+Date.now()).then(r=>r.json()),fetch('../config/'+slug+'.json?v='+Date.now()).then(r=>r.json()).catch(()=>({}))]);DATA=d;CONFIG=c;document.getElementById('n').innerText=CONFIG.nombre||slug;render();}function render(){document.getElementById('grid').innerHTML=DATA.map(p=>'<div class="item"><img src="'+(p.img||'')+'" onerror="this.style.display=\\'none\\'"><div class="info"><div class="name">'+p.nombre+'</div><div class="price">$'+Number(p.precio||0).toLocaleString('es-AR')+'</div><button class="add" onclick="add('+p.id+')">Agregar</button></div></div>').join('');}function add(id){const pr=DATA.find(x=>x.id===id);const ex=CARRITO.find(x=>x.id===id);if(ex)ex.cant++;else CARRITO.push({...pr,cant:1});upd();}function upd(){if(!CARRITO.length){document.getElementById('cartList').innerHTML='Carrito vacío';document.getElementById('total').innerText='';return;}let t=0,ht='';CARRITO.forEach(c=>{t+=c.precio*c.cant;ht+=c.cant+'x '+c.nombre+'<br>';});document.getElementById('cartList').innerHTML=ht;document.getElementById('total').innerText='$'+t.toLocaleString('es-AR');}function pedir(){if(!CARRITO.length)return alert('Vacío');let m='Hola '+(CONFIG.nombre||'')+'! Quiero pedir:%0A';CARRITO.forEach(c=>{m+=c.cant+'x '+c.nombre+'%0A';});m+='Total: $'+CARRITO.reduce((s,c)=>s+c.precio*c.cant,0);window.open('https://wa.me/'+(CONFIG.whatsapp||'').replace(/[^0-9]/g,'')+'?text='+m,'_blank');}load();<\/script></body></html>`;
-   await gh(`${slug}/index.html`,'PUT',{message:`new ${slug} index`,content:btoa(unescape(encodeURIComponent(simple)))});
-  }
-  CURRENT=slug; document.getElementById('editSlug').value=slug; listar(); cargarCliente();
- }catch(e){ alert('Error '+e.message); }
-}
-
-async function cargarCliente(){
- const slug=document.getElementById('editSlug').value.trim(); if(!slug) return;
- CURRENT=slug;
- try{
-  let r=await gh(`data/${slug}.json`); let j=await r.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content))));
-  r=await gh(`config/${slug}.json`); j=await r.json(); CONFIG=JSON.parse(decodeURIComponent(escape(atob(j.content))));
-  renderProds(); reloadPreview(); listar();
- }catch(e){ alert('Error cargando '+e.message); }
+async function selectCli(s){
+ CURRENT=s; document.getElementById('title').innerText=s+' - cartaspro.github.io/cartas/'+s+'/';
+ document.getElementById('prev').src=`../${s}/?v=${Date.now()}`;
+ // cargar data para editar
+ const r=await gh(`data/${s}.json`); if(!r.ok){ document.getElementById('prods').innerText='No existe data/'+s+'.json'; return; }
+ const j=await r.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content))));
+ renderProds(); listar();
 }
 
 function renderProds(){
  document.getElementById('prods').innerHTML=DATA.map(p=>`
-  <div class="prod-card">
-   <img src="${p.img||'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60'">
-   <div class="prod-fields">
-    <input value="${p.nombre}" oninput="DATA.find(x=>x.id==${p.id}).nombre=this.value" placeholder="Nombre">
-    <input type="number" value="${p.precio}" oninput="DATA.find(x=>x.id==${p.id}).precio=Number(this.value)" placeholder="Precio">
-    <input value="${p.descripcion||''}" oninput="DATA.find(x=>x.id==${p.id}).descripcion=this.value" placeholder="Descripción" style="grid-column:1/-1">
-    <input value="${p.img||''}" oninput="DATA.find(x=>x.id==${p.id}).img=this.value; this.parentElement.parentElement.querySelector('img').src=this.value" placeholder="URL imagen" style="grid-column:1/-1">
+  <div class="prod">
+   <img src="${p.img||''}" onerror="this.style.display='none'">
+   <div style="flex:1">
+    <div style="font-size:13px;font-weight:700">${p.nombre}</div>
+    <div style="display:flex;gap:6px;margin-top:6px"><input type="number" value="${p.precio}" oninput="DATA.find(x=>x.id==${p.id}).precio=Number(this.value)" style="flex:1"><input value="${p.nombre}" oninput="DATA.find(x=>x.id==${p.id}).nombre=this.value" style="flex:2"></div>
    </div>
-   <button class="btn btn-light" onclick="DATA=DATA.filter(x=>x.id!=${p.id});renderProds()">✕</button>
+   <button class="btn btn-g" onclick="DATA=DATA.filter(x=>x.id!=${p.id});renderProds()">X</button>
   </div>
  `).join('');
 }
 
-function addProdVisual(){
- const n=document.getElementById('pNombre').value.trim(); const pr=Number(document.getElementById('pPrecio').value); const img=document.getElementById('pImg').value.trim();
- if(!n) return;
- cons
+async function guardar(){
+ if(!CURRENT) return alert('Elegí cliente');
+ document.getElementById('out').innerText='Guardando en GitHub...';
+ const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json();
+ const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`edit precios ${CURRENT} desde admin directo`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))});
+ const jr=await res.json();
+ document.getElementById('out').innerText=res.ok?'✓ Guardado! Commit '+jr.commit.sha.slice(0,7)+'. En 60s se ve en la carta real.':'Error: '+jr.message;
+ if(res.ok) reload();
+}
+
+function reload(){ if(CURRENT) document.getElementById('prev').src=`../${CURRENT}/?v=${Date.now()}`; }
+function openReal(){ if(CURRENT) window.open(`../${CURRENT}/`,'_blank'); }
+
+// subir 3 archivos
+const drop=document.getElementById('drop'); const fileIn=document.getElementById('fileIn');
+drop.addEventListener('click',()=>fileIn.click());
+drop.addEventListener('dragover',e=>{e.preventDefault(); drop.style.borderColor='#fff'});
+drop.addEventListener('dragleave',()=>drop.style.borderColor='#333');
+drop.addEventListener('drop',e=>{e.preventDefault(); FILES=[...e.dataTransfer.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');});
+fileIn.addEventListener('change',()=>{ FILES=[...fileIn.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');});
+
+async function subir(){
+ const slug=document.getElementById('slugNew').value.trim().toLowerCase().replace(/\s+/g,'-');
+ if(!slug) return alert('Slug'); if(!FILES.length) return alert('Archivos');
+ document.getElementById('upOut').innerText='Subiendo...\n';
+ for(let file of FILES){
+  const text=await file.text();
+  let path=''; const n=file.name.toLowerCase();
+  if(n.endsWith('.html')) path=`${slug}/index.html`;
+  else if(n.includes('config')) path=`config/${slug}.json`;
+  else path=`data/${slug}.json`;
+  // autodetect por contenido si es json
+  if(n.endsWith('.json')){ try{ const j=JSON.parse(text); if(Array.isArray(j)) path=`data/${slug}.json`; else path=`config/${slug}.json`; }catch{} }
+  const ex=await gh(path); let sha=null; if(ex.ok){ const ej=await ex.json(); sha=ej.sha; }
+  const res=await gh(path,'PUT',{message:`upload ${path}`,content:btoa(unescape(encodeURIComponent(text))),...(sha?{sha}:{})});
+  document.getElementById('upOut').innerText+=res.ok?`✓ ${path}\n`:`✕ ${path} ${(await res.json()).message}\n`;
+ }
+ listar();
+}
+
+listar();
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body></html>
