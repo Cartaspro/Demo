@@ -1,0 +1,6 @@
+{
+  "nombre": "DEMO",
+  "whatsapp": "5491134890644",
+  "color": "#E11D48",
+  "envio": { "tipo": "fijo", "costo": 2000 }
+}
