@@ -1,300 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DEMO - Carta Digital</title>
+<title>CartasPro</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c;--text:#fff}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--bg);color:var(--text);padding-bottom:120px}
-.top{background:#E11D48;color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:800;position:sticky;top:0;z-index:999}
-.header{padding:28px 20px;text-align:center}
-.logo{width:80px;height:80px;background:var(--primary);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
-.badge{background:#f59e0b;color:#000;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:800;margin-top:12px;display:inline-block}
-.cats{display:flex;gap:8px;padding:0 16px;overflow-x:auto;margin:16px 0}
-.cat{background:#1c1c1c;padding:8px 16px;border-radius:20px;font-size:13px;border:1px solid #2a2a2a;cursor:pointer;white-space:nowrap}
-.cat.active{background:#E11D48}
-.menu{padding:0 16px;display:grid;gap:14px}
-.item{background:#1c1c1c;border-radius:16px;display:flex;overflow:hidden;border:1px solid #262626}
-.item img{width:88px;height:88px;object-fit:cover}
-.info{flex:1;padding:12px}
-.price{color:#E11D48;font-weight:800;margin-top:4px}
-.add{margin:12px;background:#E11D48;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer}
-.cart{position:fixed;bottom:0;left:0;right:0;background:#1c1c1c;border-top:1px solid #2a2a2a;padding:12px 16px;display:flex;justify-content:space-between;z-index:100}
-.cart button{background:#E11D48;color:#fff;border:none;padding:12px 20px;border-radius:12px;font-weight:700;cursor:pointer}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end}
-.modal.active{display:flex}
-.box{background:#1c1c1c;width:100%;max-height:92vh;border-radius:20px 20px 0 0;padding:20px;overflow-y:auto}
-.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:8px;font-size:13px}
-.input.error{border-color:#ef4444;background:#1f0f0f}
-.label{font-size:11px;color:#9ca3af;margin-top:12px;display:block;font-weight:600}
-.label span{color:#ef4444}
-.error-msg{font-size:11px;color:#ef4444;margin-top:4px;display:none}
-.suggestions{background:#0f0f0f;border:1px solid #333;border-radius:10px;margin-top:4px;max-height:180px;overflow-y:auto;display:none;position:relative;z-index:10}
-.sugg-item{padding:10px 12px;font-size:12px;border-bottom:1px solid #222;cursor:pointer}
-.sugg-item:hover{background:#1f1f1f}
-.wa{width:100%;background:#25D366;color:#fff;border:none;padding:16px;border-radius:12px;font-weight:800;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-.map-preview{margin-top:8px;border-radius:10px;overflow:hidden;border:1px solid #333;display:none}
-.map-preview iframe{width:100%;height:180px;border:0}
-.map-link{display:block;margin-top:6px;font-size:11px;color:#25D366;text-decoration:none}
-.steps{display:flex;gap:6px;margin-top:12px}
-.step{flex:1;height:4px;background:#333;border-radius:10px}
-.step.active{background:#25D366}
+body{background:#0f0f0f;color:#fff;min-height:100vh}
+.hero{padding:40px 20px;text-align:center;border-bottom:1px solid #222}
+.hero h1{font-size:34px;font-weight:800}
+.grid{max-width:1000px;margin:20px auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:#1c1c1c;border:1px solid #222;border-radius:20px;padding:20px;text-decoration:none;color:#fff;display:block}
+.card:hover{border-color:#E11D48}
+.card h3{font-size:17px} .card p{font-size:12px;color:#888;margin-top:6px}
+.badge{display:inline-block;background:#E11D48;color:#fff;font-size:10px;padding:5px 10px;border-radius:20px;margin-top:12px;font-weight:800}
+.admin{max-width:1000px;margin:0 auto;padding:0 20px 50px;text-align:center}
+.btn{background:#E11D48;color:#fff;padding:14px 28px;border-radius:14px;text-decoration:none;font-weight:800;display:inline-block}
 </style>
 </head>
 <body>
-<div class="top" id="topBar">DEMO - Asi quedaria la carta de TU local</div>
+<div class="hero">
+<h1>CartasPro</h1>
+<p style="color:#888;margin-top:6px">Seleccioná una carta</p>
+</div>
+<div class="grid" id="grid"><p style="color:#888">Cargando cartas...</p></div>
+<div class="admin">
+<a href="./admin/" class="btn">+ Nueva carta / Admin</a>
+<p style="font-size:11px;color:#444;margin-top:16px">Repo: /cartas/ | demo y templar conviven, no hace falta borrar demo</p>
+</div>
 <script>
-let WHATSAPP="5491134890644"; 
-let carrito={}; 
-let catActiva='todos'; 
-let tipo=''; 
-let envioConfig = {tipo:'fijo', costo:1500, base:1500, cadaKm:2, precioPorTramo:500};
-let envio=1500;
-let selectedCoords=null; 
-let selectedAddress='';
-let productos=[
-{id:1,cat:'hamburguesas',nombre:"Hamburguesa Doble",desc:"Doble carne, doble cheddar, bacon crocante",precio:12500,img:"https://images.unsplash.com/photo-1553979459-d2229ba7433b?q=80&w=600"},
-{id:2,cat:'pizzas',nombre:"Pizza Muzzarella",desc:"Mozza, salsa, oregano - 8 porciones",precio:13900,img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600"},
-{id:3,cat:'papas',nombre:"Papas Fritas Grandes",desc:"Porcion grande, crocantes, con cheddar opcional",precio:5500,img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=600"},
-{id:4,cat:'bebidas',nombre:"Coca Cola 1.5L",desc:"Bien fria",precio:3500,img:"https://images.unsplash.com/photo-1553456558-aff63285bdd1?q=80&w=600"}
-];
-
-// === NUEVO: CARGA DESDE JSON EDITABLE ===
-async function cargarDatosExternos(){
-  const posiblesData = ['../data/demo.json','data/demo.json','./data/demo.json','/Cartas-digitales/data/demo.json'];
-  const posiblesConfig = ['../config/demo.json','config/demo.json','./config/demo.json','/Cartas-digitales/config/demo.json'];
-  
-  // Cargar productos
-  for(let ruta of posiblesData){
-    try{
-      const r = await fetch(ruta + '?t=' + Date.now());
-      if(r.ok){
-        const j = await r.json();
-        if(Array.isArray(j) && j.length>0){
-          productos = j.map(p=>({
-            id: p.id,
-            cat: (p.categoria||p.cat||'todos').toLowerCase(),
-            nombre: p.nombre,
-            desc: p.descripcion||p.desc||'',
-            precio: p.precio,
-            img: p.img
-          }));
-          console.log('Productos cargados desde', ruta);
-          break;
-        }
-      }
-    }catch(e){}
-  }
-  // Cargar config
-  for(let ruta of posiblesConfig){
-    try{
-      const r = await fetch(ruta + '?t=' + Date.now());
-      if(r.ok){
-        const cfg = await r.json();
-        if(cfg.whatsapp) WHATSAPP = cfg.whatsapp;
-        if(cfg.color){
-          document.documentElement.style.setProperty('--primary', cfg.color);
-        }
-        if(cfg.nombre){
-          document.querySelector('.header h1').innerText = cfg.nombre + ' - Tu Local';
-          document.getElementById('topBar').innerText = cfg.nombre + ' - Asi quedaria la carta de TU local';
-        }
-        if(cfg.envio){
-          envioConfig = cfg.envio;
-          if(cfg.envio.tipo==='fijo'){ envio = cfg.envio.costo||0; }
-          else if(cfg.envio.tipo==='gratis'){ envio = 0; }
-          else if(cfg.envio.tipo==='variable'){ envio = cfg.envio.base||1500; }
-        }
-        console.log('Config cargada desde', ruta, cfg);
-        break;
-      }
-    }catch(e){}
-  }
-  render();
-  renderCategorias();
-}
-
-function renderCategorias(){
-  const cats = ['todos', ...new Set(productos.map(p=>p.cat))];
-  const cont = document.getElementById('cats');
-  cont.innerHTML = cats.map(c=>`<div class="cat ${c===catActiva?'active':''}" onclick="filtrar('${c}',this)">${c==='todos'?'Todos':c.charAt(0).toUpperCase()+c.slice(1)}</div>`).join('');
-}
-</script>
-<div class="header"><div class="logo" id="logoTxt">DEMO</div><h1>DEMO - Tu Local</h1><p style="color:#9ca3af;font-size:13px;margin-top:6px">Hamburguesas, pizzas, papas y bebidas</p><div class="badge">MODO DEMO - PEDIDOS A MI WHATSAPP</div></div>
-<div class="cats" id="cats"><div class="cat active" onclick="filtrar('todos',this)">Todos</div><div class="cat" onclick="filtrar('hamburguesas',this)">Hamburguesas</div><div class="cat" onclick="filtrar('pizzas',this)">Pizzas</div><div class="cat" onclick="filtrar('papas',this)">Papas</div><div class="cat" onclick="filtrar('bebidas',this)">Bebidas</div></div>
-<div class="menu" id="menu"></div>
-<div style="margin:24px 16px 0;background:#111;border:1px dashed #333;border-radius:14px;padding:16px;text-align:center"><h3 style="font-size:14px">Te gusto?</h3><p style="font-size:12px;color:#9ca3af;margin-top:6px">La tuya va con tu logo y tu WhatsApp. $65k/mes.</p><a href="https://wa.me/5491134890644?text=Vi%20la%20demo%20y%20quiero%20mi%20carta" id="ctaBtn" style="display:inline-block;margin-top:10px;background:#fff;color:#000;padding:10px 16px;border-radius:20px;font-size:12px;font-weight:800;text-decoration:none">Quiero mi carta</a></div>
-<div class="cart"><div><span id="count">0</span> prod - <b id="total">$0</b></div><button onclick="abrir()">Ver pedido</button></div>
-
-<div class="modal" id="modal" onclick="if(event.target==this) cerrar()">
-<div class="box">
-<div style="display:flex;justify-content:space-between;align-items:center"><h3>Finalizar pedido</h3><button onclick="cerrar()" style="background:#262626;border:none;color:#fff;width:30px;height:30px;border-radius:50%">X</button></div>
-<div class="steps"><div class="step active" id="s1"></div><div class="step" id="s2"></div><div class="step" id="s3"></div></div>
-<p style="font-size:11px;color:#9ca3af;margin-top:6px">Completa todos los campos <span style="color:#ef4444">*</span> obligatorios</p>
-<div id="items" style="margin-top:12px"></div>
-<div style="margin-top:16px;background:#111;border-radius:12px;padding:14px;border:1px solid #262626">
-<label class="label">Tu nombre <span>*</span></label>
-<input id="nombre" class="input" placeholder="Ej: Juan Perez">
-<div class="error-msg" id="err-nombre">Pone tu nombre</div>
-<label class="label">Tu WhatsApp / Telefono <span>*</span></label>
-<input id="telefono" class="input" placeholder="Ej: 11 1234-5678" inputmode="numeric">
-<div class="error-msg" id="err-telefono">Pone tu telefono</div>
-<label class="label" style="margin-top:16px">Como lo queres recibir? <span>*</span></label>
-<div style="display:flex;gap:8px;margin-top:8px"><button id="b1" onclick="setTipo('retiro')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff;font-weight:700">Retiro</button><button id="b2" onclick="setTipo('envio')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff;font-weight:700">Envio</button></div>
-<div class="error-msg" id="err-tipo">Elegi retiro o envio</div>
-<div id="dirBox" style="display:none">
-<label class="label">Direccion de entrega <span>*</span> <span style="color:#25D366;font-size:10px">- autocompletado real</span></label>
-<input id="dir" class="input" placeholder="Escribi tu direccion, ej: Av. Mitre 1234, Lomas" autocomplete="off">
-<div class="suggestions" id="suggestions"></div>
-<div class="error-msg" id="err-dir">Pone tu direccion y seleccionala del listado</div>
-<label class="label">Km desde el local (para envio variable)</label>
-<input id="kmInput" class="input" type="number" placeholder="Ej: 3" style="display:none" oninput="calcularEnvioVariable()">
-<div class="map-preview" id="mapPreview">
-<iframe id="mapFrame" loading="lazy"></iframe>
-<a id="mapLink" class="map-link" target="_blank">Ver en Google Maps</a>
-</div>
-<label class="label">Piso / Depto / Aclaracion</label>
-<input id="piso" class="input" placeholder="Ej: 2B, timbre 3">
-</div>
-<label class="label">Efectivo o transferencia?</label>
-<select id="pago" class="input"><option value="">Selecciona</option><option value="Efectivo">Efectivo</option><option value="MercadoPago / Transferencia">MercadoPago / Transferencia</option></select>
-</div>
-<div style="margin-top:16px;display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span id="mtotal">$0</span></div>
-<div id="envioTxt" style="font-size:12px;color:#9ca3af;margin-top:4px;display:none"></div>
-<button class="wa" onclick="enviar()">Pedi por WhatsApp</button>
-<p style="text-align:center;font-size:10px;color:#666;margin-top:8px">* Campos obligatorios. No podes enviar si falta algo.</p>
-</div></div>
-
-<script>
-function filtrar(c,e){catActiva=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));e.classList.add('active');render()}
-function render(){let l=catActiva=='todos'?productos:productos.filter(p=>p.cat==catActiva);document.getElementById('menu').innerHTML=l.map(p=>`<div class="item"><img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=500'"><div class="info"><h3>${p.nombre}</h3><p style="font-size:11px;color:#9ca3af">${p.desc}</p><div class="price">$${p.precio.toLocaleString('es-AR')}</div></div><button class="add" onclick="add(${p.id})">+</button></div>`).join('')}
-function add(id){carrito[id]=(carrito[id]||0)+1;upd()}
-function upd(){
-  let t=0,n=0;
-  for(let id in carrito){let p=productos.find(x=>x.id==id); if(p){t+=p.precio*carrito[id]; n+=carrito[id]}}
-  let costoEnvioActual = 0;
-  if(tipo=='envio'){
-    if(envioConfig.tipo==='fijo') costoEnvioActual = envioConfig.costo||0;
-    else if(envioConfig.tipo==='gratis') costoEnvioActual = 0;
-    else if(envioConfig.tipo==='variable'){
-      let km = parseFloat(document.getElementById('kmInput').value)||0;
-      let base = envioConfig.base||0;
-      let cada = envioConfig.cadaKm||2;
-      let precioTramo = envioConfig.precioPorTramo||500;
-      if(km<=0) costoEnvioActual = base;
-      else costoEnvioActual = base + Math.ceil(km/cada)*precioTramo;
-    } else { costoEnvioActual = envio; }
-  }
-  let f=tipo=='envio'?t+costoEnvioActual:t;
-  document.getElementById('total').innerText='$'+f.toLocaleString('es-AR');
-  document.getElementById('mtotal').innerText='$'+f.toLocaleString('es-AR');
-  document.getElementById('count').innerText=n;
-  const txt = document.getElementById('envioTxt');
-  if(tipo=='envio'){
-    txt.style.display='block';
-    if(envioConfig.tipo==='gratis') txt.innerText='Envio gratis';
-    else txt.innerText=`+ $${costoEnvioActual.toLocaleString('es-AR')} envio (${envioConfig.tipo})`;
-  } else { txt.style.display='none'; }
-  let h='';for(let id in carrito){let p=productos.find(x=>x.id==id); if(!p) continue; h+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #262626;font-size:13px"><span>${p.nombre} x${carrito[id]}</span><span><button onclick="chg(${id},-1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">-</button> ${carrito[id]} <button onclick="chg(${id},1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">+</button></span></div>`}document.getElementById('items').innerHTML=h||'<p style="color:#666;text-align:center">Carrito vacio</p>';updateSteps()
-}
-function calcularEnvioVariable(){ upd(); }
-function chg(id,d){carrito[id]+=d;if(carrito[id]<=0) delete carrito[id];upd()}
-function abrir(){document.getElementById('modal').classList.add('active')} function cerrar(){document.getElementById('modal').classList.remove('active')}
-function updateSteps(){
- let s1=document.getElementById('s1'),s2=document.getElementById('s2'),s3=document.getElementById('s3');
- s1.classList.toggle('active', document.getElementById('nombre').value.trim() && document.getElementById('telefono').value.trim());
- s2.classList.toggle('active', tipo!=='');
- s3.classList.toggle('active', tipo=='retiro' || (tipo=='envio' && selectedAddress));
-}
-function setTipo(tt){
- tipo=tt;
- document.getElementById('b1').style.background=tt=='retiro'?'#E11D48':'#262626';
- document.getElementById('b2').style.background=tt=='envio'?'#E11D48':'#262626';
- document.getElementById('dirBox').style.display=tt=='envio'?'block':'none';
- document.getElementById('err-tipo').style.display='none';
- // Mostrar input km solo si es variable
- document.getElementById('kmInput').style.display = (tt=='envio' && envioConfig.tipo==='variable') ? 'block' : 'none';
- upd();
-}
-let debounceTimer=null;
-document.getElementById('dir').addEventListener('input', function(e){
- let q=e.target.value.trim();
- selectedAddress=''; selectedCoords=null;
- document.getElementById('mapPreview').style.display='none';
- document.getElementById('err-dir').style.display='none';
- if(q.length<3){document.getElementById('suggestions').style.display='none';return}
- clearTimeout(debounceTimer);
- debounceTimer=setTimeout(()=> buscarDireccion(q), 400);
-});
-async function buscarDireccion(q){
+const REPO = 'Cartaspro/cartas';
+const BASE = './';
+async function load(){
+ const grid=document.getElementById('grid');
  try{
-  let url=`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&countrycodes=ar&q=${encodeURIComponent(q)}`;
-  let res=await fetch(url);
-  let data=await res.json();
-  let cont=document.getElementById('suggestions');
-  if(!data.length){cont.innerHTML='<div class="sugg-item">No se encontro, segui escribiendo...</div>';cont.style.display='block';return}
-  cont.innerHTML=data.map(d=>`<div class="sugg-item" onclick="seleccionarDir('${d.display_name.replace(/'/g,"&#39;")}', ${d.lat}, ${d.lon})">${d.display_name}</div>`).join('');
-  cont.style.display='block';
- }catch(err){console.log(err);}
-}
-function seleccionarDir(nombre, lat, lon){
- selectedAddress=nombre; selectedCoords={lat,lon};
- document.getElementById('dir').value=nombre;
- document.getElementById('suggestions').style.display='none';
- let mapFrame=document.getElementById('mapFrame');
- mapFrame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.005},${lat-0.005},${lon-0.005+0.01},${lat-0.005+0.01}&layer=mapnik&marker=${lat},${lon}`;
- document.getElementById('mapLink').href=`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
- document.getElementById('mapPreview').style.display='block';
- document.getElementById('err-dir').style.display='none';
- // Si es envio variable, intentar calcular km automaticamente no es posible sin API de distancia, asi que dejamos que el cliente ponga km manual o lo dejamos en base
- updateSteps();
-}
-document.addEventListener('click', function(e){
- if(!e.target.closest('#dir') && !e.target.closest('#suggestions')){
-  document.getElementById('suggestions').style.display='none';
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/data?v=${Date.now()}`);
+  const files = await res.json();
+  if(!Array.isArray(files)){ throw new Error(); }
+  let html='';
+  for(const f of files){
+    if(!f.name.endsWith('.json')) continue;
+    const name = f.name.replace('.json','');
+    try{
+      const cfgRes = await fetch(`${BASE}config/${name}.json?v=${Date.now()}`);
+      if(!cfgRes.ok) continue;
+      const cfg = await cfgRes.json();
+      html+=`<a class="card" href="${BASE}${name}/">
+        <h3>${cfg.nombre || name}</h3>
+        <p>${name} · ${BASE}${name}/</p>
+        <span class="badge">VER CARTA</span>
+      </a>`;
+    }catch(e){}
+  }
+  grid.innerHTML = html || '<p style="color:#888">No hay cartas aún</p>';
+ }catch(e){
+  // fallback estático
+  grid.innerHTML = `
+    <a class="card" href="./demo/"><h3>Demo</h3><p>demo</p><span class="badge">VER CARTA</span></a>
+    <a class="card" href="./templar/"><h3>Templar</h3><p>templar</p><span class="badge">VER CARTA</span></a>
+  `;
  }
-});
-function validar(){
- let ok=true;
- document.querySelectorAll('.input').forEach(i=>i.classList.remove('error'));
- document.querySelectorAll('.error-msg').forEach(m=>m.style.display='none');
- if(!document.getElementById('nombre').value.trim()){document.getElementById('nombre').classList.add('error');document.getElementById('err-nombre').style.display='block';ok=false;}
- if(!document.getElementById('telefono').value.trim()){document.getElementById('telefono').classList.add('error');document.getElementById('err-telefono').style.display='block';ok=false;}
- if(!tipo){document.getElementById('err-tipo').style.display='block';ok=false;}
- if(tipo=='envio' && !selectedAddress){document.getElementById('dir').classList.add('error');document.getElementById('err-dir').style.display='block';ok=false;}
- if(Object.keys(carrito).length==0){alert('Agrega al menos un producto');ok=false;}
- return ok;
 }
-function enviar(){
- if(!validar()) return;
- let nom=document.getElementById('nombre').value.trim();
- let tel=document.getElementById('telefono').value.trim();
- let piso=document.getElementById('piso').value.trim();
- let pago=document.getElementById('pago').value;
- let msg=`Hola! DEMO - Pedido de *${nom}*:%0A Tel: ${tel}%0A%0A`;
- let tot=0;
- for(let id in carrito){let p=productos.find(x=>x.id==id);msg+=`• ${p.nombre} x${carrito[id]} - $${(p.precio*carrito[id]).toLocaleString('es-AR')}%0A`;tot+=p.precio*carrito[id];}
- msg+=`%0A*Subtotal: $${tot.toLocaleString('es-AR')}*%0A`;
- let costoEnvioActual=0;
- if(tipo=='envio'){
-   if(envioConfig.tipo==='fijo') costoEnvioActual=envioConfig.costo;
-   else if(envioConfig.tipo==='gratis') costoEnvioActual=0;
-   else if(envioConfig.tipo==='variable'){
-     let km=parseFloat(document.getElementById('kmInput').value)||0;
-     let base=envioConfig.base||0; let cada=envioConfig.cadaKm||2; let tramo=envioConfig.precioPorTramo||500;
-     costoEnvioActual = km<=0?base: base + Math.ceil(km/cada)*tramo;
-   } else costoEnvioActual=envio;
-   msg+=`%0A*Tipo: ENVIO*%0A Direccion: ${selectedAddress}%0A`;
-   if(piso) msg+=`Piso/Depto: ${piso}%0A`;
-   if(selectedCoords) msg+=` Maps: https://www.google.com/maps/search/?api=1&query=${selectedCoords.lat},${selectedCoords.lon}%0A`;
-   msg+=` Envio: $${costoEnvioActual} (${envioConfig.tipo})%0A*Total: $${(tot+costoEnvioActual).toLocaleString('es-AR')}*%0A`;
- }else{msg+=`%0A*Tipo: RETIRO*%0A*Total: $${tot.toLocaleString('es-AR')}*%0A`;}
- if(pago) msg+=`Pago: ${pago}%0A`;
- window.open(`https://wa.me/${WHATSAPP}?text=${msg}`,'_blank');
-}
-cargarDatosExternos();
+load();
 </script>
-</body>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
