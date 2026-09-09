@@ -6,6 +6,6 @@
     "tipo": "fijo",
     "costo": 2500
   },
-  "activo": true,
-  "estado": "activo"
+  "activo": false,
+  "estado": "baja"
 }
