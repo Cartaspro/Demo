@@ -22,146 +22,214 @@
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
 </style>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CartasPro - App</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CartasPro Admin - /cartas/</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#E11D48;--bg:#0f0f0f;--card:#1c1c1c}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--bg);color:#fff;padding:16px;max-width:500px;margin:0 auto;padding-bottom:100px}
-.card{background:var(--card);border:1px solid #222;border-radius:18px;padding:14px;margin-bottom:12px}
-.input{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px}
-.btn{width:100%;padding:14px;border-radius:14px;border:none;font-weight:800;margin-top:10px;cursor:pointer}
-.primary{background:var(--primary);color:#fff} .green{background:#25D366;color:#fff} .dark{background:#262626;color:#fff;border:1px solid #333}
-.prod{background:#0f0f0f;border:1px solid #333;border-radius:14px;padding:10px;margin-bottom:10px;position:relative}
-.label{font-size:10px;color:#888;font-weight:700;margin-top:10px;display:block;text-transform:uppercase}
+body{background:#0f0f0f;color:#fff;padding:16px}
+.box{max-width:900px;margin:0 auto;background:#1c1c1c;border:1px solid #222;border-radius:16px;padding:16px}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px}
+button{padding:12px 18px;border:none;border-radius:10px;font-weight:800;cursor:pointer}
+.primary{background:#E11D48;color:#fff}
+.secondary{background:#262626;color:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.prod{border:1px solid #2a2a2a;border-radius:12px;padding:12px;margin-top:10px;background:#111}
+.badge{display:inline-block;background:#222;padding:4px 8px;border-radius:20px;font-size:11px}
+.ok{color:#25D366} .err{color:#ef4444}
 .small{font-size:11px;color:#888}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 </style>
 </head>
 <body>
-<h1 style="font-size:20px" id="titulo">CartasPro App</h1>
-<p class="small" id="baseInfo" style="margin:6px 0 14px"></p>
+<div class="box">
+<h2>CartasPro Admin</h2>
+<p class="small">Repo fijo: <b>Cartaspro/cartas</b> | Base: <b>/cartas/</b> | Detectado: <span id="det"></span></p>
 
-<div class="card">
-<label class="label">Cliente (ej: templar)</label>
-<input id="cliente" class="input" value="templar">
-<div class="grid2">
-<button class="btn dark" onclick="cargar()">Cargar</button>
-<button class="btn dark" onclick="nuevo()">Nuevo</button>
+<div style="margin-top:14px;padding:12px;background:#111;border-radius:12px;border:1px dashed #333">
+<label class="small">Token GitHub (con permiso repo) - se guarda solo en tu navegador</label>
+<input id="token" type="password" placeholder="ghp_...">
+<div class="row" style="margin-top:8px">
+<button class="secondary" onclick="guardarToken()">Guardar Token</button>
+<button class="secondary" onclick="borrarToken()">Borrar</button>
 </div>
-<div id="status" class="small" style="margin-top:8px"></div>
-</div>
-
-<div class="card">
-<label class="label">Nombre del local</label><input id="c_nombre" class="input" value="Templar">
-<label class="label">WhatsApp</label><input id="c_wa" class="input" value="5491134890644">
-<label class="label">Color</label><input id="c_color" class="input" type="color" value="#E11D48">
-<label class="label">Envío</label>
-<select id="c_tipo" class="input"><option value="fijo">Fijo</option><option value="variable" selected>Variable</option><option value="gratis">Gratis</option></select>
-<div class="grid2"><div><label class="label">Base</label><input id="c_base" class="input" type="number" value="1500"></div><div><label class="label">Cada km</label><input id="c_cada" class="input" type="number" value="2"></div></div>
-<label class="label">Precio tramo</label><input id="c_tramo" class="input" type="number" value="500">
+<p id="tokenStatus" class="small"></p>
 </div>
 
-<div class="card">
-<h3 style="font-size:14px">Productos</h3>
-<div id="lista" style="margin-top:10px"></div>
-<button class="btn dark" onclick="agregarVacio()" style="margin-top:10px">+ Producto</button>
+<div style="margin-top:14px">
+<label>Cliente (nombre carpeta)</label>
+<div class="row">
+<input id="cliente" placeholder="ej: templar, demo, la-casona">
+<button class="primary" onclick="cargar()">Cargar</button>
+</div>
+<p id="status" class="small"></p>
 </div>
 
-<div class="card">
-<button class="btn green" onclick="guardar()">GENERAR ARCHIVOS</button>
-<div id="down" style="margin-top:10px"></div>
+<div id="configBox" style="margin-top:16px;display:none">
+<h3>Config</h3>
+<div class="row">
+<div><label>Nombre</label><input id="cfgNombre"></div>
+<div><label>WhatsApp (549...)</label><input id="cfgWa"></div>
+</div>
+<div class="row">
+<div><label>Color</label><input id="cfgColor" type="color" value="#E11D48"></div>
+<div><label>Envío</label><select id="cfgEnvioTipo"><option value="fijo">Fijo</option><option value="gratis">Gratis</option><option value="variable">Variable por km</option></select></div>
+</div>
+<div class="row">
+<div><label>Costo / Base</label><input id="cfgCosto" type="number" value="1500"></div>
+<div><label>Cada Km / Precio Tramo</label><input id="cfgTramo" type="number" value="500"></div>
+</div>
+</div>
+
+<div id="productosBox" style="margin-top:16px;display:none">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3>Productos</h3><button class="secondary" onclick="addProd()">+ Producto</button></div>
+<div id="lista"></div>
+</div>
+
+<div style="margin-top:18px;display:flex;gap:8px">
+<button class="primary" onclick="guardarTodo()">Guardar en GitHub</button>
+<button class="secondary" onclick="descargar()">Descargar JSONs (sin token)</button>
+</div>
+<p id="saveStatus" class="small" style="margin-top:8px"></p>
 </div>
 
 <script>
-let productos=[];
-let BASE_PATH = '';
-function detectarBase(){
-  // Ej: /cartas/admin/ -> base /cartas/
-  // Ej: /Demo/admin/ -> base /Demo/
-  // Ej: /admin/ -> base /
-  const path = window.location.pathname;
-  if(path.includes('/admin/')){
-    BASE_PATH = path.split('/admin/')[0] + '/';
-  } else {
-    BASE_PATH = '/cartas/';
-  }
-  if(BASE_PATH=='//') BASE_PATH='/';
-  document.getElementById('baseInfo').innerText = 'Repo detectado: ' + BASE_PATH + ' | Carga desde: ' + BASE_PATH + 'data/';
-  document.getElementById('titulo').innerText = 'CartasPro App ('+BASE_PATH+')';
+const REPO = 'Cartaspro/cartas';
+const BASE = '/cartas/';
+document.getElementById('det').innerText = location.pathname;
+let productos = [];
+let clienteActual = '';
+
+function guardarToken(){ localStorage.setItem('gh_token_cartas', document.getElementById('token').value.trim()); updTokenStatus(); }
+function borrarToken(){ localStorage.removeItem('gh_token_cartas'); document.getElementById('token').value=''; updTokenStatus(); }
+function getToken(){ return localStorage.getItem('gh_token_cartas')||''; }
+function updTokenStatus(){
+  const t=getToken();
+  document.getElementById('tokenStatus').innerHTML = t ? `<span class="ok">Token guardado (${t.slice(0,4)}...${t.slice(-4)}) listo para commitear a ${REPO}</span>` : `<span class="err">Sin token - solo podrás descargar archivos</span>`;
+  document.getElementById('token').value = t;
 }
-detectarBase();
-function render(){
- const cont=document.getElementById('lista');
- let h='';
- productos.forEach((p,i)=>{
-  h+=`<div class="prod">
-  <div style="display:flex;justify-content:space-between"><b style="font-size:13px">${p.nombre||'Nuevo'}</b><button onclick="borrar(${i})" style="background:#ef4444;border:none;color:#fff;border-radius:50%;width:22px;height:22px">X</button></div>
-  <input class="input" placeholder="Nombre" value="${p.nombre}" oninput="productos[${i}].nombre=this.value">
-  <div class="grid2"><input class="input" placeholder="Cat" value="${p.categoria}" oninput="productos[${i}].categoria=this.value"><input class="input" type="number" placeholder="Precio" value="${p.precio}" oninput="productos[${i}].precio=parseInt(this.value)||0"></div>
-  <input class="input" placeholder="Descripción" value="${p.descripcion}" oninput="productos[${i}].descripcion=this.value">
-  <input class="input" placeholder="URL imagen" value="${p.img}" oninput="productos[${i}].img=this.value">
-  </div>`;
- });
- cont.innerHTML=h||'<p class=small>Sin productos</p>';
-}
-function agregarVacio(){ productos.push({id:Date.now(), categoria:'hamburguesas', nombre:'', descripcion:'', precio:0, img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'}); render(); }
-function borrar(i){ productos.splice(i,1); render(); }
-function nuevo(){ 
-  productos=[
-    {id:1,categoria:'hamburguesas',nombre:'Templar Clásica',descripcion:'Doble carne, cheddar, bacon',precio:4500,img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'},
-  ];
-  document.getElementById('status').innerText='Plantilla cargada';
-  render();
-}
+updTokenStatus();
+
 async function cargar(){
- const name=document.getElementById('cliente').value.trim().toLowerCase();
- if(!name) return;
- document.getElementById('status').innerText='Buscando '+BASE_PATH+'data/'+name+'.json ...';
- try{
-  const r=await fetch(BASE_PATH+'data/'+name+'.json?v='+Date.now());
-  if(!r.ok) throw new Error('No existe en '+BASE_PATH+'data/'+name+'.json');
-  const data=await r.json();
-  productos=data.map(p=>({id:p.id,categoria:p.categoria||p.cat,nombre:p.nombre,descripcion:p.descripcion||p.desc,precio:p.precio,img:p.img}));
+  clienteActual = document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
+  if(!clienteActual) return alert('Poné nombre cliente');
+  document.getElementById('status').innerText = 'Cargando '+clienteActual+' desde '+BASE+'...';
   try{
-   const rc=await fetch(BASE_PATH+'config/'+name+'.json?v='+Date.now()).then(x=>x.json());
-   if(rc){ document.getElementById('c_nombre').value=rc.nombre||name; document.getElementById('c_wa').value=rc.whatsapp||''; document.getElementById('c_color').value=rc.color||'#E11D48'; }
-  }catch(e){}
-  document.getElementById('status').innerText='Cargado '+name+' ('+productos.length+') desde '+BASE_PATH;
-  render();
- }catch(e){ document.getElementById('status').innerText=e.message; nuevo(); }
+    const dataUrl = BASE + 'data/'+clienteActual+'.json';
+    const cfgUrl = BASE + 'config/'+clienteActual+'.json';
+    // intenta relativo también
+    let dataRes = await fetch('../data/'+clienteActual+'.json?v='+Date.now());
+    if(!dataRes.ok) dataRes = await fetch(dataUrl+'?v='+Date.now());
+    let cfgRes = await fetch('../config/'+clienteActual+'.json?v='+Date.now());
+    if(!cfgRes.ok) cfgRes = await fetch(cfgUrl+'?v='+Date.now());
+    
+    if(dataRes.ok){ productos = await dataRes.json(); } else { productos = []; }
+    if(cfgRes.ok){
+      const cfg = await cfgRes.json();
+      document.getElementById('cfgNombre').value = cfg.nombre||clienteActual;
+      document.getElementById('cfgWa').value = cfg.whatsapp||'';
+      document.getElementById('cfgColor').value = cfg.color||'#E11D48';
+      if(cfg.envio){
+        document.getElementById('cfgEnvioTipo').value = cfg.envio.tipo||'fijo';
+        document.getElementById('cfgCosto').value = cfg.envio.costo||cfg.envio.base||1500;
+        document.getElementById('cfgTramo').value = cfg.envio.precioPorTramo||500;
+      }
+    } else {
+      document.getElementById('cfgNombre').value = clienteActual;
+    }
+    document.getElementById('configBox').style.display='block';
+    document.getElementById('productosBox').style.display='block';
+    render();
+    document.getElementById('status').innerHTML = `<span class="ok">Cargado ${clienteActual} (${productos.length} prods) desde ${REPO}</span>`;
+  }catch(e){
+    document.getElementById('status').innerHTML = `<span class="err">Error: ${e.message} - Si no existe, creá nuevo</span>`;
+    document.getElementById('configBox').style.display='block';
+    document.getElementById('productosBox').style.display='block';
+    productos = [];
+    render();
+  }
 }
-function descargar(nombre, contenido){
- const blob=new Blob([contenido],{type:'application/json'});
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a'); a.href=url; a.download=nombre; a.click();
-}
-function guardar(){
- const name=document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
- if(!name) return alert('Nombre');
- const outData=productos.map(p=>({id:p.id||Date.now(),categoria:p.categoria.toLowerCase(),nombre:p.nombre,descripcion:p.descripcion,precio:p.precio,img:p.img}));
- const envioTipo=document.getElementById('c_tipo').value;
- let envio={tipo:envioTipo};
- if(envioTipo==='fijo') envio.costo=1500;
- if(envioTipo==='variable'){ envio.base=parseInt(document.getElementById('c_base').value)||1500; envio.cadaKm=parseInt(document.getElementById('c_cada').value)||2; envio.precioPorTramo=parseInt(document.getElementById('c_tramo').value)||500; }
- const cfg={nombre:document.getElementById('c_nombre').value, whatsapp:document.getElementById('c_wa').value, color:document.getElementById('c_color').value, envio:envio};
- descargar(name+'.json', JSON.stringify(outData,null,2));
- setTimeout(()=>{ descargar(name+'-config.json', JSON.stringify(cfg,null,2)); }, 500);
- const finalUrl = window.location.origin + BASE_PATH + name + '/';
- document.getElementById('down').innerHTML=`
-  <div style="background:#0f0f0f;border:1px solid #25D366;border-radius:12px;padding:12px">
-  <b style="color:#25D366">Listo!</b><br>
-  <p class=small style="margin-top:6px">
-  Subí <b>${name}.json</b> a <b>${BASE_PATH}data/</b> como <b>${BASE_PATH}data/${name}.json</b><br>
-  Subí <b>${name}-config.json</b> a <b>${BASE_PATH}config/</b> como <b>${BASE_PATH}config/${name}.json</b><br><br>
-  Tu carta va a estar en:<br>
-  <a href="${finalUrl}" target="_blank" style="color:#25D366">${finalUrl}</a>
-  </p>
+
+function render(){
+  const c=document.getElementById('lista');
+  c.innerHTML = productos.map((p,i)=>`
+  <div class="prod">
+    <div class="row">
+      <div><label>Nombre</label><input value="${p.nombre||''}" oninput="productos[${i}].nombre=this.value"></div>
+      <div><label>Precio</label><input type="number" value="${p.precio||0}" oninput="productos[${i}].precio=parseInt(this.value)||0"></div>
+    </div>
+    <label>Descripción</label><input value="${(p.descripcion||p.desc||'').replace(/"/g,'&quot;')}" oninput="productos[${i}].descripcion=this.value">
+    <div class="row">
+      <div><label>Categoría</label><input value="${p.categoria||p.cat||''}" oninput="productos[${i}].categoria=this.value.toLowerCase()"></div>
+      <div><label>Imagen URL</label><input value="${p.img||''}" oninput="productos[${i}].img=this.value"></div>
+    </div>
+    <button class="secondary" style="margin-top:8px" onclick="productos.splice(${i},1);render()">Eliminar</button>
   </div>
- `;
+  `).join('') || '<p class="small">Sin productos</p>';
 }
-nuevo();
+function addProd(){ productos.push({id:Date.now(), categoria:'general', nombre:'Nuevo producto', descripcion:'', precio:1000, img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'}); render(); }
+
+function getConfigObj(){
+  const tipo = document.getElementById('cfgEnvioTipo').value;
+  const costo = parseInt(document.getElementById('cfgCosto').value)||0;
+  const tramo = parseInt(document.getElementById('cfgTramo').value)||500;
+  let envio={tipo};
+  if(tipo==='fijo') envio={tipo:'fijo', costo};
+  if(tipo==='gratis') envio={tipo:'gratis', costo:0};
+  if(tipo==='variable') envio={tipo:'variable', base:costo, cadaKm:2, precioPorTramo:tramo};
+  return {
+    nombre: document.getElementById('cfgNombre').value||clienteActual,
+    whatsapp: document.getElementById('cfgWa').value||'5491134890644',
+    color: document.getElementById('cfgColor').value||'#E11D48',
+    envio
+  };
+}
+
+async function guardarTodo(){
+  if(!clienteActual) return alert('Cargá un cliente primero');
+  const token=getToken();
+  if(!token) return alert('Poné el token primero arriba, o usa Descargar JSONs');
+  const cfg = getConfigObj();
+  document.getElementById('saveStatus').innerText = 'Guardando en GitHub...';
+  try{
+    await commitFile(`data/${clienteActual}.json`, JSON.stringify(productos,null,2));
+    await commitFile(`config/${clienteActual}.json`, JSON.stringify(cfg,null,2));
+    // si no existe carpeta cliente, intenta crear index base copiando de demo si existe
+    document.getElementById('saveStatus').innerHTML = `<span class="ok">Guardado OK en ${REPO}. Esperá 2 min y recargá https://cartaspro.github.io/cartas/${clienteActual}/</span>`;
+  }catch(e){
+    document.getElementById('saveStatus').innerHTML = `<span class="err">Error: ${e.message}</span>`;
+  }
+}
+
+async function commitFile(path, content){
+  const token=getToken();
+  const apiUrl = `https://api.github.com/repos/${REPO}/contents/${path}`;
+  // get sha if exists
+  let sha=null;
+  try{
+    const r=await fetch(apiUrl, {headers:{Authorization:`token ${token}`}});
+    if(r.ok){ const j=await r.json(); sha=j.sha; }
+  }catch(e){}
+  const body={
+    message:`Update ${path} via admin /cartas/`,
+    content: btoa(unescape(encodeURIComponent(content))),
+    ...(sha?{sha}:{})
+  };
+  const res=await fetch(apiUrl,{method:'PUT', headers:{Authorization:`token ${token}`, 'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  if(!res.ok){ const t=await res.text(); throw new Error(t); }
+}
+
+function descargar(){
+  const cfg=getConfigObj();
+  const a=document.createElement('a');
+  a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(productos,null,2));
+  a.download=`${clienteActual}.json`;
+  a.click();
+  const b=document.createElement('a');
+  b.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(cfg,null,2));
+  b.download=`${clienteActual}-config.json`;
+  b.click();
+}
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
