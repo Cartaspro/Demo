@@ -1,73 +1,196 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Fix</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}body{background:#0f0f0f;color:#fff}.wrap{max-width:900px;margin:0 auto;padding:14px}.card{background:#1c1c1c;border:1px solid #222;border-radius:18px;padding:16px;margin-top:12px}input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:6px}.btn{padding:12px 18px;border:none;border-radius:12px;font-weight:800;cursor:pointer}.p{background:#E11D48;color:#fff}.s{background:#262626;color:#fff}.prod{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:12px;margin-top:10px}.small{font-size:11px;color:#888}.ok{color:#25D366}.err{color:#ef4444}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:600px){.grid2{grid-template-columns:1fr}}.link{color:#25D366;text-decoration:none;font-size:12px;word-break:break-all}</style></head><body>
+<html lang="es"><head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Visual - CartasPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#f6f5f2;color:#111}
+.top{max-width:1200px;margin:0 auto;padding:18px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:18px;display:flex;gap:8px;align-items:center}
+.dot{width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900}
+.wrap{max-width:1200px;margin:0 auto;padding:0 18px 40px;display:grid;grid-template-columns:300px 1fr;gap:18px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e8e6e1;border-radius:20px;padding:16px}
+.card h3{font-size:14px;font-weight:800;margin-bottom:10px;letter-spacing:-0.2px}
+input,textarea,select{width:100%;background:#f6f5f2;border:1px solid #e8e6e1;border-radius:12px;padding:11px 12px;font-size:13px;margin-top:6px}
+.btn{padding:11px 16px;border-radius:100px;border:0;font-weight:800;font-size:13px;cursor:pointer}
+.btn-black{background:#111;color:#fff}
+.btn-red{background:#E11D48;color:#fff}
+.btn-light{background:#f6f5f2;color:#111;border:1px solid #e8e6e1}
+.small{font-size:11px;color:#999;margin-top:6px;line-height:1.4}
+.list-item{padding:10px 12px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;border:1px solid transparent}
+.list-item:hover{background:#f6f5f2}
+.list-item.active{background:#111;color:#fff;border-color:#111}
+.drop{border:2px dashed #e8e6e1;border-radius:16px;padding:20px;text-align:center;cursor:pointer}
+.drop.dragover{border-color:#111;background:#f6f5f2}
+.prod-card{background:#f6f5f2;border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.prod-card img{width:60px;height:60px;border-radius:12px;object-fit:cover;background:#fff}
+.prod-fields{flex:1;display:grid;grid-template-columns:1fr 90px;gap:8px}
+.preview{width:100%;height:700px;border-radius:20px;border:1px solid #e8e6e1;background:#fff}
+</style>
+</head><body>
+<div class="top">
+<div class="logo"><div class="dot">C</div>CartasPro Admin Visual</div>
+<div style="display:flex;gap:8px"><input id="token" type="password" placeholder="Token ghp_..." style="width:220px"><button class="btn btn-black" onclick="saveToken()">Guardar</button></div>
+</div>
+
 <div class="wrap">
-<h2>Admin v6.1 - Fix Token</h2>
+<!-- LEFT -->
+<div>
 <div class="card">
-<label class="small">Token GitHub - pegalo y guardá</label>
-<input id="token" placeholder="ghp_xxxxxxxx">
-<div class="grid2" style="margin-top:8px"><button class="s btn" onclick="saveT()">Guardar Token</button><button class="s btn" onclick="delT()">Borrar</button><button class="s btn" onclick="testT()">Probar Token</button></div>
-<p id="tStatus" class="small" style="margin-top:8px;padding:8px;background:#111;border-radius:8px"></p>
+<h3>Clientes</h3>
+<div id="clientList" style="margin-top:8px">Cargando...</div>
+<div style="margin-top:12px" class="small">Click para editar y ver en vivo</div>
 </div>
+
+<div class="card" style="margin-top:14px">
+<h3>+ Nuevo cliente</h3>
+<input id="newSlug" placeholder="Slug: el-fuego">
+<input id="newNombre" placeholder="Nombre: El Fuego">
+<input id="newWa" placeholder="WhatsApp: 54911...">
+<button class="btn btn-black" style="width:100%;margin-top:10px" onclick="crearClienteVisual()">Crear carta vacía</button>
+<div class="small">Te crea los 3 archivos automáticamente con la base simple</div>
+</div>
+
+<div class="card" style="margin-top:14px">
+<h3>Subir archivos que te paso</h3>
+<div class="small">Arrastrá acá los 3 archivos que te paso yo (index.html, data.json, config.json). Detecta el cliente solo.</div>
+<div id="dropZone" class="drop" style="margin-top:10px">
+<strong>Arrastrá los archivos acá</strong><br><span class="small">o click para seleccionar</span>
+<input id="fileInput" type="file" multiple hidden>
+</div>
+<div id="uploadStatus" class="small" style="margin-top:8px"></div>
+</div>
+</div>
+
+<!-- RIGHT -->
+<div>
 <div class="card">
-<label>Cliente</label><div class="grid2"><input id="cliente" placeholder="ej: templar"><button class="p btn" onclick="cargar()">Cargar</button></div>
-<p id="cStatus" class="small"></p><div id="links"></div>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h3>Vista previa en vivo</h3>
+<div style="display:flex;gap:6px">
+<button class="btn btn-light" onclick="reloadPreview()">Recargar</button>
+<button class="btn btn-light" onclick="openCarta()">Abrir link</button>
 </div>
-<div id="cfgCard" class="card" style="display:none"><h3>Datos</h3><div class="grid2"><div><label>Nombre</label><input id="cNombre"></div><div><label>WhatsApp</label><input id="cWa"></div></div><div class="grid2"><div><label>Color</label><input id="cColor" type="color" value="#E11D48"></div><div><label>Envío</label><select id="cEnvio"><option value="fijo">Fijo</option><option value="gratis">Gratis</option><option value="variable">Variable</option></select></div></div><div class="grid2"><div><label>Costo/Base</label><input id="cCosto" type="number" value="1500"></div><div><label>Tramo</label><input id="cTramo" type="number" value="500"></div></div></div>
-<div id="prodsCard" class="card" style="display:none"><div style="display:flex;justify-content:space-between"><h3>Productos</h3><button class="s btn" onclick="addP()">+ Agregar</button></div><div id="lista"></div></div>
-<div class="card"><button class="p btn" style="width:100%;padding:16px;font-size:16px" onclick="guardarReal()">💾 GUARDAR REAL</button><p id="saveStatus" class="small" style="margin-top:8px"></p><div id="preview" style="margin-top:10px;text-align:center"></div></div>
 </div>
+<div style="margin-top:12px;display:flex;gap:8px">
+<input id="editSlug" placeholder="Slug actual" style="flex:1">
+<button class="btn btn-light" onclick="cargarCliente()">Cargar</button>
+</div>
+<iframe id="preview" class="preview" style="margin-top:12px"></iframe>
+</div>
+
+<div class="card" style="margin-top:14px">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3>Productos - tocá para editar</h3><button class="btn btn-black" onclick="guardarTodo()">Guardar TODO en GitHub</button></div>
+<div id="prods" style="margin-top:12px"></div>
+<div class="prod-card">
+<div style="flex:1;display:grid;grid-template-columns:1fr 100px 1fr;gap:8px">
+<input id="pNombre" placeholder="Nuevo producto"><input id="pPrecio" type="number" placeholder="Precio"><input id="pImg" placeholder="URL imagen">
+</div>
+<button class="btn btn-black" onclick="addProdVisual()">+</button>
+</div>
+<div id="saveStatus" class="small"></div>
+</div>
+</div>
+</div>
+
 <script>
-const REPO='Cartaspro/cartas';
-const CARTA_TEMPLATE=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CARTA</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"><style>:root{--primary:#E11D48}*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}body{background:#0f0f0f;color:#fff;padding-bottom:110px}.top{background:var(--primary);color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:800;position:sticky;top:0;z-index:999}.header{padding:28px 20px;text-align:center}.logo{width:80px;height:80px;background:var(--primary);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}.cats{display:flex;gap:8px;padding:0 16px;overflow-x:auto;margin:16px 0}.cat{background:#1c1c1c;padding:8px 16px;border-radius:20px;font-size:13px;border:1px solid #2a2a2a;cursor:pointer;white-space:nowrap}.cat.active{background:var(--primary)}.menu{padding:0 16px;display:grid;gap:14px;max-width:900px;margin:0 auto}.item{background:#1c1c1c;border-radius:16px;display:flex;overflow:hidden;border:1px solid #262626}.item img{width:88px;height:88px;object-fit:cover}.info{flex:1;padding:12px}.price{color:var(--primary);font-weight:800;margin-top:4px}.add{margin:12px;background:var(--primary);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer}.cart{position:fixed;bottom:0;left:0;right:0;background:#1c1c1c;border-top:1px solid #2a2a2a;padding:12px 16px;display:flex;justify-content:space-between;z-index:100;max-width:900px;margin:0 auto}.cart button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:12px;font-weight:700;cursor:pointer}.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end}.modal.active{display:flex}.box{background:#1c1c1c;width:100%;max-height:92vh;border-radius:20px 20px 0 0;padding:20px;overflow-y:auto;max-width:900px;margin:0 auto}.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0f0f0f;color:#fff;margin-top:8px;font-size:13px}.wa{width:100%;background:#25D366;color:#fff;border:none;padding:16px;border-radius:12px;font-weight:800;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}</style></head><body><div class="top" id="topBar">Cargando...</div><div class="header"><div class="logo" id="logoTxt">..</div><h1 id="hNombre">Carta</h1><p id="hDesc" style="color:#9ca3af;font-size:13px;margin-top:6px"></p></div><div class="cats" id="cats"></div><div class="menu" id="menu"></div><div class="cart"><div><span id="count">0</span> prod - <b id="total">$0</b></div><button onclick="abrir()">Ver pedido</button></div><div class="modal" id="modal" onclick="if(event.target==this) cerrar()"><div class="box"><div style="display:flex;justify-content:space-between"><h3>Finalizar pedido</h3><button onclick="cerrar()" style="background:#262626;border:none;color:#fff;width:30px;height:30px;border-radius:50%">X</button></div><div id="items" style="margin-top:12px"></div><div style="margin-top:16px"><input id="nombre" class="input" placeholder="Tu nombre"><input id="telefono" class="input" placeholder="Tu WhatsApp"><div style="display:flex;gap:8px;margin-top:8px"><button id="b1" onclick="setTipo('retiro')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff">Retiro</button><button id="b2" onclick="setTipo('envio')" style="flex:1;padding:12px;border-radius:10px;background:#262626;border:1px solid #333;color:#fff">Envío</button></div><div id="dirBox" style="display:none"><input id="dir" class="input" placeholder="Dirección"><input id="piso" class="input" placeholder="Piso / Depto"></div><select id="pago" class="input"><option value="">Efectivo o transferencia?</option><option>Efectivo</option><option>MercadoPago / Transferencia</option></select></div><div style="margin-top:16px;display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span id="mtotal">$0</span></div><div id="envioTxt" style="font-size:12px;color:#9ca3af;margin-top:4px;display:none"></div><button class="wa" onclick="enviar()">Pedir por WhatsApp</button></div></div><script>let WHATSAPP="5491134890644"; let carrito={}; let catActiva='todos'; let tipo=''; let envioConfig={tipo:'fijo',costo:1500,base:1500,cadaKm:2,precioPorTramo:500}; let productos=[];const cliente = location.pathname.split('/').filter(Boolean).pop();async function init(){ const base='../'; try{ let dataRes=await fetch(base+'data/'+cliente+'.json?v='+Date.now()); let cfgRes=await fetch(base+'config/'+cliente+'.json?v='+Date.now()); if(!dataRes.ok) dataRes=await fetch('./data/'+cliente+'.json?v='+Date.now()); if(!cfgRes.ok) cfgRes=await fetch('./config/'+cliente+'.json?v='+Date.now()); if(!dataRes.ok) throw new Error('No data'); productos=await dataRes.json(); const cfg=cfgRes.ok?await cfgRes.json():{}; WHATSAPP=cfg.whatsapp||WHATSAPP; if(cfg.color) document.documentElement.style.setProperty('--primary',cfg.color); document.getElementById('hNombre').innerText=cfg.nombre||cliente; document.getElementById('topBar').innerText=cfg.nombre||cliente; document.getElementById('logoTxt').innerText=(cfg.nombre||cliente).slice(0,2).toUpperCase(); envioConfig=cfg.envio||envioConfig; renderCats(); render(); }catch(e){document.getElementById('hNombre').innerText='Carta no encontrada: '+cliente}}function renderCats(){ const cats=['todos',...new Set(productos.map(p=>(p.categoria||p.cat||'general').toLowerCase()))]; document.getElementById('cats').innerHTML=cats.map(c=>'<div class="cat '+(c===catActiva?'active':'')+'" onclick="filtrar(\\''+c+'\\',this)">'+(c==='todos'?'Todos':c)+'</div>').join('');}function filtrar(c,e){catActiva=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));e.classList.add('active');render()}function render(){let l=catActiva==='todos'?productos:productos.filter(p=>(p.categoria||p.cat||'').toLowerCase()===catActiva);document.getElementById('menu').innerHTML=l.map(p=>'<div class="item"><img src="'+p.img+'" onerror="this.src=\\'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=500\\'"><div class="info"><h3>'+p.nombre+'</h3><p style="font-size:11px;color:#9ca3af">'+(p.descripcion||p.desc||'')+'</p><div class="price">$'+p.precio.toLocaleString('es-AR')+'</div></div><button class="add" onclick="add('+p.id+')">+</button></div>').join('')}function add(id){carrito[id]=(carrito[id]||0)+1;upd()}function upd(){ let t=0,n=0;for(let id in carrito){let p=productos.find(x=>x.id==id);if(p){t+=p.precio*carrito[id];n+=carrito[id]}} let costoEnvio=0; if(tipo==='envio'){ if(envioConfig.tipo==='fijo') costoEnvio=envioConfig.costo||0; else if(envioConfig.tipo==='gratis') costoEnvio=0; else if(envioConfig.tipo==='variable') costoEnvio=envioConfig.base||0; } let f=tipo==='envio'?t+costoEnvio:t; document.getElementById('total').innerText='$'+f.toLocaleString('es-AR'); document.getElementById('mtotal').innerText='$'+f.toLocaleString('es-AR'); document.getElementById('count').innerText=n; let h='';for(let id in carrito){let p=productos.find(x=>x.id==id);if(!p) continue; h+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #262626;font-size:13px"><span>'+p.nombre+' x'+carrito[id]+'</span><span><button onclick="chg('+id+',-1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">-</button> '+carrito[id]+' <button onclick="chg('+id+',1)" style="width:24px;height:24px;border-radius:50%;border:1px solid #333;background:#262626;color:#fff">+</button></span></div>'}document.getElementById('items').innerHTML=h||'<p style="color:#666;text-align:center">Carrito vacío</p>'; const txt=document.getElementById('envioTxt'); if(tipo==='envio'){txt.style.display='block';txt.innerText=costoEnvio?'+ $'+costoEnvio+' envío':''} else txt.style.display='none';}function chg(id,d){carrito[id]+=d;if(carrito[id]<=0) delete carrito[id];upd()}function abrir(){document.getElementById('modal').classList.add('active')} function cerrar(){document.getElementById('modal').classList.remove('active')}function setTipo(tt){tipo=tt;document.getElementById('b1').style.background=tt==='retiro'?'#E11D48':'#262626';document.getElementById('b2').style.background=tt==='envio'?'#E11D48':'#262626';document.getElementById('dirBox').style.display=tt==='envio'?'block':'none';upd()}function enviar(){ let nom=document.getElementById('nombre').value.trim(); let tel=document.getElementById('telefono').value.trim(); let dir=document.getElementById('dir')?.value||''; let piso=document.getElementById('piso')?.value||''; let pago=document.getElementById('pago').value; if(!nom||!tel||!tipo){alert('Completá nombre, teléfono y tipo');return} let msg='Hola! Pedido de *'+nom+'*:%0A Tel: '+tel+'%0A%0A'; let tot=0; for(let id in carrito){let p=productos.find(x=>x.id==id);msg+='• '+p.nombre+' x'+carrito[id]+' - $'+(p.precio*carrito[id]).toLocaleString('es-AR')+'%0A';tot+=p.precio*carrito[id];} let costoEnvio=0; if(tipo==='envio'){if(envioConfig.tipo==='fijo') costoEnvio=envioConfig.costo; else if(envioConfig.tipo==='variable') costoEnvio=envioConfig.base} msg+='%0A*Tipo: '+tipo.toUpperCase()+'*%0A'; if(tipo==='envio'){msg+=' Dir: '+dir+' '+(piso||'')+'%0A'; if(costoEnvio) msg+=' Envío: $'+costoEnvio+'%0A'; msg+='*Total: $'+(tot+costoEnvio).toLocaleString('es-AR')+'*%0A';} else msg+='*Total: $'+tot.toLocaleString('es-AR')+'*%0A'; if(pago) msg+='Pago: '+pago+'%0A'; window.open('https://wa.me/'+WHATSAPP+'?text='+msg,'_blank');}init();<\/script></body></html>`;
-function saveT(){
- const val=document.getElementById('token').value.trim();
- if(!val){ alert('Pegá el token primero'); return; }
- localStorage.setItem('gh_token_cartas',val);
- document.getElementById('tStatus').innerHTML=`<span class="ok">✅ Guardado! Longitud: ${val.length} chars. Inicio: ${val.slice(0,7)}...</span><br><span class="small">Ahora recargá la página, debería seguir verde.</span>`;
- updT();
+let TOKEN=localStorage.getItem('cp_token')||''; let REPO=localStorage.getItem('cp_repo')||'Cartaspro/cartas';
+document.getElementById('token').value=TOKEN;
+const BASE='https://api.github.com/repos/'+REPO+'/contents/';
+let DATA=[], CONFIG={}, CURRENT='';
+
+function saveToken(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); alert('Guardado'); listar(); }
+
+async function gh(path,method='GET',body=null){
+ const r=await fetch(BASE+path,{method,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:body?JSON.stringify(body):null});
+ return r;
 }
-function delT(){localStorage.removeItem('gh_token_cartas');document.getElementById('token').value='';document.getElementById('tStatus').innerHTML=`<span class="err">Borrado localmente</span>`;updT();}
-function getT(){return localStorage.getItem('gh_token_cartas')||'';}
-function updT(){
- const t=getT();
- document.getElementById('token').value=t;
- const el=document.getElementById('tStatus');
- if(t) el.innerHTML=`<span class="ok">✅ Token OK cargado (${t.length} chars) ${t.slice(0,4)}...${t.slice(-4)} listo para guardar REAL</span>`;
- else el.innerHTML=`<span class="err">❌ Sin token - no podrás guardar real, solo descargar</span>`;
+
+async function listar(){
+ if(!TOKEN) {document.getElementById('clientList').innerText='Poné token'; return;}
+ const r=await gh('data'); const j=await r.json();
+ if(!Array.isArray(j)){document.getElementById('clientList').innerText=j.message; return;}
+ const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json',''));
+ document.getElementById('clientList').innerHTML=slugs.map(s=>`<div class="list-item ${CURRENT===s?'active':''}" onclick="document.getElementById('editSlug').value='${s}';cargarCliente()"><span>${s}</span><span style="font-size:11px;opacity:.6">ver</span></div>`).join('')||'Sin clientes';
 }
-updT();
-async function testT(){
- const token=getT(); if(!token) return alert('Sin token');
- document.getElementById('tStatus').innerHTML='Probando token contra GitHub...';
+
+async function crearClienteVisual(){
+ const slug=document.getElementById('newSlug').value.trim().toLowerCase().replace(/\s+/g,'-');
+ const nombre=document.getElementById('newNombre').value.trim()||slug;
+ const wa=document.getElementById('newWa').value.trim();
+ if(!slug) return alert('Slug');
+ const cfg={nombre, whatsapp:wa, subtitulo:'Menú digital'};
+ const data=[{id:1,nombre:'Producto ejemplo',precio:1000,categoria:'general',descripcion:'',img:''}];
+ const tpl=await fetch('../index-base-v9-simple-pedir.html').then(r=>r.text()).catch(()=>document.documentElement.outerHTML); // fallback
+ // usamos la base simple que ya tenés en /mnt
+ const baseTemplate = localStorage.getItem('base_template') || `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Carta</title></head><body><script>const s=location.pathname.split('/').filter(Boolean).pop(); fetch('../data/'+s+'.json').then(r=>r.json()).then(d=>document.body.innerHTML=JSON.stringify(d));<\/script></body></html>`;
  try{
-  const r=await fetch(`https://api.github.com/repos/${REPO}`,{headers:{Authorization:`token ${token}`}});
-  if(r.ok){ document.getElementById('tStatus').innerHTML=`<span class="ok">✅ Token válido! Puede escribir en ${REPO}</span>`; }
-  else{ const txt=await r.text(); document.getElementById('tStatus').innerHTML=`<span class="err">❌ Token inválido: ${r.status} ${txt.slice(0,200)}</span>`; }
- }catch(e){ document.getElementById('tStatus').innerHTML=`<span class="err">Error test: ${e.message}</span>`; }
+  await gh(`data/${slug}.json`,'PUT',{message:`new ${slug} data`,content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))))});
+  await gh(`config/${slug}.json`,'PUT',{message:`new ${slug} cfg`,content:btoa(unescape(encodeURIComponent(JSON.stringify(cfg,null,2))))});
+  // para index usamos la base simple que ya está en tu repo si existe, si no usamos plantilla genérica
+  const rIdx=await gh(`${slug}/index.html`);
+  if(!rIdx.ok){
+   const baseRes=await fetch(`../${slug}/index.html`).then(r=>r.text()).catch(async()=>{
+    // si no existe, pedimos el archivo base v9 que subiste
+    const b=await fetch('data:text/html;base64,PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVzIj48aGVhZD48bWV0YSBjaGFyc2V0PSJVVEYtOCI+PG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIj4KPHRpdGxlIGlkPSJ0Ij5DYXJ0YTwvdGl0bGU+CjxsaW5rIGhyZWY9Imh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9SW50ZXI6d2dodEA0MDA7NjAwOzgwMDs5MDAmZGlzcGxheT1zd2FwIiByZWw9InN0eWxlc2hlZXQiPgo8c3R5bGU+Cip7bWFyZ2luOjA7cGFkZGluZzowO2JveC1zaXppbmc6Ym9yZGVyLWJveDtmb250LWZhbWlseTonSW50ZXInLHNhbnMtc2VyaWZ9CmJvZHl7YmFja2dyb3VuZDojMGYwZjBmO2NvbG9yOiNmZmY7cGFkZGluZy1ib3R0b206MTEwcHh9Ci5oZWFkZXJ7cGFkZGluZzoyMnB4IDIwcHg7cG9zaXRpb246c3RpY2t5O3RvcDowO3otaW5kZXg6MTA7YmFja2dyb3VuZDpyZ2JhKDE1LDE1LDE1LC45Mik7YmFja2Ryb3AtZmlsdGVyOmJsdXIoMTJweCk7Ym9yZGVyLWJvdHRvbToxcHggc29saWQgIzFjMWMxY30KLmhlYWRlciBoMXtmb250LXNpemU6MjJweDtmb250LXdlaWdodDo5MDB9Ci5oZWFkZXIgcHtjb2xvcjojODg4O2ZvbnQtc2l6ZToxM3B4O21hcmdpbi10b3A6NHB4fQouZ3JpZHttYXgtd2lkdGg6MTAwMHB4O21hcmdpbjowIGF1dG87cGFkZGluZzoxNnB4O2Rpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KGF1dG8tZmlsbCxtaW5tYXgoMjgwcHgsMWZyKSk7Z2FwOjEycHh9Ci5pdGVte2JhY2tncm91bmQ6IzFjMWMxYztib3JkZXI6MXB4IHNvbGlkICMyNjI2MjY7Ym9yZGVyLXJhZGl1czoyMHB4O292ZXJmbG93OmhpZGRlbjtkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1ufQouaXRlbSBpbWd7d2lkdGg6MTAwJTtoZWlnaHQ6MTYwcHg7b2JqZWN0LWZpdDpjb3ZlcjtiYWNrZ3JvdW5kOiMxMTF9Ci5pbmZve3BhZGRpbmc6MTRweDtmbGV4OjE7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbn0KLm5hbWV7Zm9udC13ZWlnaHQ6ODAwO2ZvbnQtc2l6ZToxNXB4fQouZGVzY3tmb250LXNpemU6MTJweDtjb2xvcjojODg4O21hcmdpbi10b3A6NHB4O2xpbmUtaGVpZ2h0OjEuNDtmbGV4OjF9Ci5wcmljZXtmb250LXdlaWdodDo5MDA7Zm9udC1zaXplOjE2cHg7bWFyZ2luLXRvcDoxMHB4fQouYWRke21hcmdpbi10b3A6MTJweDt3aWR0aDoxMDAlO2JhY2tncm91bmQ6I2ZmZjtjb2xvcjojMDAwO2JvcmRlcjowO3BhZGRpbmc6MTJweDtib3JkZXItcmFkaXVzOjEycHg7Zm9udC13ZWlnaHQ6ODAwO2N1cnNvcjpwb2ludGVyfQouY2FydHtwb3NpdGlvbjpmaXhlZDtsZWZ0OjA7cmlnaHQ6MDtib3R0b206MDtiYWNrZ3JvdW5kOiMxYzFjMWM7Ym9yZGVyLXRvcDoxcHggc29saWQgIzI2MjYyNjtwYWRkaW5nOjE0cHg7ei1pbmRleDoyMH0KLmNhcnQtaW5uZXJ7bWF4LXdpZHRoOjEwMDBweDttYXJnaW46MCBhdXRvO2Rpc3BsYXk6ZmxleDtnYXA6MTJweDthbGlnbi1pdGVtczpjZW50ZXJ9Ci5jYXJ0LWxpc3R7ZmxleDoxO2ZvbnQtc2l6ZToxM3B4O2NvbG9yOiNhYWE7bGluZS1oZWlnaHQ6MS40O21heC1oZWlnaHQ6ODBweDtvdmVyZmxvdzphdXRvfQouY2FydC10b3RhbHtmb250LXdlaWdodDo5MDB9Ci5zZW5ke2JhY2tncm91bmQ6I0UxMUQ0ODtjb2xvcjojZmZmO2JvcmRlcjowO3BhZGRpbmc6MTRweCAyMHB4O2JvcmRlci1yYWRpdXM6MTAwcHg7Zm9udC13ZWlnaHQ6ODAwO2N1cnNvcjpwb2ludGVyO3doaXRlLXNwYWNlOm5vd3JhcH0KLmVtcHR5e2NvbG9yOiM1NTU7Zm9udC1zaXplOjEzcHh9Cjwvc3R5bGU+CjwvaGVhZD48Ym9keT4KPGRpdiBjbGFzcz0iaGVhZGVyIj48aDEgaWQ9Im4iPkNhcmdhbmRvLi4uPC9oMT48cCBpZD0iZCI+PC9wPjwvZGl2Pgo8ZGl2IGNsYXNzPSJncmlkIiBpZD0iZ3JpZCI+PC9kaXY+Cgo8ZGl2IGNsYXNzPSJjYXJ0Ij4KPGRpdiBjbGFzcz0iY2FydC1pbm5lciI+CjxkaXYgY2xhc3M9ImNhcnQtbGlzdCIgaWQ9ImNhcnRMaXN0Ij48c3BhbiBjbGFzcz0iZW1wdHkiPkNhcnJpdG8gdmFjw61vPC9zcGFuPjwvZGl2Pgo8ZGl2IHN0eWxlPSJ0ZXh0LWFsaWduOnJpZ2h0Ij4KPGRpdiBjbGFzcz0iY2FydC10b3RhbCIgaWQ9InRvdGFsIj48L2Rpdj4KPGJ1dHRvbiBjbGFzcz0ic2VuZCIgb25jbGljaz0icGVkaXIoKSI+UGVkaXIgcG9yIFdoYXRzQXBwPC9idXR0b24+CjwvZGl2Pgo8L2Rpdj4KPC9kaXY+Cgo8c2NyaXB0Pgpjb25zdCBzbHVnID0gbG9jYXRpb24ucGF0aG5hbWUuc3BsaXQoJy8nKS5maWx0ZXIoQm9vbGVhbikucG9wKCkgfHwgJ2RlbW8nOwpsZXQgREFUQT1bXSwgQ09ORklHPXt9LCBDQVJSSVRPPVtdOwoKYXN5bmMgZnVuY3Rpb24gbG9hZCgpewogdHJ5ewogIGNvbnN0IFtkYXRhLCBjb25maWddID0gYXdhaXQgUHJvbWlzZS5hbGwoWwogICBmZXRjaChgLi4vZGF0YS8ke3NsdWd9Lmpzb24/dj0ke0RhdGUubm93KCl9YCkudGhlbihyPT5yLmpzb24oKSksCiAgIGZldGNoKGAuLi9jb25maWcvJHtzbHVnfS5qc29uP3Y9JHtEYXRlLm5vdygpfWApLnRoZW4ocj0+ci5qc29uKCkpLmNhdGNoKCgpPT4oe30pKQogIF0pOwogIERBVEE9ZGF0YTsgQ09ORklHPWNvbmZpZzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbicpLmlubmVyVGV4dCA9IENPTkZJRy5ub21icmUgfHwgc2x1ZzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZCcpLmlubmVyVGV4dCA9IENPTkZJRy5zdWJ0aXR1bG8gfHwgJ01lbsO6IGRpZ2l0YWwnOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0JykuaW5uZXJUZXh0ID0gQ09ORklHLm5vbWJyZSB8fCBzbHVnOwogIHJlbmRlcigpOwogfWNhdGNoKGUpeyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbicpLmlubmVyVGV4dD0nRXJyb3I6ICcrc2x1ZzsgfQp9CgpmdW5jdGlvbiByZW5kZXIoKXsKIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdncmlkJykuaW5uZXJIVE1MID0gREFUQS5tYXAocD0+YAogIDxkaXYgY2xhc3M9Iml0ZW0iPgogICA8aW1nIHNyYz0iJHtwLmltZ3x8Jyd9IiBvbmVycm9yPSJ0aGlzLnN0eWxlLmRpc3BsYXk9J25vbmUnIj4KICAgPGRpdiBjbGFzcz0iaW5mbyI+CiAgICA8ZGl2IGNsYXNzPSJuYW1lIj4ke3Aubm9tYnJlfTwvZGl2PgogICAgPGRpdiBjbGFzcz0iZGVzYyI+JHtwLmRlc2NyaXBjaW9ufHwnJ308L2Rpdj4KICAgIDxkaXYgY2xhc3M9InByaWNlIj4kJHtOdW1iZXIocC5wcmVjaW98fDApLnRvTG9jYWxlU3RyaW5nKCdlcy1BUicpfTwvZGl2PgogICAgPGJ1dHRvbiBjbGFzcz0iYWRkIiBvbmNsaWNrPSJhZGQoJHtwLmlkfSkiPkFncmVnYXI8L2J1dHRvbj4KICAgPC9kaXY+CiAgPC9kaXY+CiBgKS5qb2luKCcnKTsKfQoKZnVuY3Rpb24gYWRkKGlkKXsKIGNvbnN0IHByb2QgPSBEQVRBLmZpbmQoeD0+eC5pZD09PWlkKTsKIGNvbnN0IGV4ID0gQ0FSUklUTy5maW5kKHg9PnguaWQ9PT1pZCk7CiBpZihleCkgZXguY2FudCsrOyBlbHNlIENBUlJJVE8ucHVzaCh7Li4ucHJvZCwgY2FudDoxfSk7CiB1cGRhdGVDYXJ0KCk7Cn0KCmZ1bmN0aW9uIHVwZGF0ZUNhcnQoKXsKIGlmKCFDQVJSSVRPLmxlbmd0aCl7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjYXJ0TGlzdCcpLmlubmVySFRNTD0nPHNwYW4gY2xhc3M9ImVtcHR5Ij5DYXJyaXRvIHZhY8Otbzwvc3Bhbj4nOyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndG90YWwnKS5pbm5lclRleHQ9Jyc7IHJldHVybjsgfQogbGV0IHRvdGFsPTAsIHR4dD0nJzsKIENBUlJJVE8uZm9yRWFjaChjPT57IHRvdGFsKz1jLnByZWNpbypjLmNhbnQ7IHR4dCs9YCR7Yy5jYW50fXggJHtjLm5vbWJyZX08YnI+YDsgfSk7CiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY2FydExpc3QnKS5pbm5lckhUTUw9dHh0OwogZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3RvdGFsJykuaW5uZXJUZXh0PSckJyt0b3RhbC50b0xvY2FsZVN0cmluZygnZXMtQVInKTsKfQoKZnVuY3Rpb24gcGVkaXIoKXsKIGlmKCFDQVJSSVRPLmxlbmd0aCkgcmV0dXJuIGFsZXJ0KCdBZ3JlZ8OhIGFsZ28gcHJpbWVybycpOwogbGV0IG1zZyA9IGBIb2xhICR7Q09ORklHLm5vbWJyZXx8Jyd9ISBRdWllcm8gcGVkaXI6JTBBYDsKIENBUlJJVE8uZm9yRWFjaChjPT57IG1zZys9YOKAoiAke2MuY2FudH14ICR7Yy5ub21icmV9IC0gJCR7Yy5wcmVjaW8qYy5jYW50fSUwQWA7IH0pOwogY29uc3QgdG90YWwgPSBDQVJSSVRPLnJlZHVjZSgocyxjKT0+cytjLnByZWNpbypjLmNhbnQsMCk7CiBtc2crPWAlMEFUb3RhbDogJCR7dG90YWx9YDsKIGNvbnN0IHdhID0gKENPTkZJRy53aGF0c2FwcHx8JycpLnJlcGxhY2UoL1teMC05XS9nLCcnKTsKIHdpbmRvdy5vcGVuKGBodHRwczovL3dhLm1lLyR7d2F9P3RleHQ9JHttc2d9YCwnX2JsYW5rJyk7Cn0KCmxvYWQoKTsKPC9zY3JpcHQ+CjwvYm9keT48L2h0bWw+Cg==').then(x=>x.text()).catch(()=>baseTemplate);
+    return b;
+   });
+   // usamos la plantilla v9 simple que ya generamos
+   const simple = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${nombre}</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}body{background:#0f0f0f;color:#fff;padding-bottom:110px}.header{padding:22px 20px;position:sticky;top:0;z-index:10;background:rgba(15,15,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid #1c1c1c}.header h1{font-size:22px;font-weight:900}.grid{max-width:1000px;margin:0 auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}.item{background:#1c1c1c;border:1px solid #262626;border-radius:20px;overflow:hidden}.item img{width:100%;height:160px;object-fit:cover}.info{padding:14px}.name{font-weight:800}.price{font-weight:900;margin-top:8px}.add{margin-top:10px;width:100%;background:#fff;color:#000;border:0;padding:12px;border-radius:12px;font-weight:800}.cart{position:fixed;left:0;right:0;bottom:0;background:#1c1c1c;border-top:1px solid #262626;padding:14px}.cart-inner{max-width:1000px;margin:0 auto;display:flex;gap:12px;align-items:center}.cart-list{flex:1;font-size:13px;color:#aaa}.send{background:#E11D48;color:#fff;border:0;padding:14px 20px;border-radius:100px;font-weight:800}<\/style></head><body><div class="header"><h1 id="n">${nombre}</h1><p style="color:#888;font-size:13px">Menú digital</p></div><div class="grid" id="grid"></div><div class="cart"><div class="cart-inner"><div class="cart-list" id="cartList">Carrito vacío</div><div><div id="total" style="font-weight:900"></div><button class="send" onclick="pedir()">Pedir por WhatsApp</button></div></div></div><script>const slug=location.pathname.split('/').filter(Boolean).pop()||'demo';let DATA=[],CONFIG={},CARRITO=[];async function load(){const[d,c]=await Promise.all([fetch('../data/'+slug+'.json?v='+Date.now()).then(r=>r.json()),fetch('../config/'+slug+'.json?v='+Date.now()).then(r=>r.json()).catch(()=>({}))]);DATA=d;CONFIG=c;document.getElementById('n').innerText=CONFIG.nombre||slug;render();}function render(){document.getElementById('grid').innerHTML=DATA.map(p=>'<div class="item"><img src="'+(p.img||'')+'" onerror="this.style.display=\\'none\\'"><div class="info"><div class="name">'+p.nombre+'</div><div class="price">$'+Number(p.precio||0).toLocaleString('es-AR')+'</div><button class="add" onclick="add('+p.id+')">Agregar</button></div></div>').join('');}function add(id){const pr=DATA.find(x=>x.id===id);const ex=CARRITO.find(x=>x.id===id);if(ex)ex.cant++;else CARRITO.push({...pr,cant:1});upd();}function upd(){if(!CARRITO.length){document.getElementById('cartList').innerHTML='Carrito vacío';document.getElementById('total').innerText='';return;}let t=0,ht='';CARRITO.forEach(c=>{t+=c.precio*c.cant;ht+=c.cant+'x '+c.nombre+'<br>';});document.getElementById('cartList').innerHTML=ht;document.getElementById('total').innerText='$'+t.toLocaleString('es-AR');}function pedir(){if(!CARRITO.length)return alert('Vacío');let m='Hola '+(CONFIG.nombre||'')+'! Quiero pedir:%0A';CARRITO.forEach(c=>{m+=c.cant+'x '+c.nombre+'%0A';});m+='Total: $'+CARRITO.reduce((s,c)=>s+c.precio*c.cant,0);window.open('https://wa.me/'+(CONFIG.whatsapp||'').replace(/[^0-9]/g,'')+'?text='+m,'_blank');}load();<\/script></body></html>`;
+   await gh(`${slug}/index.html`,'PUT',{message:`new ${slug} index`,content:btoa(unescape(encodeURIComponent(simple)))});
+  }
+  CURRENT=slug; document.getElementById('editSlug').value=slug; listar(); cargarCliente();
+ }catch(e){ alert('Error '+e.message); }
 }
-let productos=[]; let clienteActual='';
-async function cargar(){
- clienteActual=document.getElementById('cliente').value.trim().toLowerCase().replace(/\s+/g,'-');
- if(!clienteActual) return alert('Poné nombre cliente');
- document.getElementById('cStatus').innerText='Cargando '+clienteActual+'...';
+
+async function cargarCliente(){
+ const slug=document.getElementById('editSlug').value.trim(); if(!slug) return;
+ CURRENT=slug;
  try{
-  let dataRes=await fetch('../data/'+clienteActual+'.json?v='+Date.now());
-  let cfgRes=await fetch('../config/'+clienteActual+'.json?v='+Date.now());
-  if(!dataRes.ok) dataRes=await fetch('https://cartaspro.github.io/cartas/data/'+clienteActual+'.json?v='+Date.now());
-  if(!cfgRes.ok) cfgRes=await fetch('https://cartaspro.github.io/cartas/config/'+clienteActual+'.json?v='+Date.now());
-  if(dataRes.ok) productos=await dataRes.json(); else productos=[];
-  if(cfgRes.ok){ const cfg=await cfgRes.json(); document.getElementById('cNombre').value=cfg.nombre||clienteActual; document.getElementById('cWa').value=cfg.whatsapp||''; document.getElementById('cColor').value=cfg.color||'#E11D48'; document.getElementById('cEnvio').value=cfg.envio?.tipo||'fijo'; document.getElementById('cCosto').value=cfg.envio?.costo||cfg.envio?.base||1500; document.getElementById('cTramo').value=cfg.envio?.precioPorTramo||500; } else { document.getElementById('cNombre').value=clienteActual; }
-  document.getElementById('cfgCard').style.display='block'; document.getElementById('prodsCard').style.display='block'; render();
-  document.getElementById('cStatus').innerHTML=`<span class="ok">Cargado ${clienteActual} con ${productos.length} productos</span>`;
-  document.getElementById('links').innerHTML=`<a class="link" target="_blank" href="https://cartaspro.github.io/cartas/${clienteActual}/">🌐 Ver /${clienteActual}/</a>`;
-  document.getElementById('preview').innerHTML=`<a class="btn s" target="_blank" href="https://cartaspro.github.io/cartas/${clienteActual}/">👁️ Ver como cliente</a>`;
- }catch(e){ document.getElementById('cStatus').innerHTML=`<span class="err">Error: ${e.message}</span>`; document.getElementById('cfgCard').style.display='block'; document.getElementById('prodsCard').style.display='block'; productos=[]; render(); }
+  let r=await gh(`data/${slug}.json`); let j=await r.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content))));
+  r=await gh(`config/${slug}.json`); j=await r.json(); CONFIG=JSON.parse(decodeURIComponent(escape(atob(j.content))));
+  renderProds(); reloadPreview(); listar();
+ }catch(e){ alert('Error cargando '+e.message); }
 }
-function render(){ document.getElementById('lista').innerHTML=productos.map((p,i)=>`<div class="prod"><div class="grid2"><div><label>Nombre</label><input value="${p.nombre||''}" oninput="productos[${i}].nombre=this.value"></div><div><label>Precio $</label><input type="number" value="${p.precio||0}" oninput="productos[${i}].precio=parseInt(this.value)||0"></div></div><label>Descripción</label><input value="${(p.descripcion||p.desc||'').replace(/"/g,'&quot;')}" oninput="productos[${i}].descripcion=this.value"><div class="grid2"><div><label>Categoría</label><input value="${p.categoria||p.cat||''}" oninput="productos[${i}].categoria=this.value.toLowerCase()"></div><div><label>Imagen URL</label><input value="${p.img||''}" oninput="productos[${i}].img=this.value"></div></div><button class="s btn" style="margin-top:8px" onclick="productos.splice(${i},1);render()">Eliminar</button></div>`).join('') || '<p class="small">Sin productos</p>';}
-function addP(){productos.push({id:Date.now(),categoria:'general',nombre:'Nuevo',descripcion:'',precio:1000,img:'https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?w=600'});render();}
-function getCfg(){ const tipo=document.getElementById('cEnvio').value; const costo=parseInt(document.getElementById('cCosto').value)||0; const tramo=parseInt(document.getElementById('cTramo').value)||500; let envio={tipo}; if(tipo==='fijo') envio={tipo:'fijo',costo}; if(tipo==='gratis') envio={tipo:'gratis',costo:0}; if(tipo==='variable') envio={tipo:'variable',base:costo,cadaKm:2,precioPorTramo:tramo}; return {nombre:document.getElementById('cNombre').value||clienteActual, whatsapp:document.getElementById('cWa').value||'5491134890644', color:document.getElementById('cColor').value||'#E11D48', envio};}
-async function commit(path,content){ const token=getT(); if(!token) throw new Error('Sin token'); const url=`https://api.github.com/repos/${REPO}/contents/${path}`; let sha=null; try{ const r=await fetch(url,{headers:{Authorization:`token ${token}`}}); if(r.ok){const j=await r.json(); sha=j.sha;} }catch(e){} const body={message:`admin: update ${path}`, content:btoa(unescape(encodeURIComponent(content))), ...(sha?{sha}:{})}; const res=await fetch(url,{method:'PUT', headers:{Authorization:`token ${token}`,'Content-Type':'application/json'}, body:JSON.stringify(body)}); if(!res.ok){ const t=await res.text(); throw new Error(t.slice(0,300)); }}
-async function guardarReal(){ if(!clienteActual) return alert('Cargá cliente'); const token=getT(); if(!token) return alert('Poné token primero'); document.getElementById('saveStatus').innerText='Guardando REAL en GitHub...'; try{ const cfg=getCfg(); await commit(`data/${clienteActual}.json`, JSON.stringify(productos,null,2)); await commit(`config/${clienteActual}.json`, JSON.stringify(cfg,null,2)); try{ await commit(`${clienteActual}/index.html`, CARTA_TEMPLATE); }catch(e){} document.getElementById('saveStatus').innerHTML=`<span class="ok">✅ GUARDADO REAL OK. En 1-2 min se ve en /${clienteActual}/</span>`; document.getElementById('preview').innerHTML=`<a class="btn p" target="_blank" href="https://cartaspro.github.io/cartas/${clienteActual}/">🌐 Abrir ${clienteActual}</a>`; }catch(e){ document.getElementById('saveStatus').innerHTML=`<span class="err">Error: ${e.message}</span>`; }}
-</script></body></html>
+
+function renderProds(){
+ document.getElementById('prods').innerHTML=DATA.map(p=>`
+  <div class="prod-card">
+   <img src="${p.img||'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60'">
+   <div class="prod-fields">
+    <input value="${p.nombre}" oninput="DATA.find(x=>x.id==${p.id}).nombre=this.value" placeholder="Nombre">
+    <input type="number" value="${p.precio}" oninput="DATA.find(x=>x.id==${p.id}).precio=Number(this.value)" placeholder="Precio">
+    <input value="${p.descripcion||''}" oninput="DATA.find(x=>x.id==${p.id}).descripcion=this.value" placeholder="Descripción" style="grid-column:1/-1">
+    <input value="${p.img||''}" oninput="DATA.find(x=>x.id==${p.id}).img=this.value; this.parentElement.parentElement.querySelector('img').src=this.value" placeholder="URL imagen" style="grid-column:1/-1">
+   </div>
+   <button class="btn btn-light" onclick="DATA=DATA.filter(x=>x.id!=${p.id});renderProds()">✕</button>
+  </div>
+ `).join('');
+}
+
+function addProdVisual(){
+ const n=document.getElementById('pNombre').value.trim(); const pr=Number(document.getElementById('pPrecio').value); const img=document.getElementById('pImg').value.trim();
+ if(!n) return;
+ cons
