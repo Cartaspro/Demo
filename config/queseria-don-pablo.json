@@ -15,6 +15,6 @@
     "mensaje": "Envío $1500 - si es 0 dice envío gratis",
     "retiro": "Retiro gratis en local"
   },
-  "activo": false,
-  "estado": "baja"
+  "activo": true,
+  "estado": "activo"
 }
