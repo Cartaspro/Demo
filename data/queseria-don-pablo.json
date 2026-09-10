@@ -1,0 +1,69 @@
+[
+  {
+    "id": 1,
+    "categoria": "Quesos Duros",
+    "nombre": "Sardo Estacionado 12 meses",
+    "descripcion": "Intenso, ideal para rallar. Horma 1kg. Premio nacional 2024",
+    "precio": 14500,
+    "img": "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=600",
+    "destacado": true
+  },
+  {
+    "id": 2,
+    "categoria": "Quesos Blandos",
+    "nombre": "Muzzarella Premium 1kg",
+    "descripcion": "Hilada a mano, derretimiento perfecto. La favorita de pizzerías",
+    "precio": 8900,
+    "img": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600"
+  },
+  {
+    "id": 3,
+    "categoria": "Quesos Blandos",
+    "nombre": "Cremoso Artesanal 1kg",
+    "descripcion": "El más vendido. Cremoso, suave, 100% leche de campo",
+    "precio": 8200,
+    "img": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600"
+  },
+  {
+    "id": 4,
+    "categoria": "Picadas",
+    "nombre": "Picada Don Pablo p/2",
+    "descripcion": "Sardo, Fontina, Salame Candelario, Olivas, Nuez + Pan casero",
+    "precio": 18900,
+    "img": "https://images.unsplash.com/photo-1544148103-077ea10c9e28?w=600",
+    "destacado": true
+  },
+  {
+    "id": 5,
+    "categoria": "Picadas",
+    "nombre": "Picadón XL p/4 personas",
+    "descripcion": "5 quesos, 3 fiambres, aceitunas, berenjenas, pan de campo",
+    "precio": 32500,
+    "img": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600",
+    "destacado": true
+  },
+  {
+    "id": 6,
+    "categoria": "Fiambres",
+    "nombre": "Jamón Crudo Bodega 500g",
+    "descripcion": "12 meses de estacionamiento. Cortado fino a cuchillo",
+    "precio": 19500,
+    "img": "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600"
+  },
+  {
+    "id": 7,
+    "categoria": "Fiambres",
+    "nombre": "Salame Candelario 400g",
+    "descripcion": "Receta de la nona. Picado grueso, sabor intenso",
+    "precio": 8900,
+    "img": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600"
+  },
+  {
+    "id": 8,
+    "categoria": "Combos",
+    "nombre": "Combo Asado + Queso",
+    "descripcion": "Provolone + Chimichurri + Morrones. Listo para parrilla",
+    "precio": 11200,
+    "img": "https://images.unsplash.com/photo-1558030006-450066393d65?w=600"
+  }
+]
