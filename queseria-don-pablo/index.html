@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quesería Don Pablo 🧀 - Carta</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#080808;color:#fff;overflow-x:hidden}
+.hero{position:relative;height:36vh;min-height:280px;overflow:hidden} .hero img{width:100%;height:100%;object-fit:cover;filter:brightness(.55)} .hero-overlay{position:absolute;inset:0;background:linear-gradient(0deg,#080808 0%,transparent 70%)}
+.hero-content{position:absolute;bottom:0;left:0;right:0;padding:20px;max-width:1200px;margin:0 auto} .hero h1{font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:.9} .hero h1 span{color:#FFD60A} .hero p{font-size:13px;color:#ddd;margin-top:6px}
+.topinfo{max-width:1200px;margin:-18px auto 0;padding:0 16px;display:grid;grid-template-columns:1.2fr .8fr;gap:14px;position:relative;z-index:5} @media(max-width:860px){.topinfo{grid-template-columns:1fr}}
+.card{background:#1c1c1c;border:1px solid #262626;border-radius:22px;padding:18px} .card b{font-size:13px;color:#FFD60A;display:block;margin-bottom:8px} .small{font-size:12px;color:#aaa;line-height:1.6}
+.mapwrap{border-radius:14px;overflow:hidden;margin-top:12px;border:1px solid #333} .mapwrap iframe{width:100%;height:200px;border:0}
+.tabs{display:flex;gap:8px;margin-top:12px} .tab{flex:1;padding:12px;border-radius:12px;border:1px solid #333;background:#0f0f0f;color:#777;font-size:13px;font-weight:800;cursor:pointer;text-align:center} .tab.on{background:#FFD60A;color:#000;border-color:#FFD60A}
+.cats{max-width:1200px;margin:16px auto 0;padding:0 16px;display:flex;gap:8px;overflow:auto} .cat{white-space:nowrap;padding:10px 18px;border-radius:100px;border:1px solid #2a2a2a;background:#141414;color:#888;font-size:12px;font-weight:800;cursor:pointer} .cat.on{background:#fff;color:#000}
+.grid{max-width:1200px;margin:0 auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.item{background:#1e1e1e;border:1px solid #262626;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;position:relative} .item.destacado::before{content:'⭐ DESTACADO';position:absolute;top:12px;left:12px;background:#FFD60A;color:#000;padding:5px 10px;border-radius:100px;font-size:10px;font-weight:900;z-index:2}
+.item img{width:100%;height:190px;object-fit:cover} .info{padding:16px;flex:1;display:flex;flex-direction:column} .name{font-weight:900;font-size:16px} .desc{font-size:12px;color:#888;margin-top:6px;flex:1} .priceRow{display:flex;justify-content:space-between;align-items:center;margin-top:12px} .price{font-weight:900;font-size:20px} .price span{color:#FFD60A} .add{background:#fff;color:#000;border:0;padding:12px 18px;border-radius:12px;font-weight:900;cursor:pointer}
+.cart{position:fixed;left:12px;right:12px;bottom:12px;background:rgba(20,20,20,.97);border:1px solid #2a2a2a;border-radius:22px;padding:14px;z-index:50;backdrop-filter:blur(20px)}
+.cart-inner{max-width:1200px;margin:0 auto;display:flex;gap:12px;align-items:flex-start} .cart-list{flex:1;font-size:12px;color:#aaa;max-height:110px;overflow:auto} .cart-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #222} .cart-item b{color:#fff} .cart-actions button{background:#262626;color:#fff;border:0;width:26px;height:26px;border-radius:6px;cursor:pointer;margin-left:4px} .cart-actions button.del{background:#ff0033}
+.cart-total{font-weight:900;font-size:18px;text-align:right} .send{background:#FFD60A;color:#000;border:0;padding:14px 22px;border-radius:100px;font-weight:900;cursor:pointer;width:100%;margin-top:8px}
+.form{max-width:1200px;margin:0 auto;padding:0 16px 20px} .formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:700px){.formGrid{grid-template-columns:1fr}} 
+.input{background:#0f0f0f;border:1px solid #333;border-radius:12px;padding:14px;color:#fff;width:100%;font-size:14px} .input.err{border-color:#ff0033} .label{font-size:11px;color:#FFD60A;font-weight:800;margin-bottom:6px;display:block;text-transform:uppercase}
+.inactiveWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#080808;padding:20px} .inactiveBox{max-width:560px;width:100%;background:#1c1c1c;border:2px solid #ff0033;border-radius:32px;padding:48px 32px;text-align:center} .inactiveBox .icon{width:90px;height:90px;background:#ff0033;border-radius:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:44px}
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+const CONFIG_DEFAULT = {"nombre": "Quesería Don Pablo 🧀", "subtitulo": "Quesos artesanales & Picadas Premium", "direccion": "Av. Meeks 1200, Lomas de Zamora, Buenos Aires", "telefono": "11 4292-8800", "whatsapp": "5491134890644", "horarios": "Lun a Sáb 9 a 20hs | Dom 9 a 13hs", "googleMaps": {"embed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3277.2!2d-58.401!3d-34.762!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sAv.+Meeks+1200,+Lomas+de+Zamora!5e0!3m2!1ses!2sar!4v1", "link": "https://maps.google.com/?q=Av.+Meeks+1200,+Lomas+de+Zamora", "lat": -34.762, "lng": -58.401}, "envio": {"tipo": "variable", "costoFijo": 2000, "costoPorKm": 500, "kmGratis": 1, "incrementoCadaKm": 1, "aumentoPorBloque": 500, "mensaje": "Envío desde local - editable", "retiro": "Retiro gratis en local"}, "activo": true, "estado": "activo"};
+const DATA_DEFAULT = [{"id": 1, "categoria": "Quesos Duros", "nombre": "Sardo 12 meses 1kg", "descripcion": "Intenso, ideal para rallar", "precio": 14500, "img": "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=600", "destacado": true}, {"id": 2, "categoria": "Quesos Blandos", "nombre": "Muzzarella Premium 1kg", "descripcion": "Hilada a mano", "precio": 8900, "img": "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600"}, {"id": 3, "categoria": "Picadas", "nombre": "Picada p/2", "descripcion": "Sardo, Fontina, Salame, Olivas", "precio": 18900, "img": "https://images.unsplash.com/photo-1544148103-077ea10c9e28?w=600", "destacado": true}, {"id": 4, "categoria": "Fiambres", "nombre": "Jamón Crudo 500g", "descripcion": "12 meses", "precio": 19500, "img": "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600"}];
+
+(async function(){
+  let CONFIG=CONFIG_DEFAULT, DATA=DATA_DEFAULT;
+  try{
+    const slug=location.pathname.split('/').filter(Boolean).pop();
+    const base='https://raw.githubusercontent.com/Cartaspro/cartas/main/';
+    if(slug){
+      const [c,d]=await Promise.all([
+        fetch(base+`config/${slug}.json?v=${Date.now()}`).then(r=>r.ok?r.json():null).catch(()=>null),
+        fetch(base+`data/${slug}.json?v=${Date.now()}`).then(r=>r.ok?r.json():null).catch(()=>null)
+      ]);
+      if(c) CONFIG=c; if(d) DATA=d;
+    }
+  }catch(e){}
+
+  const app=document.getElementById('app');
+  const baja = CONFIG.activo===false || CONFIG.estado==='baja';
+  if(baja){
+    app.innerHTML=`<div class="inactiveWrap"><div class="inactiveBox"><div class="icon">⛔</div><h1 style="font-family:'Bebas Neue';font-size:44px"><span style="color:#ff0033">PÁGINA</span> INACTIVA</h1><p style="color:#fff;font-weight:800;font-size:20px;margin-top:12px">Pagina inactiva, si sos el dueño del local contacta con soporte</p><p style="color:#777;font-size:12px;margin-top:12px">Sin números expuestos al público</p></div></div>`;
+    return;
+  }
+
+  let modo='retiro';
+  let catActiva='Todos';
+  let CARRITO=[];
+  window.kmActual=null;
+  window.clientData={nombre:'', telefono:'', direccion:'', notas:''};
+
+  function calcEnvio(km){
+    const e=CONFIG.envio||{};
+    const gratis=Number(e.kmGratis||0), porKm=Number(e.costoPorKm||0), fijo=Number(e.costoFijo||0), bloque=Number(e.incrementoCadaKm||1), aumento=Number(e.aumentoPorBloque||porKm);
+    if(e.tipo==='fijo') return fijo;
+    if(e.tipo==='gratis') return 0;
+    if(km<=gratis) return 0;
+    const bloques=Math.ceil((km-gratis)/bloque);
+    return bloques*aumento;
+  }
+
+  function getCats(){ return ['Todos', ...new Set(DATA.map(d=>d.categoria))]; }
+
+  function getMapSrc(){
+    const localAddr = encodeURIComponent(CONFIG.direccion||'');
+    const clientAddr = window.clientData.direccion ? encodeURIComponent(window.clientData.direccion) : '';
+    // Si hay direccion cliente, muestra ruta local -> cliente con 2 pines
+    if(clientAddr){
+      // Usamos embed de directions sin API key via q=origin to destination
+      return `https://www.google.com/maps?q=${localAddr}&z=14&output=embed`;
+      // Para ruta real usaremos link aparte, el embed de ruta necesita API, así mostramos local y link a ruta
+    }
+    return CONFIG.googleMaps?.embed || `https://www.google.com/maps?q=${localAddr}&z=15&output=embed`;
+  }
+
+  function getDirectionsLink(){
+    const localAddr = CONFIG.direccion||'';
+    const clientAddr = window.clientData.direccion||'';
+    if(!clientAddr) return CONFIG.googleMaps?.link || '#';
+    return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(localAddr)}&destination=${encodeURIComponent(clientAddr)}`;
+  }
+
+  function render(){
+    const cats=getCats();
+    app.innerHTML=`
+      <div class="hero"><img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=1200"><div class="hero-overlay"></div><div class="hero-content"><h1>Quesería <span>Don Pablo 🧀</span></h1><p>Quesos artesanales & Picadas Premium • Lun a Sáb 9 a 20hs | Dom 9 a 13hs</p></div></div>
+      <div style="max-width:1200px;margin:-18px auto 0;padding:0 16px;display:grid;grid-template-columns:1.2fr .8fr;gap:14px;position:relative;z-index:5">
+        <div class="card"><b>📍 Nuestro local - Pin del local</b><div class="small">${CONFIG.direccion}<br>${CONFIG.horarios}</div><div class="mapwrap"><iframe id="mapLocal" src="${getMapSrc()}" loading="lazy"></iframe></div><a href="${CONFIG.googleMaps?.link||'#'}" target="_blank" style="display:inline-block;background:#FFD60A;color:#000;padding:7px 14px;border-radius:100px;font-size:11px;font-weight:900;margin-top:10px;text-decoration:none">📍 Abrir pin del local</a></div>
+        <div class="card"><b>🛵 Retiro / Envío</b><div class="tabs"><div class="tab ${modo==='retiro'?'on':''}" onclick="setModo('retiro')">🏪 Retiro gratis</div><div class="tab ${modo==='envio'?'on':''}" onclick="setModo('envio')">🛵 Envío</div></div><div id="envioBox" style="margin-top:14px"></div></div>
+      </div>
+      <div class="cats">${cats.map(c=>`<div class="cat ${catActiva===c?'on':''}" onclick="catActiva='${c}';render()">${c}</div>`).join('')}</div>
+      <div class="grid" id="grid"></div>
+
+      <div class="form">
+        <div class="card" style="background:#111">
+          <b>📝 Tus datos para el pedido - Obligatorio</b>
+          <div class="small" style="margin-bottom:12px">No podés pedir si no completás tu dirección. Así le queda pin de tu casa al local.</div>
+          <div class="formGrid">
+            <div><span class="label">Nombre *</span><input id="f_nombre" class="input" placeholder="Ej: Brian" value="${window.clientData.nombre}" oninput="window.clientData.nombre=this.value"></div>
+            <div><span class="label">Teléfono *</span><input id="f_tel" class="input" placeholder="11 1234-5678" value="${window.clientData.telefono}" oninput="window.clientData.telefono=this.value"></div>
+            <div style="grid-column:1/-1"><span class="label">Dirección exacta cliente - con pin 📍 *</span><input id="f_dir" class="input" placeholder="Ej: Av. Alsina 1234, Banfield - para marcar tu pin" value="${window.clientData.direccion}" oninput="window.clientData.direccion=this.value; updateClientMap()"><div class="small" style="margin-top:6px">Escribí tu dirección completa, se marca tu pin en el mapa y generamos ruta desde el local hasta vos.</div></div>
+            <div style="grid-column:1/-1"><span class="label">Notas</span><input id="f_notas" class="input" placeholder="Timbre, piso, etc" value="${window.clientData.notas}" oninput="window.clientData.notas=this.value"></div>
+          </div>
+          <div id="clientMapWrap" style="margin-top:12px;display:${window.clientData.direccion?'block':'none'}">
+            <div class="mapwrap"><iframe id="mapClient" src="${getMapSrc()}" loading="lazy"></iframe></div>
+            <a id="dirLink" href="${getDirectionsLink()}" target="_blank" style="display:inline-block;background:#0f0f0f;border:1px solid #333;color:#fff;padding:8px 14px;border-radius:100px;font-size:11px;margin-top:8px;text-decoration:none">🗺️ Ver ruta: Local 📍 → Tu dirección 📍 (2 pines)</a>
+          </div>
+          <div id="kmBox" style="margin-top:12px;display:${modo==='envio'?'block':'none'}">
+            <span class="label">Distancia Google Maps (km) - opcional si usan por km</span>
+            <div style="display:flex;gap:8px"><input id="kmIn" type="number" step="0.1" class="input" placeholder="Ej: 3.5 km que te marca Maps" value="${window.kmActual||''}" oninput="window.kmActual=Number(this.value)||null; upd()"><button onclick="window.kmActual=Number(document.getElementById('kmIn').value)||null; upd(); render()" style="background:#FFD60A;color:#000;border:0;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer">OK</button></div>
+            <div class="small">Costo editable en config: $${CONFIG.envio?.costoPorKm||0} cada ${CONFIG.envio?.incrementoCadaKm||1}km • ${CONFIG.envio?.kmGratis||0}km gratis • base $${CONFIG.envio?.costoFijo||0}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:160px"></div>
+      <div class="cart"><div class="cart-inner"><div class="cart-list" id="cartList"></div><div style="min-width:160px"><div class="cart-total" id="total"></div><button class="send" onclick="pedir()">Pedir por WhatsApp</button></div></div></div>
+    `;
+    const filtrados = catActiva==='Todos'?DATA:DATA.filter(d=>d.categoria===catActiva);
+    document.getElementById('grid').innerHTML=filtrados.map(p=>`<div class="item ${p.destacado?'destacado':''}"><img src="${p.img}"><div class="info"><div class="name">${p.nombre}</div><div class="desc">${p.descripcion}</div><div class="priceRow"><div class="price">$<span>${Number(p.precio).toLocaleString('es-AR')}</span></div><button class="add" onclick="add(${p.id})">+ Agregar</button></div></div></div>`).join('');
+    const eb=document.getElementById('envioBox');
+    if(eb){
+      if(modo==='retiro') eb.innerHTML=`<div style="background:#0f0f0f;border:1px solid #1f3d1f;border-radius:12px;padding:12px"><b style="color:#00ff88">✅ Retiro gratis en local</b><div class="small">Retirá en Av. Meeks 1200, Lomas de Zamora, Buenos Aires</div></div>`;
+      else eb.innerHTML=`<div class="small">Envío desde <b style="color:#fff">${CONFIG.direccion}</b> hasta tu dirección (tu pin).<br>Editable: costo fijo $${CONFIG.envio?.costoFijo||0} o variable $${CONFIG.envio?.costoPorKm}/km</div>`;
+    }
+    upd();
+  }
+
+  window.updateClientMap=function(){
+    const wrap=document.getElementById('clientMapWrap');
+    const dir=document.getElementById('f_dir').value;
+    window.clientData.direccion=dir;
+    if(dir){
+      if(wrap) wrap.style.display='block';
+      const link=getDirectionsLink();
+      const dirEl=document.getElementById('dirLink');
+      if(dirEl) dirEl.href=link;
+    } else {
+      if(wrap) wrap.style.display='none';
+    }
+  }
+
+  window.setModo=function(m){ modo=m; render(); }
+  window.add=function(id){ const pr=DATA.find(x=>x.id===id); const ex=CARRITO.find(x=>x.id===id); if(ex) ex.cant++; else CARRITO.push({...pr,cant:1}); upd(); }
+  window.remove=function(id){ const ex=CARRITO.find(x=>x.id===id); if(!ex) return; ex.cant--; if(ex.cant<=0) CARRITO=CARRITO.filter(x=>x.id!==id); upd(); }
+  window.del=function(id){ CARRITO=CARRITO.filter(x=>x.id!==id); upd(); }
+  window.upd=function(){
+    const list=document.getElementById('cartList'); const tot=document.getElementById('total');
+    if(!list) return;
+    if(!CARRITO.length){ list.innerHTML='<span style="color:#555">Carrito vacío 🧀</span>'; if(tot) tot.innerHTML=''; return; }
+    let t=0, ht='';
+    CARRITO.forEach(c=>{ t+=c.precio*c.cant; ht+=`<div class="cart-item"><div><b>${c.cant}x ${c.nombre}</b></div><div class="cart-actions"><button onclick="remove(${c.id})">-</button><button onclick="add(${c.id})">+</button><button class="del" onclick="del(${c.id})">×</button></div></div>`; });
+    list.innerHTML=ht;
+    let env=0;
+    if(modo==='envio'){
+      if(window.kmActual!=null) env=calcEnvio(window.kmActual);
+      else if(CONFIG.envio?.tipo==='fijo') env=Number(CONFIG.envio.costoFijo||0);
+    }
+    const total=t+env;
+    if(tot) tot.innerHTML=`Sub $${t.toLocaleString('es-AR')}<br>${modo==='retiro'?'Retiro gratis':env>0?`Envío $${env}`: 'Envío a calcular'}<br><b>$${total.toLocaleString('es-AR')}</b>`;
+  }
+
+  window.pedir=function(){
+    // VALIDACION - no avanzar si no completa
+    const nombre=document.getElementById('f_nombre')?.value.trim();
+    const tel=document.getElementById('f_tel')?.value.trim();
+    const dir=document.getElementById('f_dir')?.value.trim();
+    
+    let faltan=[];
+    if(!nombre) faltan.push('Nombre');
+    if(!tel) faltan.push('Teléfono');
+    if(modo==='envio' && !dir) faltan.push('Dirección (obligatoria para envío con pin)');
+    if(modo==='envio' && CONFIG.envio?.tipo==='variable' && window.kmActual==null) {
+      // si usan variable, advertir pero no bloquear? lo bloqueamos suave
+    }
+    if(!CARRITO.length) faltan.push('Productos en carrito');
+    
+    if(faltan.length){
+      alert('⚠️ Faltan datos obligatorios:\n\n• '+faltan.join('\n• ')+'\n\nCompletá para poder pedir.');
+      faltan.forEach(f=>{
+        if(f.includes('Nombre')) document.getElementById('f_nombre')?.classList.add('err');
+        if(f.includes('Teléfono')) document.getElementById('f_tel')?.classList.add('err');
+        if(f.includes('Dirección')) document.getElementById('f_dir')?.classList.add('err');
+      });
+      return;
+    }
+
+    // Texto WhatsApp con emojis arreglado
+    let texto = `🧀 *Nuevo pedido - ${CONFIG.nombre}* 🧀\n\n`;
+    texto += `👤 *Cliente:* ${nombre}\n`;
+    texto += `📞 *Tel:* ${tel}\n`;
+    if(dir) texto += `📍 *Dirección cliente (pin):* ${dir}\n`;
+    if(window.clientData.notas) texto += `📝 *Notas:* ${window.clientData.notas}\n`;
+    texto += `\n`;
+    texto += `🛒 *Pedido:*\n`;
+    CARRITO.forEach(c=>{ texto += `• ${c.cant}x ${c.nombre} - $${c.precio} = $${c.precio*c.cant}\n`; });
+    texto += `\n`;
+    texto += `📦 *Modo:* ${modo==='retiro' ? '🏪 Retiro en local (gratis)' : '🛵 Envío a domicilio'}\n`;
+    if(modo==='envio'){
+      const env = window.kmActual!=null ? calcEnvio(window.kmActual) : (Number(CONFIG.envio?.costoFijo||0));
+      if(window.kmActual!=null) texto += `📏 *Distancia:* ${window.kmActual}km desde ${CONFIG.direccion} hasta cliente\n`;
+      texto += `💰 *Envío:* $${env} (${CONFIG.envio?.tipo==='variable' ? `desde local, ${CONFIG.envio?.kmGratis}km gratis, $${CONFIG.envio?.costoPorKm}/km` : 'costo fijo editable'})\n`;
+      const ruta = getDirectionsLink();
+      texto += `🗺️ *Ruta con pines:* ${ruta}\n`;
+    }
+    texto += `\n`;
+    const subtotal = CARRITO.reduce((s,c)=>s+c.precio*c.cant,0);
+    const envio = modo==='envio' ? (window.kmActual!=null ? calcEnvio(window.kmActual) : Number(CONFIG.envio?.costoFijo||0)) : 0;
+    texto += `💵 *Subtotal:* $${subtotal.toLocaleString('es-AR')}\n`;
+    if(envio>0) texto += `🚚 *Envío:* $${envio}\n`;
+    texto += `💳 *TOTAL:* $${(subtotal+envio).toLocaleString('es-AR')}\n\n`;
+    texto += `✅ ¡Gracias!`;
+
+    const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(texto)}`;
+    window.open(url, '_blank');
+  }
+
+  render();
+})();
+</script>
+</body></html>
