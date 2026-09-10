@@ -21,6 +21,6 @@
     "mensaje": "Envío desde local - editable",
     "retiro": "Retiro gratis en local"
   },
-  "activo": true,
-  "estado": "activo"
+  "activo": false,
+  "estado": "baja"
 }
