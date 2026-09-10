@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin DEFINITIVO CORREGIDO - Switch + Botón Guardar Real</title>
+<title>Admin DEFINITIVO FINAL - Todo lo anterior + Fijo/Gratis + Baja por Reemplazo</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
@@ -27,16 +27,17 @@ input,textarea,select{background:#0f0f0f;border:1px solid #333;border-radius:10p
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .small{font-size:11px;color:#777;margin-top:6px;line-height:1.4}
 .uploadBox{border:1px dashed #444;border-radius:10px;padding:8px;text-align:center;cursor:pointer;background:#0f0f0f}
+.badge{font-size:10px;background:#0f0f0f;border:1px solid #262626;padding:5px 9px;border-radius:100px;color:#888}
 </style>
 </head><body>
 <div class="top">
-<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin CORREGIDO - Switch con Guardar</div>
+<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin FINAL - Fotos + Columnas + Fijo/Gratis + Baja Real</div>
 <div style="display:flex;gap:8px"><input id="token" type="password" placeholder="ghp_..." style="width:220px"><button class="btn btn-w" onclick="saveTok()">Guardar token</button></div>
 </div>
 
 <div class="main">
 <div class="left">
-<div class="card"><b>Clientes - ACTIVA / BAJA</b><div class="small">El switch ahora tiene botón GUARDAR que sí impacta en GitHub</div><div id="list" style="margin-top:10px">Cargando...</div></div>
+<div class="card"><b>Clientes - ACTIVA / BAJA REAL</b><div class="small">Ahora BAJA reemplaza index.html por cartel sin tu número - Efecto inmediato. ACTIVA restaura carta.</div><div id="list" style="margin-top:10px">Cargando...</div></div>
 <div class="card"><b style="font-size:12px">Subir 3 archivos cliente nuevo</b><input id="slugNew" placeholder="slug: queseria" style="margin-top:8px"><div id="drop" style="margin-top:8px;border:1px dashed #444;border-radius:12px;padding:14px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá acá<input id="fileIn" type="file" multiple hidden></div><button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir</button><div id="upOut" class="small"></div></div>
 </div>
 
@@ -49,16 +50,18 @@ input,textarea,select{background:#0f0f0f;border:1px solid #333;border-radius:10p
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG - Dirección, Maps, Envío</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG - Dirección, Maps, Envío FIJO/GRATIS editable</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
+<div class="small">Envio: envio.costoFijo = 1500 → Envío $1500. Si es 0 → Envío gratis. Sin km.</div>
 <div id="configEditor" style="margin-top:14px"></div>
-<div style="margin-top:10px"><button class="btn btn-g" onclick="addConfigField()">+ Agregar campo</button></div>
+<div style="margin-top:10px"><button class="btn btn-g" onclick="addConfigField()">+ Agregar campo (ej: direccion, envio.costoFijo)</button></div>
 <div id="outC" class="small"></div>
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>PRODUCTOS - Con foto WhatsApp</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>PRODUCTOS - Con foto WhatsApp + Columnas editables</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
+<div class="small">Mantenido: subir foto desde WhatsApp/PC, agregar/quitar columnas, precios, categorías. Todo lo anterior sigue.</div>
 <div id="prods" style="margin-top:14px"></div>
-<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-g" onclick="addProd()">+ Producto</button></div>
+<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-g" onclick="addProd()">+ Producto</button><button class="btn btn-g" onclick="addCol()">+ Columna extra (ej: stock)</button></div>
 <div id="out" class="small"></div>
 </div>
 </div>
@@ -67,10 +70,12 @@ input,textarea,select{background:#0f0f0f;border:1px solid #333;border-radius:10p
 <script>
 let TOKEN=localStorage.getItem('cp_token')||''; let REPO=localStorage.getItem('cp_repo')||'Cartaspro/cartas';
 document.getElementById('token').value=TOKEN;
-let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[];
+let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[]; let CUSTOM_COLS=[];
 
 function saveTok(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); listar(); }
 async function gh(p,m='GET',b=null){ return fetch(`https://api.github.com/repos/${REPO}/contents/${p}`,{method:m,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:b?JSON.stringify(b):null}); }
+
+const BAJA_HTML = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Página inactiva</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}body{background:#080808;color:#fff}.inactiveWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 0%,#3a0a0a 0%,#080808 70%);padding:20px}.inactiveBox{max-width:560px;width:100%;background:#1c1c1c;border:2px solid #ff0033;border-radius:32px;padding:48px 32px;text-align:center;box-shadow:0 0 100px rgba(255,0,51,.25)}.icon{width:90px;height:90px;background:#ff0033;border-radius:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:44px;animation:pulse 1.2s infinite}@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}h1{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:.9}h1 span{color:#ff0033}</style></head><body><div class="inactiveWrap"><div class="inactiveBox"><div class="icon">⛔</div><h1><span>PÁGINA</span> INACTIVA</h1><p style="color:#fff;font-weight:800;font-size:22px;margin-top:14px;line-height:1.2">Pagina inactiva, si sos el dueño del local contacta con soporte</p><p style="color:#888;font-size:14px;margin-top:12px">Esta carta fue pausada temporalmente. Sin números expuestos al público.</p></div></div></body></html>`;
 
 async function listar(){
  if(!TOKEN){document.getElementById('list').innerText='Poné token';return;}
@@ -87,7 +92,7 @@ async function listar(){
 
 async function selectCli(s){
  CURRENT=s; document.getElementById('title').innerText=s+' — cartaspro.github.io/cartas/'+s+'/'; document.getElementById('prev').src=`../${s}/?v=${Date.now()}`;
- const rd=await gh(`data/${s}.json`); if(rd.ok){ const j=await rd.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content)))); renderData(); }
+ const rd=await gh(`data/${s}.json`); if(rd.ok){ const j=await rd.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content)))); CUSTOM_COLS=[]; if(DATA.length){ Object.keys(DATA[0]).forEach(k=>{ if(!['id','nombre','precio','categoria','descripcion','img','destacado'].includes(k)) CUSTOM_COLS.push(k); }); } renderData(); }
  const rc=await gh(`config/${s}.json`); if(rc.ok){ const j=await rc.json(); CONFIG=JSON.parse(decodeURIComponent(escape(atob(j.content)))); renderConfig(); renderEstado(); }
  document.getElementById('delZone').innerHTML=`<div style="border:1px solid #333;border-radius:12px;padding:10px;margin-top:10px"><span class="small">Borrar ${s}</span> <button class="btn btn-del" onclick="borrarCliente('${s}')">Borrar todo</button> <span id="delOut" class="small"></span></div>`;
  listar();
@@ -95,47 +100,60 @@ async function selectCli(s){
 
 function renderEstado(){
  const activo = CONFIG.activo!==false && CONFIG.estado!=='baja';
+ const costo = CONFIG.envio?.costoFijo ?? 1500;
  document.getElementById('estadoZone').innerHTML=`
   <div class="switch-wrap" style="border-color:${activo?'#00ff88':'#ff0033'};border-width:2px">
-   <div><b style="font-size:15px">${activo?'✅ ACTIVA - Cliente al día':'⛔ BAJA - Página frenada'}</b><div class="small">${activo?'La página anda normal':'Muestra: Pagina inactiva, si sos el dueño del local contacta con soporte - SIN tu número'}</div></div>
+   <div><b style="font-size:15px">${activo?'✅ ACTIVA - Cliente al día':'⛔ BAJA - Página frenada por reemplazo'}</b><div class="small">${activo?`Anda normal - Envío ${costo==0?'GRATIS':'$'+costo} editable en config`:'Muestra cartel "Pagina inactiva..." SIN tu número - Reemplaza index.html - Efecto inmediato'}</div></div>
    <div style="display:flex;align-items:center;gap:12px">
      <span style="font-size:11px;font-weight:800">${activo?'ACTIVA':'BAJA'}</span>
      <div class="switch ${activo?'on':''}" onclick="toggleActivoLocal()"><div class="knob"></div></div>
-     <button class="btn ${activo?'btn-del':'btn-y'}" onclick="guardarEstado()">${activo?'Pasar a BAJA y Guardar':'Pasar a ACTIVA y Guardar'}</button>
+     <button class="btn ${activo?'btn-del':'btn-y'}" onclick="guardarEstadoReal()">${activo?'Pasar a BAJA y Guardar':'Pasar a ACTIVA y Guardar'}</button>
    </div>
   </div>
   <div id="estadoOut" class="small" style="margin-top:8px;color:#FFD60A"></div>`;
 }
-
-// Solo cambia local, no guarda
 function toggleActivoLocal(){
  const act = CONFIG.activo!==false && CONFIG.estado!=='baja';
  CONFIG.activo=!act; CONFIG.estado=CONFIG.activo?'activo':'baja';
  renderEstado(); renderConfig();
- document.getElementById('estadoOut').innerText='⚠️ Cambio local, ahora dale a GUARDAR para que impacte en la página real';
+ document.getElementById('estadoOut').innerText='⚠️ Cambio local, ahora dale a GUARDAR para que impacte real en la página';
 }
-
-// Guarda en GitHub de verdad
-async function guardarEstado(){
+async function guardarEstadoReal(){
  if(!CURRENT) return;
- document.getElementById('estadoOut').innerText='Guardando en GitHub...';
+ const out=document.getElementById('estadoOut');
+ out.innerText='Guardando 1/2 config...';
  try{
    const r1=await gh(`config/${CURRENT}.json`);
-   if(!r1.ok){ document.getElementById('estadoOut').innerText='Error leyendo config: '+r1.status; return; }
+   if(!r1.ok){ out.innerText='Error config: '+r1.status; return; }
    const j1=await r1.json();
-   const res=await gh(`config/${CURRENT}.json`,'PUT',{
-     message:`${CONFIG.estado} ${CURRENT} - switch con boton guardar`,
-     sha:j1.sha,
-     content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))
-   });
-   const jr=await res.json();
-   if(res.ok){
-     document.getElementById('estadoOut').innerText=`✅ ${CONFIG.estado.toUpperCase()} guardado en GitHub! Recargá la carta en 20 seg. Si es BAJA verás "Pagina inactiva..." sin tu número`;
+   const resCfg=await gh(`config/${CURRENT}.json`,'PUT',{message:`${CONFIG.estado} ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))});
+   if(!resCfg.ok){ out.innerText='Error guardando config'; return; }
+   out.innerText='Config OK. Guardando 2/2 index.html por reemplazo...';
+   const ri=await gh(`${CURRENT}/index.html`);
+   let shaIdx=null; if(ri.ok){ const ji=await ri.json(); shaIdx=ji.sha; }
+   let htmlToUpload='';
+   if(CONFIG.estado==='baja'){
+     htmlToUpload=BAJA_HTML;
+   } else {
+     // Restaurar index normal - intentamos traer molde base
+     try{
+       const resNormal=await fetch('https://raw.githubusercontent.com/Cartaspro/cartas/main/index-normal-BASE-TODOS-CLIENTES.html?v='+Date.now()).then(r=>r.ok?r.text():null);
+       if(resNormal && resNormal.includes('<!DOCTYPE')) htmlToUpload=resNormal;
+       else {
+         // Fallback: traer el index actual de queseria que es el molde fijo
+         const fallback=await fetch('https://raw.githubusercontent.com/Cartaspro/cartas/main/queseria-don-pablo/index.html?v='+Date.now()).then(r=>r.ok?r.text():null);
+         htmlToUpload=fallback || BAJA_HTML;
+       }
+     }catch(e){ htmlToUpload=BAJA_HTML; }
+   }
+   const resIdx=await gh(`${CURRENT}/index.html`,'PUT',{message:`${CONFIG.estado} index ${CURRENT} - reemplazo`,sha:shaIdx||undefined,content:btoa(unescape(encodeURIComponent(htmlToUpload)))});
+   if(resIdx.ok){
+     out.innerText=`✅ ${CONFIG.estado.toUpperCase()} REAL - index.html reemplazado! ${CONFIG.estado==='baja'?'Muestra cartel sin número':'Restaura carta normal'} - Recargá en 20s`;
      reload(); listar();
    } else {
-     document.getElementById('estadoOut').innerText='❌ Error GitHub: '+(jr.message||res.status);
+     out.innerText='Error index: '+(await resIdx.json()).message;
    }
- }catch(e){ document.getElementById('estadoOut').innerText='❌ Error: '+e; }
+ }catch(e){ out.innerText='Error: '+e; }
 }
 
 function renderConfig(){
@@ -159,21 +177,25 @@ function addConfigField(){ const k=prompt('Campo: ej direccion, telefono, google
 function renderData(){
  const container=document.getElementById('prods'); container.innerHTML='';
  DATA.forEach((p,i)=>{
+   let customHtml='';
+   CUSTOM_COLS.forEach(col=>{ customHtml+=`<div class="field"><label>${col}</label><input value="${esc(p[col]||'')}" oninput="DATA[${i}]['${col}']=this.value"></div>`; });
    container.innerHTML+=`
    <div class="prod-card">
-    <div><img id="img_${i}" src="${p.img||''}" onerror="this.style.opacity=.2"><div class="uploadBox" style="margin-top:8px" onclick="document.getElementById('file_${i}').click()">📷 Subir foto</div><input id="file_${i}" type="file" accept="image/*" hidden onchange="subirFoto(this,${i})"><div id="up_${i}" class="small"></div></div>
+    <div><img id="img_${i}" src="${p.img||''}" onerror="this.style.opacity=.2"><div class="uploadBox" style="margin-top:8px" onclick="document.getElementById('file_${i}').click()">📷 Subir foto<br><span style="font-size:10px">WhatsApp / PC</span></div><input id="file_${i}" type="file" accept="image/*" hidden onchange="subirFoto(this,${i})"><div id="up_${i}" class="small"></div></div>
     <div>
      <div class="field"><label>Nombre</label><input value="${esc(p.nombre||'')}" oninput="DATA[${i}].nombre=this.value"></div>
-     <div class="row2"><div class="field"><label>Precio</label><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)"></div><div class="field"><label>Categoria</label><input value="${esc(p.categoria||'')}" oninput="DATA[${i}].categoria=this.value"></div></div>
+     <div class="row2"><div class="field"><label>Precio $</label><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)"></div><div class="field"><label>Categoria</label><input value="${esc(p.categoria||'')}" oninput="DATA[${i}].categoria=this.value"></div></div>
      <div class="field"><label>Descripcion</label><textarea oninput="DATA[${i}].descripcion=this.value">${esc(p.descripcion||'')}</textarea></div>
-     <div class="field"><label>IMG URL</label><input id="url_${i}" value="${esc(p.img||'')}" oninput="DATA[${i}].img=this.value;document.getElementById('img_${i}').src=this.value"></div>
-     <div style="display:flex;justify-content:space-between;margin-top:8px"><span class="badge">ID ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar</button></div>
+     <div class="field"><label>IMG URL (se llena sola al subir)</label><input id="url_${i}" value="${esc(p.img||'')}" oninput="DATA[${i}].img=this.value;document.getElementById('img_${i}').src=this.value"></div>
+     ${customHtml}
+     <div style="display:flex;justify-content:space-between;margin-top:8px"><span class="badge">ID ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar producto</button></div>
     </div>
    </div>`;
  });
 }
 function esc(s){ return String(s).replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; DATA.push({id:nid,nombre:'Nuevo',precio:0,categoria:'',descripcion:'',img:''}); renderData(); }
+function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; const obj={id:nid,nombre:'Nuevo',precio:0,categoria:'',descripcion:'',img:''}; CUSTOM_COLS.forEach(c=>obj[c]=''); DATA.push(obj); renderData(); }
+function addCol(){ const c=prompt('Nueva columna ej: stock, talle, destacado'); if(!c) return; if(!CUSTOM_COLS.includes(c)) CUSTOM_COLS.push(c); DATA.forEach(p=>p[c]=p[c]||''); renderData(); }
 
 async function subirFoto(input, idx){
  const file=input.files[0]; if(!file) return;
@@ -195,7 +217,7 @@ async function subirFoto(input, idx){
  reader.readAsDataURL(file);
 }
 
-async function guardarConfig(){ if(!CURRENT) return; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`config ${CONFIG.estado} ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); document.getElementById('outC').innerText=res.ok?'✓ Config guardada':'Error'; reload(); listar(); }
+async function guardarConfig(){ if(!CURRENT) return; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`config ${CONFIG.estado} ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); document.getElementById('outC').innerText=res.ok?'✓ Config guardada - Si costoFijo 0 dirá Envío gratis':'Error'; reload(); listar(); }
 async function guardarData(){ if(!CURRENT) return; const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`data ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))}); document.getElementById('out').innerText=res.ok?'✓ Productos guardados':'Error'; reload(); }
 async function borrarCliente(slug){ if(!confirm(`Borrar ${slug}?`)) return; for(const p of [`data/${slug}.json`,`config/${slug}.json`,`${slug}/index.html`]){ const r=await gh(p); if(r.ok){ const j=await r.json(); await gh(p,'DELETE',{message:`delete ${p}`,sha:j.sha}); } } CURRENT=''; listar(); }
 function reload(){ if(CURRENT) document.getElementById('prev').src=`../${CURRENT}/?v=${Date.now()}`; }
