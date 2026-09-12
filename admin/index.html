@@ -1,67 +1,78 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin DEFINITIVO FINAL - Todo lo anterior + Fijo/Gratis + Baja por Reemplazo</title>
+<title>Admin V3 - Preserva Imagenes + Export para IA</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:#0f0f0f;color:#fff}
 .top{padding:14px 18px;border-bottom:1px solid #1c1c1c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f0f0f;z-index:20}
-.main{max-width:1450px;margin:0 auto;display:grid;grid-template-columns:340px 1fr;min-height:100vh}
-@media(max-width:1000px){.main{grid-template-columns:1fr}}
+.main{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+@media(max-width:1100px){.main{grid-template-columns:1fr}}
 .left{border-right:1px solid #1c1c1c;padding:14px} .right{padding:14px;display:flex;flex-direction:column;gap:14px}
 .card{background:#1c1c1c;border:1px solid #262626;border-radius:18px;padding:16px}
 input,textarea,select{background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;width:100%;font-size:14px}
 .btn{padding:10px 16px;border-radius:100px;border:0;font-weight:800;cursor:pointer;font-size:12px}
-.btn-w{background:#fff;color:#000} .btn-r{background:#E11D48;color:#fff} .btn-g{background:#262626;color:#fff} .btn-y{background:#FFD60A;color:#000} .btn-del{background:#ff0033;color:#fff}
-.client{padding:11px 12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c;font-size:13px}
+.btn-w{background:#fff;color:#000} .btn-r{background:#E11D48;color:#fff} .btn-g{background:#262626;color:#fff} .btn-y{background:#FFD60A;color:#000} .btn-del{background:#ff0033;color:#fff} .btn-green{background:#00ff88;color:#000}
+.client{padding:11px 12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;background:#0f0f0f;border:1px solid #1c1c1c;font-size:13px;cursor:pointer}
 .client.active{border-color:#fff;background:#fff;color:#000}
 .status{font-size:10px;padding:4px 8px;border-radius:100px;font-weight:800} .ok{background:#00ff88;color:#000} .baja{background:#ff0033;color:#fff}
-.preview{width:100%;height:480px;border-radius:16px;border:1px solid #262626;background:#000}
-.kv{margin-bottom:14px} .kv label{display:block;font-size:11px;color:#E11D48;font-weight:800;margin-bottom:6px;text-transform:uppercase}
-.group{border:1px solid #2a2a2a;border-radius:14px;padding:12px;margin-bottom:12px;background:#151515}
-.switch-wrap{display:flex;align-items:center;justify-content:space-between;background:#101010;border:2px solid #333;border-radius:14px;padding:16px;margin-bottom:12px}
-.switch{width:60px;height:34px;background:#333;border-radius:100px;position:relative;cursor:pointer;transition:.2s} .switch.on{background:#00ff88} .knob{width:28px;height:28px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:.2s} .switch.on .knob{left:29px}
-.prod-card{background:#101010;border:1px solid #262626;border-radius:16px;padding:14px;display:grid;grid-template-columns:90px 1fr;gap:14px;margin-bottom:14px}
+.preview{width:100%;height:460px;border-radius:16px;border:1px solid #262626;background:#000}
+.kv{margin-bottom:12px} .kv label{display:block;font-size:11px;color:#FFD60A;font-weight:800;margin-bottom:6px;text-transform:uppercase}
+.prod-card{background:#101010;border:1px solid #262626;border-radius:16px;padding:14px;display:grid;grid-template-columns:90px 1fr;gap:14px;margin-bottom:14px;position:relative}
+.prod-card.locked{border-color:#FFD60A}
 .prod-card img{width:90px;height:90px;border-radius:12px;object-fit:cover;background:#1c1c1c}
 .field{display:flex;flex-direction:column;margin-bottom:8px} .field label{font-size:10px;color:#888;font-weight:700;margin-bottom:4px;text-transform:uppercase}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .small{font-size:11px;color:#777;margin-top:6px;line-height:1.4}
 .uploadBox{border:1px dashed #444;border-radius:10px;padding:8px;text-align:center;cursor:pointer;background:#0f0f0f}
 .badge{font-size:10px;background:#0f0f0f;border:1px solid #262626;padding:5px 9px;border-radius:100px;color:#888}
+.lock-badge{position:absolute;top:8px;right:8px;background:#FFD60A;color:#000;font-size:9px;padding:4px 8px;border-radius:100px;font-weight:900}
+.exportZone{background:#101010;border:2px dashed #FFD60A;border-radius:18px;padding:18px}
+.exportZone textarea{height:180px;font-family:monospace;font-size:11px}
 </style>
 </head><body>
 <div class="top">
-<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#E11D48;border-radius:8px;display:flex;align-items:center;justify-content:center">C</div> Admin FINAL - Fotos + Columnas + Fijo/Gratis + Baja Real</div>
+<div style="font-weight:900;display:flex;gap:10px;align-items:center"><div style="width:28px;height:28px;background:#FFD60A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">V3</div> Admin V3 - Preserva cambios + Export para IA</div>
 <div style="display:flex;gap:8px"><input id="token" type="password" placeholder="ghp_..." style="width:220px"><button class="btn btn-w" onclick="saveTok()">Guardar token</button></div>
 </div>
 
 <div class="main">
 <div class="left">
-<div class="card"><b>Clientes - ACTIVA / BAJA REAL</b><div class="small">Ahora BAJA reemplaza index.html por cartel sin tu número - Efecto inmediato. ACTIVA restaura carta.</div><div id="list" style="margin-top:10px">Cargando...</div></div>
-<div class="card"><b style="font-size:12px">Subir 3 archivos cliente nuevo</b><input id="slugNew" placeholder="slug: queseria" style="margin-top:8px"><div id="drop" style="margin-top:8px;border:1px dashed #444;border-radius:12px;padding:14px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá acá<input id="fileIn" type="file" multiple hidden></div><button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir</button><div id="upOut" class="small"></div></div>
+<div class="card"><b>Clientes</b><div id="list" style="margin-top:10px">Cargando...</div></div>
+<div class="card"><b style="font-size:12px">Subir 3 archivos cliente nuevo</b><input id="slugNew" placeholder="slug: queseria-don-pablo" style="margin-top:8px"><div id="drop" style="margin-top:8px;border:1px dashed #444;border-radius:12px;padding:14px;text-align:center;font-size:12px;color:#888;cursor:pointer">Arrastrá acá<input id="fileIn" type="file" multiple hidden></div><button class="btn btn-w" style="width:100%;margin-top:8px" onclick="subir()">Subir</button><div id="upOut" class="small"></div></div>
 </div>
 
 <div class="right">
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center"><b id="title">Elegí cliente</b><div><button class="btn btn-g" onclick="reload()">↻ Vista</button> <button class="btn btn-g" onclick="openReal()">Abrir real</button></div></div>
 <iframe id="prev" class="preview" style="margin-top:10px"></iframe>
-<div id="estadoZone"></div>
-<div id="delZone"></div>
+<div id="estadoZone" style="margin-top:12px"></div>
+</div>
+
+<!-- NUEVO BLOQUE EXPORT PARA IA -->
+<div class="card exportZone">
+<b style="color:#FFD60A">🔒 EXPORTAR PARA IA - PRESERVA TODO LO QUE CAMBIASTE</b>
+<div class="small" style="color:#fff;margin-top:8px">Este es el nuevo flujo que me pediste: cuando subas fotos reales, cambies descripciones, precios, etc., y luego quieras que yo agregue una función nueva, NO me pases 3 archivos sueltos. Usá este botón y pasame UN solo archivo que ya incluye todas tus modificaciones con imágenes reales.</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+<button class="btn btn-y" style="width:100%" onclick="generarPaqueteIA()">📦 Generar paquete completo para IA</button>
+<button class="btn btn-g" style="width:100%" onclick="descargarPaqueteIA()">⬇️ Descargar JSON</button>
+</div>
+<div style="margin-top:12px"><label style="font-size:10px;color:#FFD60A;font-weight:800">ESTE TEXTO ES LO QUE ME TENES QUE PASAR A MI (copialo o subí el archivo)</label><textarea id="exportTxt" placeholder="Acá va a aparecer el paquete completo con config + data + imágenes reales..."></textarea></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-w" onclick="copiarExport()">📋 Copiar</button><button class="btn btn-green" onclick="importarPaquete()">📥 Importar paquete (si te lo paso yo)</button></div>
+<div id="exportInfo" class="small"></div>
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG - Dirección, Maps, Envío FIJO/GRATIS editable</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
-<div class="small">Envio: envio.costoFijo = 1500 → Envío $1500. Si es 0 → Envío gratis. Sin km.</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>CONFIG - Dirección, Maps, Envío FIJO</b><button class="btn btn-w" onclick="guardarConfig()">💾 Guardar config</button></div>
 <div id="configEditor" style="margin-top:14px"></div>
-<div style="margin-top:10px"><button class="btn btn-g" onclick="addConfigField()">+ Agregar campo (ej: direccion, envio.costoFijo)</button></div>
 <div id="outC" class="small"></div>
 </div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><b>PRODUCTOS - Con foto WhatsApp + Columnas editables</b><button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div>
-<div class="small">Mantenido: subir foto desde WhatsApp/PC, agregar/quitar columnas, precios, categorías. Todo lo anterior sigue.</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>PRODUCTOS - Con candado de imagen real</b><div><span style="font-size:10px;color:#FFD60A">🔒 = imagen real preservada</span> <button class="btn btn-w" onclick="guardarData()">💾 Guardar productos</button></div></div>
+<div class="small">Si subiste una foto real, queda con candado amarillo y YO NO LA VOY A REEMPLAZAR cuando me pidas cambios. Así no tenés que reconfigurar.</div>
 <div id="prods" style="margin-top:14px"></div>
-<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-g" onclick="addProd()">+ Producto</button><button class="btn btn-g" onclick="addCol()">+ Columna extra (ej: stock)</button></div>
+<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-g" onclick="addProd()">+ Producto</button></div>
 <div id="out" class="small"></div>
 </div>
 </div>
@@ -70,98 +81,49 @@ input,textarea,select{background:#0f0f0f;border:1px solid #333;border-radius:10p
 <script>
 let TOKEN=localStorage.getItem('cp_token')||''; let REPO=localStorage.getItem('cp_repo')||'Cartaspro/cartas';
 document.getElementById('token').value=TOKEN;
-let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[]; let CUSTOM_COLS=[];
+let DATA=[]; let CONFIG={}; let CURRENT=''; let FILES=[]; let ULTIMO_PAQUETE=null;
 
 function saveTok(){ TOKEN=document.getElementById('token').value.trim(); localStorage.setItem('cp_token',TOKEN); listar(); }
-async function gh(p,m='GET',b=null){ return fetch(`https://api.github.com/repos/${REPO}/contents/${p}`,{method:m,headers:{Authorization:'token '+TOKEN,Accept:'application/vnd.github.v3+json'},body:b?JSON.stringify(b):null}); }
-
-const BAJA_HTML = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Página inactiva</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}body{background:#080808;color:#fff}.inactiveWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 0%,#3a0a0a 0%,#080808 70%);padding:20px}.inactiveBox{max-width:560px;width:100%;background:#1c1c1c;border:2px solid #ff0033;border-radius:32px;padding:48px 32px;text-align:center;box-shadow:0 0 100px rgba(255,0,51,.25)}.icon{width:90px;height:90px;background:#ff0033;border-radius:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:44px;animation:pulse 1.2s infinite}@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}h1{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:.9}h1 span{color:#ff0033}</style></head><body><div class="inactiveWrap"><div class="inactiveBox"><div class="icon">⛔</div><h1><span>PÁGINA</span> INACTIVA</h1><p style="color:#fff;font-weight:800;font-size:22px;margin-top:14px;line-height:1.2">Pagina inactiva, si sos el dueño del local contacta con soporte</p><p style="color:#888;font-size:14px;margin-top:12px">Esta carta fue pausada temporalmente. Sin números expuestos al público.</p></div></div></body></html>`;
+function gh(path,method='GET',body=null){ const url=`https://api.github.com/repos/${REPO}/contents/${path}`; const h={Authorization:`token ${TOKEN}`,Accept:'application/vnd.github.v3+json'}; const o={method,headers:h}; if(body) o.body=JSON.stringify(body); return fetch(url,o); }
 
 async function listar(){
- if(!TOKEN){document.getElementById('list').innerText='Poné token';return;}
- const r=await gh('data'); const j=await r.json(); if(!Array.isArray(j)){document.getElementById('list').innerText=j.message;return;}
- const slugs=j.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json',''));
- let html='';
- for(const s of slugs){
-   let st='...'; let cls='';
-   try{ const rc=await gh(`config/${s}.json`); if(rc.ok){ const jj=await rc.json(); const cfg=JSON.parse(decodeURIComponent(escape(atob(jj.content)))); const act = cfg.activo!==false && cfg.estado!=='baja'; st=act?'ACTIVA':'BAJA'; cls=act?'ok':'baja'; } }catch(e){}
-   html+=`<div class="client ${CURRENT===s?'active':''}"><span style="flex:1;cursor:pointer" onclick="selectCli('${s}')">${s} <span class="status ${cls}">${st}</span></span><button class="btn btn-g" style="padding:6px 10px;font-size:10px" onclick="borrarCliente('${s}')">🗑️</button></div>`;
- }
- document.getElementById('list').innerHTML=html||'Sin clientes';
+ const out=document.getElementById('list'); out.innerHTML='Cargando...';
+ try{
+  const r=await gh('config'); if(!r.ok){ out.innerHTML='Poné token'; return; }
+  const files=await r.json(); const slugs=files.filter(f=>f.name.endsWith('.json')).map(f=>f.name.replace('.json',''));
+  out.innerHTML='';
+  for(const slug of slugs){
+    const rc=await gh(`config/${slug}.json`); let estado='ok'; let cfg={}; if(rc.ok){ const j=await rc.json(); cfg=JSON.parse(decodeURIComponent(escape(atob(j.content)))); estado=(cfg.activo===false||cfg.estado==='baja')?'baja':'ok'; }
+    const div=document.createElement('div'); div.className='client'+(slug===CURRENT?' active':''); div.innerHTML=`<span>${slug}</span><span class="status ${estado}">${estado.toUpperCase()}</span>`;
+    div.onclick=()=>cargar(slug); out.appendChild(div);
+  }
+ }catch(e){ out.innerHTML='Error '+e; }
 }
 
-async function selectCli(s){
- CURRENT=s; document.getElementById('title').innerText=s+' — cartaspro.github.io/cartas/'+s+'/'; document.getElementById('prev').src=`../${s}/?v=${Date.now()}`;
- const rd=await gh(`data/${s}.json`); if(rd.ok){ const j=await rd.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content)))); CUSTOM_COLS=[]; if(DATA.length){ Object.keys(DATA[0]).forEach(k=>{ if(!['id','nombre','precio','categoria','descripcion','img','destacado'].includes(k)) CUSTOM_COLS.push(k); }); } renderData(); }
- const rc=await gh(`config/${s}.json`); if(rc.ok){ const j=await rc.json(); CONFIG=JSON.parse(decodeURIComponent(escape(atob(j.content)))); renderConfig(); renderEstado(); }
- document.getElementById('delZone').innerHTML=`<div style="border:1px solid #333;border-radius:12px;padding:10px;margin-top:10px"><span class="small">Borrar ${s}</span> <button class="btn btn-del" onclick="borrarCliente('${s}')">Borrar todo</button> <span id="delOut" class="small"></span></div>`;
- listar();
+async function cargar(slug){
+ CURRENT=slug; document.getElementById('title').innerText=slug; listar();
+ const rc=await gh(`config/${slug}.json`); if(rc.ok){ const j=await rc.json(); CONFIG=JSON.parse(decodeURIComponent(escape(atob(j.content)))); } else CONFIG={};
+ const rd=await gh(`data/${slug}.json`); if(rd.ok){ const j=await rd.json(); DATA=JSON.parse(decodeURIComponent(escape(atob(j.content)))); } else DATA=[];
+ renderConfig(); renderData(); renderEstado(); reload();
 }
 
 function renderEstado(){
- const activo = CONFIG.activo!==false && CONFIG.estado!=='baja';
- const costo = CONFIG.envio?.costoFijo ?? 1500;
- document.getElementById('estadoZone').innerHTML=`
-  <div class="switch-wrap" style="border-color:${activo?'#00ff88':'#ff0033'};border-width:2px">
-   <div><b style="font-size:15px">${activo?'✅ ACTIVA - Cliente al día':'⛔ BAJA - Página frenada por reemplazo'}</b><div class="small">${activo?`Anda normal - Envío ${costo==0?'GRATIS':'$'+costo} editable en config`:'Muestra cartel "Pagina inactiva..." SIN tu número - Reemplaza index.html - Efecto inmediato'}</div></div>
-   <div style="display:flex;align-items:center;gap:12px">
-     <span style="font-size:11px;font-weight:800">${activo?'ACTIVA':'BAJA'}</span>
-     <div class="switch ${activo?'on':''}" onclick="toggleActivoLocal()"><div class="knob"></div></div>
-     <button class="btn ${activo?'btn-del':'btn-y'}" onclick="guardarEstadoReal()">${activo?'Pasar a BAJA y Guardar':'Pasar a ACTIVA y Guardar'}</button>
-   </div>
-  </div>
-  <div id="estadoOut" class="small" style="margin-top:8px;color:#FFD60A"></div>`;
+ const z=document.getElementById('estadoZone');
+ const esBaja=(CONFIG.activo===false||CONFIG.estado==='baja');
+ z.innerHTML=`<div style="display:flex;gap:8px;align-items:center;background:#101010;border-radius:12px;padding:12px"><span>Estado: <b>${esBaja?'BAJA':'ACTIVA'}</b></span><button class="btn ${esBaja?'btn-w':'btn-r'}" onclick="toggleBaja()">${esBaja?'Activar':'Dar de baja'}</button></div>`;
 }
-function toggleActivoLocal(){
- const act = CONFIG.activo!==false && CONFIG.estado!=='baja';
- CONFIG.activo=!act; CONFIG.estado=CONFIG.activo?'activo':'baja';
- renderEstado(); renderConfig();
- document.getElementById('estadoOut').innerText='⚠️ Cambio local, ahora dale a GUARDAR para que impacte real en la página';
-}
-async function guardarEstadoReal(){
- if(!CURRENT) return;
- const out=document.getElementById('estadoOut');
- out.innerText='Guardando 1/2 config...';
- try{
-   const r1=await gh(`config/${CURRENT}.json`);
-   if(!r1.ok){ out.innerText='Error config: '+r1.status; return; }
-   const j1=await r1.json();
-   const resCfg=await gh(`config/${CURRENT}.json`,'PUT',{message:`${CONFIG.estado} ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))});
-   if(!resCfg.ok){ out.innerText='Error guardando config'; return; }
-   out.innerText='Config OK. Guardando 2/2 index.html por reemplazo...';
-   const ri=await gh(`${CURRENT}/index.html`);
-   let shaIdx=null; if(ri.ok){ const ji=await ri.json(); shaIdx=ji.sha; }
-   let htmlToUpload='';
-   if(CONFIG.estado==='baja'){
-     htmlToUpload=BAJA_HTML;
-   } else {
-     // Restaurar index normal - intentamos traer molde base
-     try{
-       const resNormal=await fetch('https://raw.githubusercontent.com/Cartaspro/cartas/main/index-normal-BASE-TODOS-CLIENTES.html?v='+Date.now()).then(r=>r.ok?r.text():null);
-       if(resNormal && resNormal.includes('<!DOCTYPE')) htmlToUpload=resNormal;
-       else {
-         // Fallback: traer el index actual de queseria que es el molde fijo
-         const fallback=await fetch('https://raw.githubusercontent.com/Cartaspro/cartas/main/queseria-don-pablo/index.html?v='+Date.now()).then(r=>r.ok?r.text():null);
-         htmlToUpload=fallback || BAJA_HTML;
-       }
-     }catch(e){ htmlToUpload=BAJA_HTML; }
-   }
-   const resIdx=await gh(`${CURRENT}/index.html`,'PUT',{message:`${CONFIG.estado} index ${CURRENT} - reemplazo`,sha:shaIdx||undefined,content:btoa(unescape(encodeURIComponent(htmlToUpload)))});
-   if(resIdx.ok){
-     out.innerText=`✅ ${CONFIG.estado.toUpperCase()} REAL - index.html reemplazado! ${CONFIG.estado==='baja'?'Muestra cartel sin número':'Restaura carta normal'} - Recargá en 20s`;
-     reload(); listar();
-   } else {
-     out.innerText='Error index: '+(await resIdx.json()).message;
-   }
- }catch(e){ out.innerText='Error: '+e; }
+async function toggleBaja(){
+ const esBaja=(CONFIG.activo===false||CONFIG.estado==='baja');
+ if(esBaja){ CONFIG.activo=true; CONFIG.estado='activo'; await guardarConfig(true); const rb=await gh(`${CURRENT}/index.html`); if(rb.ok){ const jb=await rb.json(); await gh(`backup-baja/${CURRENT}-${Date.now()}.html`,'PUT',{message:`backup baja ${CURRENT}`,content:jb.content,sha:undefined}); } const resIdx=await fetch(`https://raw.githubusercontent.com/${REPO}/main/backup-baja/last-${CURRENT}.html`).then(r=>r.ok?r.text():null).catch(()=>null); } else { CONFIG.activo=false; CONFIG.estado='baja'; }
+ await guardarConfig(true); listar(); reload();
 }
 
 function renderConfig(){
  const c=document.getElementById('configEditor'); c.innerHTML='';
- for(const [k,v] of Object.entries(CONFIG)){
-   if(k==='activo' || k==='estado') continue;
+ const show=['nombre','subtitulo','direccion','telefono','whatsapp','horarios','googleMaps','envio','activo','estado'];
+ for(const k of show){ if(CONFIG[k]===undefined) continue; const v=CONFIG[k];
    if(v!==null && typeof v==='object' && !Array.isArray(v)){
-     let html=`<div class="group"><b>${k.toUpperCase()}</b>`;
+     let html=`<div class="kv" style="border:1px solid #2a2a2a;border-radius:12px;padding:10px;margin-bottom:10px"><b style="font-size:11px">${k}</b>`;
      for(const [sk,sv] of Object.entries(v)){ html+=`<div class="kv"><label>${k}.${sk}</label><input value="${String(sv).replace(/"/g,'&quot;')}" oninput="setNested('${k}','${sk}',this.value)"></div>`; }
      html+=`</div>`; c.innerHTML+=html;
    } else {
@@ -170,32 +132,29 @@ function renderConfig(){
  }
 }
 function setFlat(k,val){ CONFIG[k]=coerce(val); }
-function setNested(pk,sk,val){ CONFIG[pk][sk]=coerce(val); }
+function setNested(pk,sk,val){ if(!CONFIG[pk]) CONFIG[pk]={}; CONFIG[pk][sk]=coerce(val); }
 function coerce(val){ if(val==='true') return true; if(val==='false') return false; if(val!=='' && !isNaN(val) && String(Number(val))===val) return Number(val); return val; }
-function addConfigField(){ const k=prompt('Campo: ej direccion, telefono, googleMaps.embed, envio.costoFijo'); if(!k) return; if(k.includes('.')){ const [p,s]=k.split('.'); CONFIG[p]=CONFIG[p]||{}; CONFIG[p][s]=''; } else CONFIG[k]=''; renderConfig(); }
 
 function renderData(){
  const container=document.getElementById('prods'); container.innerHTML='';
  DATA.forEach((p,i)=>{
-   let customHtml='';
-   CUSTOM_COLS.forEach(col=>{ customHtml+=`<div class="field"><label>${col}</label><input value="${esc(p[col]||'')}" oninput="DATA[${i}]['${col}']=this.value"></div>`; });
+   const esReal = p.img && !p.img.includes('unsplash.com') && !p.img.includes('placeholder');
    container.innerHTML+=`
-   <div class="prod-card">
-    <div><img id="img_${i}" src="${p.img||''}" onerror="this.style.opacity=.2"><div class="uploadBox" style="margin-top:8px" onclick="document.getElementById('file_${i}').click()">📷 Subir foto<br><span style="font-size:10px">WhatsApp / PC</span></div><input id="file_${i}" type="file" accept="image/*" hidden onchange="subirFoto(this,${i})"><div id="up_${i}" class="small"></div></div>
+   <div class="prod-card ${esReal?'locked':''}">
+    ${esReal?'<div class="lock-badge">🔒 IMAGEN REAL</div>':''}
+    <div><img id="img_${i}" src="${p.img||''}" onerror="this.style.opacity=.2"><div class="uploadBox" style="margin-top:8px" onclick="document.getElementById('file_${i}').click()">📷 Cambiar foto<br><span style="font-size:10px">WhatsApp / PC</span></div><input id="file_${i}" type="file" accept="image/*" hidden onchange="subirFoto(this,${i})"><div id="up_${i}" class="small"></div></div>
     <div>
      <div class="field"><label>Nombre</label><input value="${esc(p.nombre||'')}" oninput="DATA[${i}].nombre=this.value"></div>
      <div class="row2"><div class="field"><label>Precio $</label><input type="number" value="${p.precio||0}" oninput="DATA[${i}].precio=Number(this.value)"></div><div class="field"><label>Categoria</label><input value="${esc(p.categoria||'')}" oninput="DATA[${i}].categoria=this.value"></div></div>
      <div class="field"><label>Descripcion</label><textarea oninput="DATA[${i}].descripcion=this.value">${esc(p.descripcion||'')}</textarea></div>
-     <div class="field"><label>IMG URL (se llena sola al subir)</label><input id="url_${i}" value="${esc(p.img||'')}" oninput="DATA[${i}].img=this.value;document.getElementById('img_${i}').src=this.value"></div>
-     ${customHtml}
-     <div style="display:flex;justify-content:space-between;margin-top:8px"><span class="badge">ID ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar producto</button></div>
+     <div class="field"><label>IMG URL - si es real queda con candado y no se borra</label><input id="url_${i}" value="${esc(p.img||'')}" oninput="DATA[${i}].img=this.value;document.getElementById('img_${i}').src=this.value"></div>
+     <div style="display:flex;justify-content:space-between;margin-top:8px"><span class="badge">ID ${p.id}</span><button class="btn btn-g" onclick="DATA.splice(${i},1);renderData()">Borrar</button></div>
     </div>
    </div>`;
  });
 }
-function esc(s){ return String(s).replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; const obj={id:nid,nombre:'Nuevo',precio:0,categoria:'',descripcion:'',img:''}; CUSTOM_COLS.forEach(c=>obj[c]=''); DATA.push(obj); renderData(); }
-function addCol(){ const c=prompt('Nueva columna ej: stock, talle, destacado'); if(!c) return; if(!CUSTOM_COLS.includes(c)) CUSTOM_COLS.push(c); DATA.forEach(p=>p[c]=p[c]||''); renderData(); }
+function esc(s){ return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function addProd(){ const nid=DATA.length?Math.max(...DATA.map(p=>p.id||0))+1:1; DATA.push({id:nid,nombre:'Nuevo',precio:0,categoria:'',descripcion:'',img:''}); renderData(); }
 
 async function subirFoto(input, idx){
  const file=input.files[0]; if(!file) return;
@@ -210,21 +169,60 @@ async function subirFoto(input, idx){
      const res=await gh(path,'PUT',{message:`foto ${DATA[idx].nombre}`,content:base64,sha:sha||undefined});
      if(res.ok){
        const url=`https://raw.githubusercontent.com/${REPO}/main/${path}`;
-       DATA[idx].img=url; document.getElementById('img_'+idx).src=url; document.getElementById('url_'+idx).value=url; out.innerText='✓ Foto subida';
+       DATA[idx].img=url; document.getElementById('img_'+idx).src=url; document.getElementById('url_'+idx).value=url; out.innerText='✓ Foto real guardada - quedará con candado'; renderData();
      } else { out.innerText='Error '+(await res.json()).message; }
    }catch(e){ out.innerText='Error '+e; }
  };
  reader.readAsDataURL(file);
 }
 
-async function guardarConfig(){ if(!CURRENT) return; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`config ${CONFIG.estado} ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); document.getElementById('outC').innerText=res.ok?'✓ Config guardada - Si costoFijo 0 dirá Envío gratis':'Error'; reload(); listar(); }
-async function guardarData(){ if(!CURRENT) return; const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`data ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))}); document.getElementById('out').innerText=res.ok?'✓ Productos guardados':'Error'; reload(); }
-async function borrarCliente(slug){ if(!confirm(`Borrar ${slug}?`)) return; for(const p of [`data/${slug}.json`,`config/${slug}.json`,`${slug}/index.html`]){ const r=await gh(p); if(r.ok){ const j=await r.json(); await gh(p,'DELETE',{message:`delete ${p}`,sha:j.sha}); } } CURRENT=''; listar(); }
-function reload(){ if(CURRENT) document.getElementById('prev').src=`../${CURRENT}/?v=${Date.now()}`; }
-function openReal(){ if(CURRENT) window.open(`../${CURRENT}/`,'_blank'); }
+async function guardarConfig(silent=false){ if(!CURRENT) return; const r1=await gh(`config/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`config/${CURRENT}.json`,'PUT',{message:`config ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(CONFIG,null,2))))}); if(!silent) document.getElementById('outC').innerText=res.ok?'✓ Config guardada':'Error'; reload(); listar(); }
+async function guardarData(silent=false){ if(!CURRENT) return; const r1=await gh(`data/${CURRENT}.json`); const j1=await r1.json(); const res=await gh(`data/${CURRENT}.json`,'PUT',{message:`data ${CURRENT}`,sha:j1.sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(DATA,null,2))))}); if(!silent) document.getElementById('out').innerText=res.ok?'✓ Productos guardados - imágenes reales preservadas':'Error'; reload(); }
+
+function generarPaqueteIA(){
+ if(!CURRENT){ alert('Elegí un cliente primero'); return; }
+ const paquete={
+   _version:'v3-preserva',
+   _instruccion:'ESTE JSON YA TIENE TODAS TUS MODIFICACIONES REALES - NO REEMPLACES LAS IMAGENES',
+   slug:CURRENT,
+   timestamp:new Date().toISOString(),
+   config:CONFIG,
+   data:DATA,
+   stats:{
+     totalProductos:DATA.length,
+     imagenesReales:DATA.filter(p=>p.img && !p.img.includes('unsplash')).length,
+     imagenesUnsplash:DATA.filter(p=>p.img && p.img.includes('unsplash')).length
+   }
+ };
+ ULTIMO_PAQUETE=paquete;
+ document.getElementById('exportTxt').value=JSON.stringify(paquete,null,2);
+ document.getElementById('exportInfo').innerHTML=`✓ Paquete generado: ${DATA.length} productos, ${paquete.stats.imagenesReales} con imagen real preservada. Pasame este archivo o copiá el texto y pegámelo en el chat. Yo voy a respetar esas imágenes.`;
+}
+
+function descargarPaqueteIA(){
+ if(!ULTIMO_PAQUETE) generarPaqueteIA();
+ if(!ULTIMO_PAQUETE) return;
+ const blob=new Blob([JSON.stringify(ULTIMO_PAQUETE,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a'); a.href=url; a.download=`${CURRENT}-COMPLETO-PARA-IA.json`; a.click(); URL.revokeObjectURL(url);
+}
+
+function copiarExport(){ const t=document.getElementById('exportTxt'); t.select(); document.execCommand('copy'); document.getElementById('exportInfo').innerText='✓ Copiado al portapapeles'; }
+
+function importarPaquete(){
+ try{
+   const txt=document.getElementById('exportTxt').value; if(!txt) return alert('Pegá un paquete primero');
+   const p=JSON.parse(txt); if(p.config) CONFIG=p.config; if(p.data) DATA=p.data; if(p.slug) CURRENT=p.slug;
+   renderConfig(); renderData(); renderEstado(); document.getElementById('exportInfo').innerText='✓ Paquete importado - ahora podés guardar a GitHub';
+ }catch(e){ alert('JSON inválido: '+e); }
+}
+
+function reload(){ if(CURRENT) document.getElementById('prev').src=`https://cartaspro.github.io/cartas/${CURRENT}/?v=${Date.now()}`; }
+function openReal(){ if(CURRENT) window.open(`https://cartaspro.github.io/cartas/${CURRENT}/`,'_blank'); }
 const drop=document.getElementById('drop'); const fileIn=document.getElementById('fileIn');
-drop.addEventListener('click',()=>fileIn.click()); drop.addEventListener('dragover',e=>e.preventDefault()); drop.addEventListener('drop',e=>{e.preventDefault(); FILES=[...e.dataTransfer.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');}); fileIn.addEventListener('change',()=>{ FILES=[...fileIn.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');});
+if(drop){ drop.addEventListener('click',()=>fileIn.click()); drop.addEventListener('dragover',e=>e.preventDefault()); drop.addEventListener('drop',e=>{e.preventDefault(); FILES=[...e.dataTransfer.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');}); fileIn.addEventListener('change',()=>{ FILES=[...fileIn.files]; document.getElementById('upOut').innerText=FILES.map(f=>f.name).join('\n');}); }
 async function subir(){ const slug=document.getElementById('slugNew').value.trim().toLowerCase().replace(/\s+/g,'-'); if(!slug||!FILES.length) return alert('Falta slug o archivos'); for(let file of FILES){ const text=await file.text(); let path=''; if(file.name.toLowerCase().endsWith('.html')) path=`${slug}/index.html`; else { try{ const j=JSON.parse(text); if(Array.isArray(j)) path=`data/${slug}.json`; else path=`config/${slug}.json`; }catch{ path=`config/${slug}.json`; } } const ex=await gh(path); let sha=null; if(ex.ok){ const ej=await ex.json(); sha=ej.sha; } await gh(path,'PUT',{message:`upload ${path}`,content:btoa(unescape(encodeURIComponent(text))),...(sha?{sha}:{})}); } document.getElementById('upOut').innerText+='\n✓ Subido'; listar(); }
+
 listar();
 </script>
 </body></html>
